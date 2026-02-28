@@ -44,6 +44,7 @@ entity npu_core is
 
         clk         : in  std_logic;                         -- Sinal de clock
         rst_n       : in  std_logic;                         -- Sinal de reset síncrono local (ativo baixo)
+        soc_en_i    : in  std_logic;                         -- Sinal de ENABLE
         acc_clear   : in  std_logic;                         -- Limpa os acumuladores internos dos PEs
         acc_dump    : in  std_logic;                         -- Ativa o modo "Drain" (saída dos dados)
         
@@ -107,6 +108,7 @@ begin
         port map (
             clk           => clk,
             rst_n         => rst_n,
+            soc_en_i      => soc_en_i,
             valid_in      => valid_in,
             data_in       => input_acts,
             data_out      => acts_skewed
@@ -124,6 +126,7 @@ begin
         port map (
             clk           => clk,
             rst_n         => rst_n,
+            soc_en_i      => soc_en_i,
             valid_in      => valid_in,
             data_in       => input_weights,
             data_out      => weights_skewed
@@ -141,6 +144,7 @@ begin
         port map (
             clk           => clk,
             rst_n         => rst_n,
+            soc_en_i      => soc_en_i,
             clear_acc     => acc_clear,
             drain_output  => acc_dump,
             input_weights => weights_skewed,

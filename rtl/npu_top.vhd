@@ -76,6 +76,7 @@ entity npu_top is
 
         clk         : in  std_logic;                             -- Clock do sistema
         rst_n       : in  std_logic;                             -- Reset síncrono (ativo em nível baixo)
+        soc_en_i    : in  std_logic;                             -- Sinal de ENABLE
 
         -----------------------------------------------------------------------------------------------------
         -- Interface para Mapeamento em Memória (MMIO)
@@ -167,19 +168,19 @@ begin
                 r_done_dly <= '0';
                 irq_done_o <= '0';
 
-            else
+            elsif soc_en_i = '1' then 
 
-                r_done_dly <= s_sts_done; -- Guarda estado anterior
+                r_done_dly <= s_sts_done; 
 
-                -- Rising Edge Detection
                 if (s_sts_done = '1' and r_done_dly = '0') then
-                    irq_done_o <= '1'; -- Pulso!
+                    irq_done_o <= '1'; 
                 else
                     irq_done_o <= '0';
                 end if;
-                
+
             end if;
         end if;
+
     end process;
 
     ---------------------------------------------------------------------------------------------------------
@@ -250,6 +251,7 @@ begin
             -- Sinais de Controle e Sincronismo
             clk           => clk, 
             rst_n         => rst_n,
+            soc_en_i      => soc_en_i,
 
             -- RegFile Interface
             cmd_start     => s_cmd_start, 
@@ -291,6 +293,7 @@ begin
 
             clk                 => clk, 
             rst_n               => rst_n,
+            soc_en_i            => soc_en_i,
 
             -- Write Side (RegFile)
             wgt_we              => s_wgt_we, 

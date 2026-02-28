@@ -43,6 +43,7 @@ entity post_process is
 
         clk         : in  std_logic;                             -- Clock do sistema
         rst_n       : in  std_logic;                             -- Reset síncrono (ativo em nível baixo)
+        soc_en_i    : in  std_logic;                             -- Sinal de ENABLE
 
         -----------------------------------------------------------------------------------------------------
         -- Entradas 
@@ -143,7 +144,7 @@ begin
                 s2_prod <= (others => '0');
                 s3_shifted <= (others => '0');
                 
-            else
+            elsif soc_en_i = '1' then
                 
                 -- ==========================================================================================
                 -- ESTÁGIO 1: BIAS ADD

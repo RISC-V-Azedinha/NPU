@@ -144,16 +144,17 @@ begin
             FIFO_DEPTH => 2048 
         )
         port map (
-            clk     => clk, 
-            rst_n   => s_rst_n,
+            clk        => clk, 
+            rst_n      => s_rst_n,
+            soc_en_i   => '1',
             
             -- Nova Interface de MMIO
-            vld_i   => s_npu_vld,
-            rdy_o   => s_npu_rdy,
-            we_i    => s_npu_we,
-            addr_i  => s_npu_addr,
-            data_i  => s_npu_wdata,
-            data_o  => s_npu_rdata,
+            vld_i      => s_npu_vld,
+            rdy_o      => s_npu_rdy,
+            we_i       => s_npu_we,
+            addr_i     => s_npu_addr,
+            data_i     => s_npu_wdata,
+            data_o     => s_npu_rdata,
 
             -- Interface IRQ
             irq_done_o => open

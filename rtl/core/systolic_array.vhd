@@ -44,6 +44,7 @@ entity systolic_array is
 
         clk         : in  std_logic;                         -- Sinal de clock
         rst_n       : in  std_logic;                         -- Sinal de reset síncrono local (ativo baixo)
+        soc_en_i    : in  std_logic;                         -- Sinal de ENABLE
         
         -- Controles OS
 
@@ -146,6 +147,7 @@ begin
                 port map (
                     clk          => clk,
                     rst_n        => rst_n,
+                    soc_en_i     => soc_en_i,
                     clear_acc    => clear_acc,
                     drain_output => drain_output,
                     weight_in    => weight_wires(get_v_idx(i, j)),

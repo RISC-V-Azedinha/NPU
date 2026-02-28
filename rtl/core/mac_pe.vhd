@@ -36,6 +36,7 @@ entity mac_pe is
 
         clk         : in  std_logic;                      -- Sinal de clock
         rst_n       : in  std_logic;                      -- Sinal de reset síncrono local (ativo baixo)
+        soc_en_i    : in  std_logic;                      -- Sinal de ENABLE
         
         -- Controle OS (Output Stationary)
 
@@ -93,10 +94,12 @@ begin
 
         if rising_edge(clk) then
             if rst_n = '0' then
+                
                 weight_reg <= (others => '0');
                 act_reg    <= (others => '0');
                 acc_reg    <= (others => '0');
-            else
+
+            elsif soc_en_i = '1' then
 
                 -- 1. Pipeline de Dados (Systolic Flow)
                 -- Os dados de entrada são passados para os registradores de saída

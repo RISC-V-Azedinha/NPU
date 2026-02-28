@@ -43,6 +43,7 @@ entity input_buffer is
 
         clk         : in  std_logic;                         -- Sinal de clock
         rst_n       : in  std_logic;                         -- Sinal de reset síncrono local (ativo baixo)
+        soc_en_i    : in  std_logic;                         -- Sinal de ENABLE
 
         -----------------------------------------------------------------------------------------------------
         -- Entradas (Vetores Empacotados)
@@ -128,7 +129,7 @@ begin
 
                         shift_reg <= (others => (others => '0'));
 
-                    else 
+                    elsif soc_en_i = '1' then
                     
                         -- Entrada do Shift Register (Posição 0)
                         if valid_in = '1' then

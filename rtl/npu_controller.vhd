@@ -42,6 +42,7 @@ entity npu_controller is
 
         clk           : in  std_logic;
         rst_n         : in  std_logic;
+        soc_en_i      : in  std_logic;
 
         -----------------------------------------------------------------------------------------------------
         -- Interface Register File
@@ -133,7 +134,9 @@ begin
                 sts_busy <= '0';
                 sts_done <= '0';
                 r_no_drain <= '0';
-            else
+            
+            elsif soc_en_i = '1' then
+
                 -- Pipeline do Valid (Acompanha latência de 1 ciclo da BRAM)
                 ctl_core_vld <= s_ram_read_en;
 

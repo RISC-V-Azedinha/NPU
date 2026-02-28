@@ -46,6 +46,7 @@ entity npu_datapath is
 
         clk                 : in  std_logic;
         rst_n               : in  std_logic;
+        soc_en_i            : in  std_logic;
 
         -----------------------------------------------------------------------------------------------------
         -- Controle de Memória (Escrita - MMIO)
@@ -170,6 +171,7 @@ begin
         port map (
             clk           => clk,
             rst_n         => rst_n, 
+            soc_en_i      => soc_en_i,
             acc_clear     => ctl_acc_clear,
             acc_dump      => ctl_acc_dump,
             valid_in      => ctl_valid_in,
@@ -188,6 +190,7 @@ begin
             port map (
                 clk         => clk,
                 rst_n       => rst_n,
+                soc_en_i    => soc_en_i,
                 valid_in    => core_valid_out,
                 acc_in      => core_accs((i+1)*ACC_W-1 downto i*ACC_W),
                 bias_in     => cfg_bias_vec((i+1)*ACC_W-1 downto i*ACC_W),
