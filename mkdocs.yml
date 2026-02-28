@@ -1,0 +1,85 @@
+site_name: Neural Processing Unit - NPU
+site_description: Arquitetura, Drivers e Aplicações do Acelerador de IA
+site_url: https://Nyfeu.github.io/NPU/
+repo_url: https://github.com/Nyfeu/NPU
+repo_name: Nyfeu/NPU
+
+theme:
+  name: material
+  
+  # Logo no canto superior esquerdo (usando vetor embutido)
+  icon:
+    logo: material/memory
+    
+  # Favicon da aba do navegador. 
+  # IMPORTANTE: Crie a pasta docs/assets, coloque um arquivo favicon.png lá e descomente a linha abaixo!
+  # favicon: assets/favicon.png 
+
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.top
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - toc.follow
+    - content.code.copy
+    - content.tabs.link
+    - search.highlight
+    - search.suggest
+
+  palette:
+    # Apenas Modo Escuro para forçar o estilo da imagem que você mandou
+    - scheme: slate
+      primary: black 
+      accent: indigo
+
+  font:
+    text: Inter
+    code: JetBrains Mono
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.arithmatex:
+      generic: true
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - tables
+
+# Estrutura do Menu Lateral (Ajuste conforme seus arquivos)
+nav:
+  - Introdução:
+      - Visão Geral: index.md
+      - Requisitos e Setup: intro/setup.md
+  - Arquitetura de Hardware:
+      - Visão Geral do Top-Level: hardware/overview.md
+      - O Array Sistólico 4x4: hardware/systolic_array.md  # Foco no mac_pe.vhd e systolic_array.vhd
+      - Unidade de Pós-Processamento (PPU): hardware/ppu.md # Foco no post_process.vhd
+      - Unidade de Controlo (FSM): hardware/controller.md   # Foco no npu_controller.vhd
+      - Gestão de Memória e Datapath: hardware/datapath.md # Foco no npu_datapath.vhd
+      - Mapa de Registos (MMIO): hardware/registers.md     # Detalhe do npu_register_file.vhd
+  - Software e Integração:
+      - API de Programação: software/NPU_PROGRAMMING.md
+      - Driver Bare-metal (C): software/drivers.md         # Foco no mlp_server.c
+      - Driver de Host (Python): software/python_driver.md # Foco no fpga_driver.py
+      - Integração no SoC RISC-V: software/soc_integration.md
+  - Simulação e Verificação:
+      - Ambiente de Testes (Cocotb): dev/simulation.md     # Baseado nos ficheiros em sim/
+      - Fluxo de Síntese (FPGA): dev/fpga_build.md         # Baseado em fpga/scripts/
+  - Aplicações:
+      - Classificação MNIST: apps/MNIST.md
+      - Classificação IRIS: apps/IRIS.md
+      - Inferência MLP: apps/MLP.md                        # Onde você explicará o Tiling e o Loopback
+
+# ISSO AQUI FAZ O SEU CSS SER CARREGADO:
+extra_css:
+  - stylesheets/extra.css
