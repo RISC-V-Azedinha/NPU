@@ -1,9 +1,9 @@
-# 📃 Modelo de Programação da NPU
+# API de Programação da NPU
 
-## 1. Visão Geral
+## Visão Geral
 A NPU opera como um periférico mapeado em memória (MMIO) com arquitetura **Output Stationary**. Isso significa que os acumuladores internos mantêm os resultados parciais (Princípio da Localidade) até que o processamento completo de um vetor (Tile) seja concluído ou que um comando de `DUMP` seja enviado.
 
-## 2. Mapa de Registradores (Base Address + Offset)
+## Mapa de Registradores (Base Address + Offset)
 
 | Offset | Registrador | Acesso | Descrição |
 | :--- | :--- | :--- | :--- |
@@ -17,7 +17,7 @@ A NPU opera como um periférico mapeado em memória (MMIO) com arquitetura **Out
 | `0x44` | **QUANT_MULT**| RW | Multiplicador Inteiro da PPU. |
 | `0x80` | **BIAS_BASE** | RW | Vetor de Bias (4 x 32-bit). |
 
-## 3. Detalhe dos Registradores
+## Detalhe dos Registradores
 
 ### CMD (0x04) - Command Register
 Este registrador controla a Máquina de Estados e os Ponteiros de DMA. É *Write-Only*.
@@ -39,11 +39,14 @@ Este registrador controla a Máquina de Estados e os Ponteiros de DMA. É *Write
 | **1** | `DONE` | **1**: Processamento concluído. O Host pode ler os resultados ou iniciar novo tile. |
 | **3** | `OUT_VALID` | **1**: A FIFO de saída contém dados válidos para leitura. |
 
-## 4. Estratégia de Tiling (Output Stationary)
+## Estratégia de Tiling (Output Stationary)
 
 Graças ao reuso da memória interna e do princípio da localidade, redes maiores que o array físico (4x4) podem ser computadas em partes com menor impacto no tráfego de dados no barramento:
 
 1. Carregue o Input Vetor completo uma única vez.
 2. Carregue o primeiro bloco de Pesos.
 3. Execute (Output Stationary acumula o resultado parcial).
-4. Para o próximo bloco: Envie `CMD_RST_WR_W` (Reseta ponteiro de escrita de pesos) -> Carregue novos pesos -> Envie `CMD_START` com `RST_W_RD | RST_I_RD` (Para reler o input e acumular no mesmo output).
+4. Para o próximo bloco: 
+    - Envie `CMD_RST_WR_W` (reseta ponteiro de escrita de pesos)
+    - Carregue novos pesos 
+    - Envie `CMD_START` com `RST_W_RD | RST_I_RD` (para reler o input e acumular no mesmo output).

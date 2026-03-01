@@ -69,5 +69,3 @@ npu/
 ├── docs/              # Documentação MkDocs
 └── Makefile           # Sistema de automação de Build/Simulação
 ```
-
----

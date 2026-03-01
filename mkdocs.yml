@@ -69,9 +69,8 @@ nav:
       - Gestão de Memória e Datapath: hardware/datapath.md # Foco no npu_datapath.vhd
       - Mapa de Registos (MMIO): hardware/registers.md     # Detalhe do npu_register_file.vhd
   - Software e Integração:
-      - API de Programação: software/NPU_PROGRAMMING.md
-      - Driver Bare-metal (C): software/drivers.md         # Foco no mlp_server.c
-      - Driver de Host (Python): software/python_driver.md # Foco no fpga_driver.py
+      - API de Programação: software/api_programming.md
+      - Hardware-in-the-Loop (HIL): software/hil.md
       - Integração no SoC RISC-V: software/soc_integration.md
   - Simulação e Verificação:
       - Ambiente de Testes (Cocotb): dev/simulation.md     # Baseado nos ficheiros em sim/
