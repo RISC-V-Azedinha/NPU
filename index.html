@@ -474,10 +474,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#arquitetura-e-design" class="md-nav__link">
+  <a href="#contextualizacao" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Arquitetura e Design
+        Contextualização
       
     </span>
   </a>
@@ -1197,10 +1197,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#arquitetura-e-design" class="md-nav__link">
+  <a href="#contextualizacao" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Arquitetura e Design
+        Contextualização
       
     </span>
   </a>
@@ -1250,19 +1250,26 @@
 
 
 <h1 id="visao-geral-do-projeto">Visão Geral do Projeto</h1>
-<div class="admonition info">
-<p class="admonition-title">Sobre a NPU</p>
+<p><img alt="VHDL" src="https://img.shields.io/badge/VHDL-2008-blue?style=for-the-badge&amp;logo=vhdl" />
+<img alt="GHDL" src="https://img.shields.io/badge/Simulator-GHDL-green?style=for-the-badge&amp;logo=ghdl" />
+<img alt="GTKWave" src="https://img.shields.io/badge/Waveform-GTKWave-9cf?style=for-the-badge&amp;logo=gtkwave" />
+<img alt="Python" src="https://img.shields.io/badge/Python-3.10-blue?style=for-the-badge&amp;logo=python" /></p>
+<p><img alt="Neural Processing Unit" class="hero-img" src="assets/npu_soc" /></p>
 <p>Bem-vindo à documentação oficial da <strong>Unidade de Processamento Neural (NPU)</strong>. Este projeto é um acelerador de hardware baseado em uma arquitetura de Array Sistólico, projetado especificamente para acelerar cargas de trabalho de inferência de Redes Neurais. O hardware foi desenvolvido inteiramente em <strong>VHDL-2008</strong>.</p>
+<h2 id="contextualizacao">Contextualização</h2>
+<p>A evolução das arquiteturas de computadores tem sido fortemente influenciada pela crescente demanda por desempenho, eficiência energética e especialização para <strong>cargas de trabalhos específicas</strong>. Durante décadas, o aumento de desempenho foi sustentado principalmente pela elevação da frequência de clock e pela exploração de paralelismo em nível de instrução. No entanto, limitações físicas, como consumo de energia e dissipação térmica, tornaram esse modelo insustentável. Nesse contexto, o <strong>coprocessamento</strong> emerge como uma estratégia fundamental para ampliar o desempenho de sistemas computacionais modernos.</p>
+<p>Coprocessadores são unidades de hardware especializadas, projetadas para executar classes específicas de operações de forma mais eficiente do que uma CPU de propósito geral. Em vez de tentar otimizar um único núcleo para todas as aplicações possíveis, sistemas modernos adotam uma abordagem <strong>heterogênea</strong>, combinando CPUs com aceleradores dedicados, como GPUs, DSPs, unidades criptográficas e, mais recentemente, <strong>Neural Processing Units (NPUs)</strong>. Essa abordagem permite ganhos significativos de desempenho e eficiência energética ao alinhar a microarquitetura do hardware às características do algoritmo executado.</p>
+<p>Historicamente, coprocessadores foram introduzidos como extensões funcionais da CPU, como as unidades de ponto flutuante (FPUs), acessadas por meio de instruções especiais. Com o aumento da complexidade dos sistemas, essa integração evoluiu para modelos mais flexíveis, nos quais coprocessadores são conectados por barramentos internos, acessados via <strong>endereçamento em memória (MMIO - <em>Memory Mapped I/O</em>)</strong> ou operam de forma parcialmente autônoma, utilizando mecanismos como <strong>acesso direto à memória (DMA)</strong>. Essas formas de comunicação definem o grau de acoplamento entre CPU e coprocessador, impactando latência, coerência de memória e complexidade de software.</p>
+<p>As <strong>Neural Processing Units (NPUs)</strong> representam uma classe moderna de coprocessadores especializados, projetados especificamente para acelerar algoritmos de aprendizado de máquina, em especial <strong>redes neurais artificiais</strong>. Diferentemente de CPUs, que priorizam flexibilidade, e de GPUs, que exploram paralelismo massivo de dados de forma genérica, NPUs são arquitetadas para maximizar a eficiência em operações características de redes neurais, como: <strong>multiplicações e acumulações matriciais (MAC), convoluções e operações de ativação</strong>. Para isso, exploram intensivamente paralelismo espacial, reutilização de dados e hierarquias de memória otimizadas para alto throughput e baixo consumo energético. </p>
+<div class="admonition info">
+<p class="admonition-title">Multiply-accumulate operation (MAC)</p>
+<p>Em computação, operações de multiplicações e acumulações são etapas comuns que calculam o produto entre dois números e adicionam esse produto ao acumulador. 
+$$
+a\leftarrow a+(b\times c)
+$$
+Esse tipo de operação é chave para aceleração de cálculos como: produtos escalares, convoluções e redes neurais artificiais.</p>
 </div>
-<h2 id="arquitetura-e-design">Arquitetura e Design</h2>
-<div class="admonition abstract">
-<p class="admonition-title">Dataflow: Output-Stationary</p>
-<p>O design implementa uma arquitetura <strong>Output-Stationary</strong>. Dessa forma, as somas parciais (<em>partial sums</em>) são acumuladas localmente nos <em>Processing Elements</em> (PEs), levando a uma redução drástica na largura de banda necessária para escrever os resultados intermediários de volta na memória.</p>
-</div>
-<div class="admonition abstract">
-<p class="admonition-title">Princípio da Localidade</p>
-<p>Essa abordagem aproveita o princípio da localidade, que é garantido pelas <strong>memórias locais (<em>scratchpads</em>)</strong> da NPU, para maximizar o reuso de dados internos. </p>
-</div>
+<p>Em sistemas contemporâneos, NPUs são frequentemente integradas como coprocessadores em <strong>Systems-on-Chip (SoCs)</strong>, especialmente em dispositivos móveis embarcados e de borda (edge computing). Nesses sistemas, a CPU atua como unidade de controle, responsável por inicializar, configurar e coordenar a execução da NPU, enquanto o processamento intensivo é delegado ao acelerador. Esse modelo reforça a separação entre controle e computação, um princípio recorrente em arquitetura heterogêneas.</p>
 <h2 id="objetivos-e-recursos-principais">Objetivos e Recursos Principais</h2>
 <ul>
 <li><strong>Arquitetura</strong>: Array Sistólico (<strong>Output Stationary</strong>) 4x4.</li>
@@ -1305,7 +1312,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-datetime" title="March 1, 2026 04:17:40 UTC">March 1, 2026 04:17:40</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-datetime" title="March 1, 2026 05:27:17 UTC">March 1, 2026 05:27:17</span>
   </span>
 
     
@@ -1391,6 +1398,10 @@
     
     
       <script src="assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
       
     
   </body>

@@ -79,6 +79,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#arquitetura-e-design" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -529,6 +534,8 @@
       
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
+      
+        
       
       
       <a href="./" class="md-nav__link md-nav__link--active">
@@ -1112,6 +1119,8 @@
   
   
   
+    
+  
   
 </nav>
                   </div>
@@ -1131,9 +1140,15 @@
   
 
 
-  <h1>Visão Geral do Top-Level</h1>
-
-
+<h1 id="arquitetura-e-design">Arquitetura e Design</h1>
+<div class="admonition abstract">
+<p class="admonition-title">Dataflow: Output-Stationary</p>
+<p>O design implementa uma arquitetura <strong>Output-Stationary</strong>. Dessa forma, as somas parciais (<em>partial sums</em>) são acumuladas localmente nos <em>Processing Elements</em> (PEs), levando a uma redução drástica na largura de banda necessária para escrever os resultados intermediários de volta na memória.</p>
+</div>
+<div class="admonition abstract">
+<p class="admonition-title">Princípio da Localidade</p>
+<p>Essa abordagem aproveita o princípio da localidade, que é garantido pelas <strong>memórias locais (<em>scratchpads</em>)</strong> da NPU, para maximizar o reuso de dados internos. </p>
+</div>
 
 
 
@@ -1256,6 +1271,10 @@
     
     
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
       
     
   </body>
