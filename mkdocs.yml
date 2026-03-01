@@ -17,15 +17,16 @@ theme:
 
   features:
     - navigation.instant
+    - navigation.tabs
+    - navigation.footer
     - navigation.tracking
     - navigation.top
-    - navigation.tabs
-    - navigation.tabs.sticky
     - toc.follow
     - content.code.copy
     - content.tabs.link
     - search.highlight
     - search.suggest
+    - content.tooltips
 
   palette:
     # Apenas Modo Escuro para forçar o estilo da imagem que você mandou
@@ -80,6 +81,10 @@ nav:
       - Classificação IRIS: apps/IRIS.md
       - Inferência MLP: apps/MLP.md                        # Onde você explicará o Tiling e o Loopback
 
-# ISSO AQUI FAZ O SEU CSS SER CARREGADO:
 extra_css:
   - stylesheets/extra.css
+
+plugins:
+  - search
+  - git-revision-date-localized:
+      type: datetime
