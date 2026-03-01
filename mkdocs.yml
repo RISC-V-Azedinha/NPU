@@ -55,6 +55,7 @@ markdown_extensions:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - tables
+  - attr_list
 
 # Estrutura do Menu Lateral (Ajuste conforme seus arquivos)
 nav:
@@ -87,3 +88,7 @@ plugins:
   - search
   - git-revision-date-localized:
       type: datetime
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js

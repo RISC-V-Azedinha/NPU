@@ -82,3 +82,16 @@
     border-radius: 4px;
 }
 
+
+.hero-img {
+  display: block;
+  margin: 2rem auto;   
+  max-width: 100%;
+  height: auto;
+  border-radius: 16px;
+}
+
+[data-md-color-scheme="slate"] .md-typeset h1 {
+  color: #ffffff;
+  font-weight: 200;
+}
