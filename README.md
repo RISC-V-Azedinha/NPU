@@ -5,7 +5,7 @@
 ![GTKWave](https://img.shields.io/badge/Waveform-GTKWave-9cf?style=for-the-badge&logo=gtkwave)
 ![Python](https://img.shields.io/badge/Python-3.10-blue?style=for-the-badge&logo=python)
 
-```
+```text
     ███╗   ██╗██████╗ ██╗   ██╗
     ████╗  ██║██╔══██╗██║   ██║
     ██╔██╗ ██║██████╔╝██║   ██║
@@ -14,189 +14,60 @@
     ╚═╝  ╚═══╝╚═╝      ╚═════╝      ->> DATE: 23/1/2026
 ```
 
-This repository contains the implementation of a Neural Processing Unit (NPU) based on a Systolic Array architecture, designed to accelerate NN (Neural Networks) workloads. The project is developed entirely in VHDL-2008.
+Este repositório contém a implementação de uma Unidade de Processamento Neural (NPU) baseada em uma arquitetura de Array Sistólico, projetada para acelerar cargas de trabalho de Redes Neurais (NN). O projeto é desenvolvido inteiramente em VHDL-2008 com suporte para síntese em FPGA.
 
-The design implements an **Output-Stationary** architecture. This approach leverages the **principle of locality** within the Processing Elements (PEs) registers to maximize internal memory reuse. Partial sums are accumulated locally within the PEs, significantly reducing the bandwidth required for writing intermediate results back to memory.
+## 📖 Documentação Completa
 
-Verification is a core pillar of this project. It utilizes Cocotb (Python) for automated testing, featuring unit tests, randomized fuzzing against Python Golden Models, and end-to-end integration tests.
+Toda a documentação de arquitetura, integração, simulação e o guia de programação do mapa de registradores (MMIO) foi migrada para o nosso portal dedicado:
 
-| Document | Description | Link |
-| :-- | :-- | :- | 
-| **Programmer's Guide** | Register map, UART protocol, and data formats. | [**docs/NPU_PROGRAMMING.md** ](./docs/NPU_PROGRAMMING.md) | 
-| **MNIST Dataset** | Details on the digit recognition network. | [**docs/MNIST.md** ](./docs/MNIST.md) | 
-| **IRIS Dataset** | Details on the iris flower classification network. | [**docs/IRIS.md** ](./docs/IRIS.md) |
+👉 [Acesse a Documentação Completa Aqui!](https://nyfeu.github.io/NPU/)
 
-## 🎯 Goals and Features
+## 🎯 Objetivos e Recursos
 
-* **Architecture**: Systolic Array (**Output Stationary**) 4x4
-* **Optimization**: High internal memory reuse via Register Locality
-* **Precision**: INT8 for Input/Weights, INT32 for Accumulators
-* **Communication**: UART High-Speed (921.600 bps) 
-* **HIL**: Real-time Hardware-in-the-Loop with Python/PyQt6 Interface
+- **Arquitetura**: Array Sistólico (Output Stationary) 4x4
+- **Otimização**: Alto reuso de memória interna através da Localidade de Registradores
+- **Precisão**: INT8 para Entradas/Pesos, INT32 para Acumuladores
+- **Comunicação**: UART de Alta Velocidade (921.600 bps)
+- **HIL**: Hardware-in-the-Loop em tempo real com Interface Python/PyQt6
 
-## 📂 Project Structure
+## 🛠️ Stack Tecnológica
 
-The repository is organized to separate hardware design (RTL), verification testbenches, and build artifacts.
+O projeto utiliza um ecossistema moderno para design, verificação e implementação de hardware:
 
-```
-npu-accelerator/
-|
-├── rtl/               # VHDL Source Code
-│   ├── core/          # NPU Core, Systolic Array, MACs
-│   ├── ppu/           # Post-Processing Unit (ReLU, Accumulation)
-│   ├── common/        # Shared Components (FIFOs)
-│   └── fpga_tester/   # UART Wrapper & Top Level for FPGA
-├── sim/               # Cocotb Testbenches
-├── fpga/              # Vivado Constraints (XDC) & Build Scripts (Tcl)
-├── sw/                # Python Host Drivers & HIL Applications
-├── pkg/               # VHDL Packages
-└── mk/                # Modular Build System (Makefiles)
-```
+- **VHDL-2008**: Linguagem principal de Descrição de Hardware (RTL).
+- **GHDL**: Simulador open-source utilizado para validação lógica.
+- **Cocotb / Python 3**: Framework para testbenches baseados em corrotinas, permitindo integração direta com modelos de referência em Python.
+- **GTKWave**: Análise e debug de formas de onda.
+- **Xilinx Vivado**: Síntese, roteamento e geração de bitstream para FPGAs Xilinx.
+- **Make**: Automação de todo o fluxo de build, simulação e deploy.
 
-## 🛠️ Prerequisites
-To compile and simulate this project, install the following tools and ensure they are in your PATH:
+## 🧪 Verificação e Hardware-in-the-Loop (HIL)
 
-1. **GHDL**: Open-source VHDL simulator.
-2. **GTKWave**: Waveform viewer.
-3. **COCOTB**: Python-based coroutine testbench framework for hardware simulation.
-4. **Python 3**: Required for running cocotb testbenches.
-5. **Xilinx Vivado**: synthesis and FPGA programming.
+A verificação é um pilar central deste projeto. O ambiente de testes utiliza Cocotb para simulação automatizada, contando com testes unitários, fuzzing randomizado contra Modelos de Referência (Golden Models) em Python, e testes de integração end-to-end (E2E).
 
-## 🚀 How to Compile and Simulate (Using the Makefile)
+Além disso, o projeto suporta Hardware-in-the-Loop (HIL) em tempo real:
 
-All commands are executed from the root of the repository. The Makefile automates hardware simulation via COCOTB and waveform visualization.
+1. O host (PC) treina a rede e quantiza os pesos.
+2. Um script em Python envia os dados serializados via UART para a FPGA.
+3. A NPU executa a inferência acelerada em hardware e devolve os scores das classes para o PC.
 
-```
- 
- 
-      ███╗   ██╗██████╗ ██╗   ██╗ 
-      ████╗  ██║██╔══██╗██║   ██║ 
-      ██╔██╗ ██║██████╔╝██║   ██║ 
-      ██║╚██╗██║██╔═══╝ ██║   ██║ 
-      ██║ ╚████║██║     ╚██████╔╝ 
-      ╚═╝  ╚═══╝╚═╝      ╚═════╝  
- 
-============================================================================================
-           NPU BUILD SYSTEM                      
-============================================================================================
- 
- 🧠 PROJECT OVERVIEW
- ──────────────────────────────────────────────────────────────────────────────────────────
- 
-   Target       : Neural Processing Unit (NPU)
-   Architecture : Systolic Array Accelerator
-   Tooling      : Make + GHDL + Cocotb + GTKWave + Vivado
- 
- 
- 🧪 SIMULATION & VERIFICATION
- ──────────────────────────────────────────────────────────────────────────────────────────
- 
-   make cocotb TOP=<top> TEST=<test>        Rodar simulação Cocotb
-   make view TEST=<test>                    Abrir ondas no GTKWave
-   make sim_mnist                           Atalho: Simulação do MNIST
-   make sim_iris                            Atalho: Simulação do IRIS
- 
- 
- 🛠️  FPGA WORKFLOW (Inteligente)
- ──────────────────────────────────────────────────────────────────────────────────────────
- 
-   make fpga                                Verificar bitstream, gerar se necessário e programar
-   make fpga_bit                            Forçar geração do Bitstream (Vivado)
-   make fpga_prog                           Apenas programar (sem check)
- 
- 
- 🐍 HARDWARE-IN-THE-LOOP (HIL)
- ──────────────────────────────────────────────────────────────────────────────────────────
- 
-   make hil TEST=<script>                   Rodar script Python da pasta sw/
-   make hil_mnist                           Atalho: Rodar HIL do MNIST
-   make hil_iris                            Atalho: Rodar HIL do IRIS
- 
- 
- 📦 HOUSEKEEPING
- ──────────────────────────────────────────────────────────────────────────────────────────
- 
-   make clean                               Limpar tudo
- 
- 
-============================================================================================
+Aplicações já validadas na FPGA:
+
+- 🔢 **MNIST Dataset**: Reconhecimento de dígitos manuscritos.
+- 🌸 **IRIS Dataset**: Classificação de espécies de flores.
+
+Mais sobre as aplicações testadas pode ser visto na documentação.
+
+## 📂 Estrutura do Repositório
+
+```text
+npu/
+├── rtl/               # Código Fonte em VHDL (Core, PPU, FIFOs, UART)
+├── sim/               # Testbenches em Python (Cocotb)
+├── fpga/              # Restrições (XDC) e Scripts Tcl para o Xilinx Vivado
+├── sw/                # Drivers Host em Python e Aplicações HIL (MNIST/IRIS)
+├── docs/              # Documentação MkDocs
+└── Makefile           # Sistema de automação de Build/Simulação
 ```
 
-### 1. Clean Project
-Removes all generated files:
-```bash
-make clean
-```
-
-### 2. Run Automated Tests with COCOTB
-
-Run automated tests using COCOTB (Python-based coroutine testbenches):
-
-```bash
-make cocotb TEST=<testbench_name> TOP=<top_level>
-```
-
-**Parameters:**
-- `TEST`: Name of the Python testbench file (without `.py` extension) located in `sim/`
-- `TOP`: Top-level VHDL entity to test 
-
-### 3. Visualize Waveforms
-
-Open the last simulation waveform in GTKWave:
-```bash
-make view TEST=<testbench_name>
-```
-
-This opens `build/<testbench_name>.vcd` in GTKWave for detailed signal inspection.
-
-## 🛠️ FPGA Workflow
-
-The project includes an automated Makefile flow for Xilinx Vivado to synthesize, implement, and program the bitstream.
-
-**Target Device**: Xilinx Artix-7 (XC7A100T-CSG324-1) - e.g., Nexys 4
-
-```bash
-# Verify if bitstream exists; if not, synthesize it, then program the board.
-make fpga
-
-# Force bitstream generation (Synthesis + Implementation)
-make fpga_bit
-
-# Program the FPGA 
-make fpga_prog
-```
-
-## 🐍 Hardware-in-the-Loop (HIL)
-
-Once the FPGA is programmed, you can use the Python drivers to send data from your PC to the FPGA and receive the classification results in real-time.
-
-```bash
-# Run MNIST Inference on FPGA 
-make hil_mnist
-
-# Run Iris Inference on FPGA
-make hil_iris
-```
-
-### How HIL Works
-1. **Training**: The Python script trains a Neural Network on the CPU.
-2. **Quantization**: Floating-point weights are converted to Int8.
-3. **Stream**: Weights are packed and sent via UART to the NPU's internal buffers.
-4. **Inference**: Input vectors are streamed to the NPU.
-5. **Result**: The NPU computes the class scores and sends them back to the PC for validation.
-
-## ⚙️ Memory Map & Control
-
-The NPU uses a memory-mapped interface over UART:
-
-| Address | Register / FIFO | Access | Description |
-|--------:|------------------|:------:|-------------|
-| `0x00` | `CSR_STATUS`   | RO | Status Flags (Busy, Done, Output Valid) |
-| `0x04` | `CSR_CMD`      | WO | Command Register (Start, Clear, Pointer Resets) |
-| `0x08` | `CSR_CONFIG`   | RW | Run Configuration (Tile Size) |
-| `0x10` | `REG_WRITE_W`  | WO | Weight Input Port (Fixed Address) |
-| `0x14` | `REG_WRITE_A`  | WO | Activation Input Port (Fixed Address) |
-| `0x18` | `REG_READ_OUT` | RO | Output Read Port (Fixed Address) |
-| `0x40` | `QUANT_CFG`    | RW | Quantization Shift & Zero Point |
-| `0x44` | `QUANT_MULT`   | RW | PPU Multiplier |
-| `0x80` | `BIAS_BASE`    | RW | Base Address for Bias Registers |
+---
