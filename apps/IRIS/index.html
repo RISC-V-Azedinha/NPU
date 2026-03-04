@@ -13,8 +13,10 @@
         <link rel="canonical" href="https://Nyfeu.github.io/NPU/apps/IRIS/">
       
       
-        <link rel="prev" href="../MNIST/">
+        <link rel="prev" href="../../dev/fpga_build/">
       
+      
+        <link rel="next" href="../MNIST/">
       
       
         
@@ -295,7 +297,7 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="../MNIST/" class="md-tabs__link">
+        <a href="./" class="md-tabs__link">
           
   
   
@@ -445,6 +447,34 @@
     
   
     Requisitos e Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro/quickstart.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Primeiros Passos
   
 
     
@@ -1003,34 +1033,6 @@
                 
   
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../MNIST/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Classificação MNIST
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
     
   
   
@@ -1117,10 +1119,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#entradas-features" class="md-nav__link">
+  <a href="#21-entradas-features" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Entradas (Features)
+        2.1. Entradas (Features)
       
     </span>
   </a>
@@ -1128,10 +1130,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#saidas-classes" class="md-nav__link">
+  <a href="#22-saidas-classes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Saídas (Classes)
+        2.2. Saídas (Classes)
       
     </span>
   </a>
@@ -1156,10 +1158,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#matriz-de-pesos-weights" class="md-nav__link">
+  <a href="#31-matriz-de-pesos-weights" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Matriz de Pesos (Weights)
+        3.1. Matriz de Pesos (Weights)
       
     </span>
   </a>
@@ -1167,10 +1169,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#quantizacao-int8" class="md-nav__link">
+  <a href="#32-quantizacao-int8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Quantização (Int8)
+        3.2. Quantização (INT8)
       
     </span>
   </a>
@@ -1178,22 +1180,22 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#calibracao-da-ppu-o-segredo-da-acuracia" class="md-nav__link">
+  <a href="#33-calibracao-da-ppu-o-segredo-da-acuracia" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Calibração da PPU (O Segredo da Acurácia)
+        3.3. Calibração da PPU (O Segredo da Acurácia)
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Calibração da PPU (O Segredo da Acurácia)">
+    <nav class="md-nav" aria-label="3.3. Calibração da PPU (O Segredo da Acurácia)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#problema-saturacao" class="md-nav__link">
+  <a href="#331-problema-saturacao" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Problema: Saturação
+        3.3.1. Problema: Saturação
       
     </span>
   </a>
@@ -1201,10 +1203,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#solucao-re-escalonamento-rescaling" class="md-nav__link">
+  <a href="#332-solucao-re-escalonamento-rescaling" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Solução: Re-escalonamento (Rescaling)
+        3.3.2. Solução: Re-escalonamento (Rescaling)
       
     </span>
   </a>
@@ -1232,10 +1234,77 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#referencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Referências
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MNIST/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Classificação MNIST
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fc_synthetic/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Classificação de Dados Sintéticos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -1326,10 +1395,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#entradas-features" class="md-nav__link">
+  <a href="#21-entradas-features" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Entradas (Features)
+        2.1. Entradas (Features)
       
     </span>
   </a>
@@ -1337,10 +1406,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#saidas-classes" class="md-nav__link">
+  <a href="#22-saidas-classes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Saídas (Classes)
+        2.2. Saídas (Classes)
       
     </span>
   </a>
@@ -1365,10 +1434,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#matriz-de-pesos-weights" class="md-nav__link">
+  <a href="#31-matriz-de-pesos-weights" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Matriz de Pesos (Weights)
+        3.1. Matriz de Pesos (Weights)
       
     </span>
   </a>
@@ -1376,10 +1445,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#quantizacao-int8" class="md-nav__link">
+  <a href="#32-quantizacao-int8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Quantização (Int8)
+        3.2. Quantização (INT8)
       
     </span>
   </a>
@@ -1387,22 +1456,22 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#calibracao-da-ppu-o-segredo-da-acuracia" class="md-nav__link">
+  <a href="#33-calibracao-da-ppu-o-segredo-da-acuracia" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Calibração da PPU (O Segredo da Acurácia)
+        3.3. Calibração da PPU (O Segredo da Acurácia)
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Calibração da PPU (O Segredo da Acurácia)">
+    <nav class="md-nav" aria-label="3.3. Calibração da PPU (O Segredo da Acurácia)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#problema-saturacao" class="md-nav__link">
+  <a href="#331-problema-saturacao" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Problema: Saturação
+        3.3.1. Problema: Saturação
       
     </span>
   </a>
@@ -1410,10 +1479,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#solucao-re-escalonamento-rescaling" class="md-nav__link">
+  <a href="#332-solucao-re-escalonamento-rescaling" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Solução: Re-escalonamento (Rescaling)
+        3.3.2. Solução: Re-escalonamento (Rescaling)
       
     </span>
   </a>
@@ -1441,6 +1510,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#referencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Referências
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1461,19 +1541,32 @@
   
 
 
-<h1 id="documentacao-do-dataset-iris">🌸 Documentação do Dataset Iris</h1>
+<h1 id="documentacao-do-dataset-iris">Documentação do Dataset Iris 🌸</h1>
 <h2 id="1-visao-geral">1. Visão Geral</h2>
 <p>O <strong>Iris Dataset</strong> é o conjunto de dados utilizado para validar a inferência real na NPU. Ele consiste na classificação de flores em 3 espécies baseando-se em 4 medidas físicas.</p>
-<p>Este dataset foi escolhido porque suas dimensões (4 entradas) casam perfeitamente com a arquitetura física da NPU (Matriz Sistólica 4x4), permitindo validação sem necessidade de <em>tiling</em>.</p>
+<div class="admonition info">
+<p class="admonition-title">Iris Dataset</p>
+<p>O <strong>Iris Dataset</strong> é um clássico para treinamento de classificações via aprendizado de máquina. Foi inicialmente proposto por Ronald Fisher em 1936. Contém 50 amostras para cada uma das três espécies: <em>Iris Setosa</em>, <em>Iris Virginica</em>, <em>Iris Versicolor</em> - utilizando-se quatro características numéricas: <strong>comprimento da sépala</strong>; <strong>largura da sépala</strong>; <strong>comprimento da pétala</strong>; e <strong>largura da pétala</strong>. </p>
+</div>
+<p><img alt="Iris Dataset" class="hero-img" src="../../assets/iris_dataset.png" /></p>
+<p>Este dataset foi escolhido porque suas dimensões (4 entradas) casam perfeitamente com a arquitetura física da NPU (Matriz Sistólica 4x4), permitindo validação sem necessidade de <em>tiling</em>. No entanto, por serem três categorias será utilizada a técnica de <em>padding</em>. </p>
+<div class="admonition note">
+<p class="admonition-title">Técnica de <em>Tiling</em></p>
+<p>A técnica de <strong><em>Tiling</em></strong> é utilizada quando as dimensões do problema (por exemplo, número de entradas, neurônios ou tamanho de matrizes) excedem os recursos físicos disponíveis na arquitetura. Nesse caso, os dados são particionados em blocos menores (tiles) compatíveis com a capacidade da unidade de processamento e processados sequencialmente ou em múltiplos ciclos, com posterior composição dos resultados parciais.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Técnica de <em>Padding</em></p>
+<p>A técnica de <strong><em>Padding</em></strong>, por sua vez, consiste em expandir artificialmente as dimensões dos dados para que se ajustem à granularidade fixa do hardware. Isso é feito adicionando valores neutros (tipicamente zeros) às entradas, pesos ou saídas, garantindo alinhamento estrutural com a arquitetura física. No caso, como há três categorias e a matriz sistólica opera naturalmente em múltiplos de quatro, adiciona-se uma quarta classe fictícia com valores nulos apenas para compatibilização dimensional, sem impacto semântico no resultado final.</p>
+</div>
 <h2 id="2-estrutura-dos-dados">2. Estrutura dos Dados</h2>
-<h3 id="entradas-features">Entradas (Features)</h3>
-<p>Cada amostra enviada para a NPU (<code>valid_in</code>) é um vetor de 4 bytes (Int8), representando:</p>
+<h3 id="21-entradas-features">2.1. Entradas (Features)</h3>
+<p>Cada amostra enviada para a NPU (<code>valid_in</code>) é um vetor de 4 bytes (<code>INT8</code>), representando:</p>
 <table>
 <thead>
 <tr>
 <th style="text-align: left;">Índice</th>
-<th style="text-align: left;">Feature (Característica)</th>
-<th style="text-align: left;">Unidade Original</th>
+<th style="text-align: left;">Característica</th>
+<th style="text-align: left;">Unidade</th>
 <th style="text-align: left;">Representação NPU</th>
 </tr>
 </thead>
@@ -1481,31 +1574,31 @@
 <tr>
 <td style="text-align: left;"><strong>0</strong></td>
 <td style="text-align: left;">Comprimento da Sépala</td>
-<td style="text-align: left;">cm</td>
-<td style="text-align: left;">Int8 (Quantizado)</td>
+<td style="text-align: left;"><code>[cm]</code></td>
+<td style="text-align: left;"><code>INT8</code> (Quantizado)</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>1</strong></td>
 <td style="text-align: left;">Largura da Sépala</td>
-<td style="text-align: left;">cm</td>
-<td style="text-align: left;">Int8 (Quantizado)</td>
+<td style="text-align: left;"><code>[cm]</code></td>
+<td style="text-align: left;"><code>INT8</code> (Quantizado)</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>2</strong></td>
 <td style="text-align: left;">Comprimento da Pétala</td>
-<td style="text-align: left;">cm</td>
-<td style="text-align: left;">Int8 (Quantizado)</td>
+<td style="text-align: left;"><code>[cm]</code></td>
+<td style="text-align: left;"><code>INT8</code> (Quantizado)</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>3</strong></td>
 <td style="text-align: left;">Largura da Pétala</td>
-<td style="text-align: left;">cm</td>
-<td style="text-align: left;">Int8 (Quantizado)</td>
+<td style="text-align: left;"><code>[cm]</code></td>
+<td style="text-align: left;"><code>INT8</code> (Quantizado)</td>
 </tr>
 </tbody>
 </table>
-<h3 id="saidas-classes">Saídas (Classes)</h3>
-<p>A NPU retorna um vetor de 4 bytes. Os 3 primeiros correspondem aos <em>scores</em> (logits) de cada classe:</p>
+<h3 id="22-saidas-classes">2.2. Saídas (Classes)</h3>
+<p>A NPU retorna um vetor de 4 bytes. Os 3 primeiros correspondem aos <em>scores</em> (<strong><em>logits</em></strong>) de cada classe:</p>
 <table>
 <thead>
 <tr>
@@ -1538,64 +1631,116 @@
 </tbody>
 </table>
 <h2 id="3-mapeamento-no-hardware">3. Mapeamento no Hardware</h2>
-<h3 id="matriz-de-pesos-weights">Matriz de Pesos (Weights)</h3>
-<p>O modelo treinado gera uma matriz de pesos de dimensão <code>[4 entradas x 3 saídas]</code>.
-Na NPU 4x4, adicionamos uma coluna de zeros (padding) para completar a matriz <code>4x4</code>.</p>
+<p>A NPU adota uma arquitetura de <strong>matriz sistólica</strong> com dataflow do tipo <strong><em>Output-Stationary (OS)</em></strong>. Essa escolha impacta diretamente o mapeamento de operações de multiplicação-acumulação (MAC) e o padrão de comunicação entre os elementos de processamento (PEs).</p>
+<div class="admonition note">
+<p class="admonition-title">Output-Stationary Dataflow</p>
+<p>No modelo <strong>Output-Stationary</strong>, cada elemento de processamento (PE) é responsável por acumular e manter localmente o valor parcial de um elemento da matriz de saída.</p>
+<p>Durante a computação de uma multiplicação de matrizes (GEMM), os operandos de entrada (ativação e pesos) fluem através da matriz sistólica, enquanto as <strong>somas parciais permanecem estacionárias dentro do PE</strong> até que o resultado final esteja completamente acumulado.</p>
+<p>Formalmente, considerando:</p>
+<div class="arithmatex">\[
+C[i,j] = Σ_k A[i,k] · B[k,j]
+\]</div>
+<p>cada PE(i,j) mantém o acumulador associado a C[i,j], recebendo sequencialmente os produtos A[i,k]·B[k,j].</p>
+</div>
+<h3 id="31-matriz-de-pesos-weights">3.1. Matriz de Pesos (Weights)</h3>
+<p>O modelo treinado gera uma matriz de pesos de dimensão [4 entradas x 3 saídas].
+Na NPU 4x4, adicionamos uma coluna de zeros (padding) para completar a matriz 4x4.</p>
 <ul>
-<li><strong>Load Order:</strong> Os pesos são carregados via <code>ADDR_FIFO_W</code> (0x10).</li>
-<li><strong>Layout:</strong>
+<li><strong>Load Order</strong>: Os pesos são carregados via <code>ADDR_FIFO_W</code> (<code>0x10</code>) e fluem pela matriz sistólica conforme a ordem do fluxo Output-Stationary.</li>
+<li><strong>Layout Lógico</strong>:
     <div class="highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>W[0,0] W[0,1] W[0,2] 0
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>W[1,0] W[1,1] W[1,2] 0
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>W[2,0] W[2,1] W[2,2] 0
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>W[3,0] W[3,1] W[3,2] 0
 </span></code></pre></div></li>
 </ul>
-<h3 id="quantizacao-int8">Quantização (Int8)</h3>
+<h3 id="32-quantizacao-int8">3.2. Quantização (<code>INT8</code>)</h3>
 <p>Como a NPU opera com inteiros de 8 bits, os valores reais (ex: 5.1 cm) são convertidos:</p>
 <ol>
 <li><strong>Escala:</strong> Encontramos o valor máximo absoluto no dataset de treino (ex: 7.9 cm).</li>
 <li><strong>Fator:</strong> <code>Scale = 7.9 / 127</code>.</li>
 <li><strong>Conversão:</strong> <code>Valor_Int8 = Valor_Float / Scale</code>.</li>
 </ol>
-<p>Isso garante que usamos toda a faixa dinâmica de -128 a +127.</p>
-<h3 id="calibracao-da-ppu-o-segredo-da-acuracia">Calibração da PPU (O Segredo da Acurácia)</h3>
-<p>A NPU opera internamente com acumuladores de 32 bits, mas a saída é limitada a 8 bits (Int8). Sem calibração, ocorre o fenômeno de <strong>saturação</strong> (<em>quantization saturation</em>), prejudicando a acurácia do modelo.</p>
-<h4 id="problema-saturacao">Problema: Saturação</h4>
-<p>Durante a inferência, a soma dos produtos (Pesos × Entradas) pode gerar valores muito altos, por exemplo <code>50.000</code>.</p>
-<p>Ao converter diretamente esse valor para Int8 (intervalo [-128, 127]), ocorre saturação:
-* <code>50.000</code> -&gt; vira <code>127</code> (clamp)
-* <code>48.000</code> -&gt; vira <code>127</code> (clamp)</p>
+<p>Isso garante que usamos toda a faixa dinâmica de <code>-128</code> a <code>+127</code>.</p>
+<h3 id="33-calibracao-da-ppu-o-segredo-da-acuracia">3.3. Calibração da PPU (O Segredo da Acurácia)</h3>
+<p>A NPU opera internamente com acumuladores de 32 bits, mas a saída é limitada a 8 bits (<code>INT8</code>). Sem calibração, ocorre o fenômeno de <strong>saturação</strong> (<em>quantization saturation</em>), prejudicando a acurácia do modelo.</p>
+<h4 id="331-problema-saturacao">3.3.1. Problema: Saturação</h4>
+<p>Durante a inferência, a soma dos produtos (Pesos x Entradas) pode gerar valores muito altos, por exemplo <code>50.000</code>.</p>
+<p>Ao converter diretamente esse valor para <code>INT8</code> (intervalo [-128, 127]), ocorre saturação:</p>
+<ul>
+<li>
+<p><code>50.000</code> -&gt; vira <code>127</code> (<strong>clamp</strong>)</p>
+</li>
+<li>
+<p><code>48.000</code> -&gt; vira <code>127</code> (<strong>clamp</strong>)</p>
+</li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title"><strong><em>Clamping</em></strong></p>
+<p><strong><em>Clamping</em></strong> é a operação de saturação que restringe um valor numérico a um intervalo fechado pré-definido.</p>
+<p>Formalmente, dado um intervalo [<code>min</code>, <code>max</code>], o valor clamped é definido como:</p>
+<div class="arithmatex">\[
+y = min(max(x, min), max)
+\]</div>
+<p>Essa operação é também chamada de <strong>saturação</strong>, pois valores que ultrapassam os limites são "forçados" para a extremidade mais próxima do intervalo permitido.</p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Aluno Nota Dez</p>
+<p>Imagine uma prova cuja nota máxima é 10.</p>
+<ul>
+<li>Se um aluno obtém 12 pontos brutos, a nota registrada será 10.</li>
+<li>Não porque ele "só consegue tirar 10", mas porque <strong>o sistema de avaliação impõe 10 como limite superior</strong>.</li>
+</ul>
+<p>O clamping funciona exatamente assim: o valor real pode ser maior,
+mas o formato de representação define o teto permitido.</p>
+</div>
 <p>Apesar de <code>50.000</code> ser maior que <code>48.000</code>, ambos passam a ter <strong>exatamente a mesma representação</strong>.</p>
-<p>Com isso, o hardware perde a capacidade de diferenciar qual valor era realmente maior.<br />
+<p>Com isso, o hardware <strong>perde a capacidade de diferenciar qual valor era realmente maior</strong>.<br />
 Na prática, o modelo entra em um regime de <strong>empate artificial</strong>, e a decisão final se assemelha a um chute aleatório — semelhante a uma questão de múltipla escolha em que duas alternativas parecem igualmente corretas.</p>
-<h4 id="solucao-re-escalonamento-rescaling">Solução: Re-escalonamento (Rescaling)</h4>
-<p>Configuramos a PPU para multiplicar e dividir o resultado acumulado <em>antes</em> de cortar para 8 bits, trazendo os valores para a faixa dinâmica correta (-128 a +127).</p>
-<p><strong>Configuração Utilizada no Teste:</strong>
-* <strong>Mult (0x08):</strong> <code>100</code> (Aumenta precisão antes da divisão)
-* <strong>Shift (0x04):</strong> <code>16</code> (Divide por <span class="arithmatex">\(2^{16} = 65536\)</span>)</p>
+<h4 id="332-solucao-re-escalonamento-rescaling">3.3.2. Solução: Re-escalonamento (<strong><em>Rescaling</em></strong>)</h4>
+<p>Configuramos a PPU para multiplicar e dividir o resultado acumulado <em>antes</em> de cortar para 8 bits, trazendo os valores para a faixa dinâmica correta (<code>-128</code> a <code>+127</code>).</p>
+<p><strong>Configuração Utilizada no Teste:</strong></p>
+<ul>
+<li><strong>Mult (0x08):</strong> <code>100</code> (Aumenta precisão antes da divisão)</li>
+<li><strong>Shift (0x04):</strong> <code>16</code> (Divide por <span class="arithmatex">\(2^{16} = 65536\)</span>)</li>
+</ul>
 <p><strong>Matemática Real:</strong>
-$<span class="arithmatex">\(Saída = \frac{Acumulador \times 100}{65536}\)</span>$</p>
+$$
+Saída = \frac{Acumulador \times 100}{65536}
+$$</p>
 <p><strong>Exemplo Prático:</strong>
 Tomando o mesmo valor de <code>50.000</code> que antes saturava:
-$<span class="arithmatex">\(\frac{50.000 \times 100}{65536} \approx \frac{5.000.000}{65536} \approx 76\)</span>$</p>
+$$
+\frac{50.000 \times 100}{65536} \approx \frac{5.000.000}{65536} \approx 76
+$$</p>
 <ul>
-<li>O valor <strong>76</strong> cabe perfeitamente em 8 bits.</li>
-<li>O valor <code>48.000</code> viraria <strong>73</strong>.</li>
-<li>A NPU agora consegue distinguir que <strong>76 &gt; 73</strong>, restaurando a acurácia.</li>
+<li>O valor <code>76</code> cabe perfeitamente em 8 bits.</li>
+<li>O valor <code>48.000</code> viraria <code>73</code>.</li>
+<li>A NPU agora consegue distinguir que <strong><code>76</code> &gt; <code>73</code></strong>, restaurando a acurácia.</li>
 </ul>
 <h2 id="4-exemplo-de-inferencia">4. Exemplo de Inferência</h2>
-<p><strong>Entrada (Amostra Real de uma Versicolor):</strong>
-* Sépala: 6.0 cm, 2.2 cm
-* Pétala: 4.0 cm, 1.0 cm</p>
-<p><strong>Processamento:</strong>
-1.  O vetor quantizado entra na NPU.
-2.  A matriz sistólica multiplica pelas colunas de pesos das 3 flores.
-3.  A PPU aplica o Bias e faz o Rescaling.</p>
-<p><strong>Saída Esperada (Scores):</strong>
-* Col 0 (Setosa): -45 (Baixa probabilidade)
-* Col 1 (Versicolor): <strong>82</strong> (Alta probabilidade) 🏆
-* Col 2 (Virginica): 30 (Média probabilidade)</p>
-<p>O testbench (driver) lê esses valores, aplica <code>argmax([ -45, 82, 30 ])</code> e retorna <strong>Classe 1 (Versicolor)</strong>.</p>
+<p><strong>Entrada (Amostra Real de uma Versicolor):</strong></p>
+<ul>
+<li>Sépala: <code>6.0 cm</code>, <code>2.2 cm</code></li>
+<li>Pétala: <code>4.0 cm</code>, <code>1.0 cm</code></li>
+</ul>
+<p><strong>Processamento:</strong></p>
+<ol>
+<li>O vetor quantizado entra na NPU.</li>
+<li>A matriz sistólica multiplica pelas colunas de pesos das 3 flores.</li>
+<li>A PPU aplica o Bias e faz o Rescaling.</li>
+</ol>
+<p><strong>Saída Esperada (Scores):</strong></p>
+<ul>
+<li><strong>Col 0 (Setosa)</strong>: -45 (Baixa probabilidade)</li>
+<li><strong>Col 1 (Versicolor)</strong>: <strong>82</strong> (Alta probabilidade) 🏆</li>
+<li><strong>Col 2 (Virginica)</strong>: 30 (Média probabilidade)</li>
+</ul>
+<p>O testbench (driver) lê esses valores, aplica <code>argmax([ -45, 82, 30 ])</code> e retorna <strong>Classe 1 (Versicolor)</strong> definindo a categoria da flor de íris.</p>
+<h2 id="referencias">Referências</h2>
+<ul>
+<li>FISHER, Ronald A. The use of multiple measurements in taxonomic problems. <strong>Annals of eugenics</strong>, v. 7, n. 2, p. 179-188, 1936.</li>
+</ul>
 
 
 
@@ -1654,7 +1799,7 @@ $<span class="arithmatex">\(\frac{50.000 \times 100}{65536} \approx \frac{5.000.
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../MNIST/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Classificação MNIST">
+          <a href="../../dev/fpga_build/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Fluxo de Síntese (FPGA)">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -1664,11 +1809,27 @@ $<span class="arithmatex">\(\frac{50.000 \times 100}{65536} \approx \frac{5.000.
                 Previous
               </span>
               <div class="md-ellipsis">
-                Classificação MNIST
+                Fluxo de Síntese (FPGA)
               </div>
             </div>
           </a>
         
+        
+          
+          <a href="../MNIST/" class="md-footer__link md-footer__link--next" aria-label="Next: Classificação MNIST">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Classificação MNIST
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
         
       </nav>
     

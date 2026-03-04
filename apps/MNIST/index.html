@@ -13,10 +13,10 @@
         <link rel="canonical" href="https://Nyfeu.github.io/NPU/apps/MNIST/">
       
       
-        <link rel="prev" href="../../dev/fpga_build/">
+        <link rel="prev" href="../IRIS/">
       
       
-        <link rel="next" href="../IRIS/">
+        <link rel="next" href="../fc_synthetic/">
       
       
         
@@ -297,7 +297,7 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="./" class="md-tabs__link">
+        <a href="../IRIS/" class="md-tabs__link">
           
   
   
@@ -447,6 +447,34 @@
     
   
     Requisitos e Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro/quickstart.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Primeiros Passos
   
 
     
@@ -1005,6 +1033,34 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../IRIS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Classificação IRIS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -1091,10 +1147,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#entradas-features" class="md-nav__link">
+  <a href="#21-entradas-features" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Entradas (Features)
+        2.1. Entradas (Features)
       
     </span>
   </a>
@@ -1102,10 +1158,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#saidas-classes" class="md-nav__link">
+  <a href="#22-saidas-classes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Saídas (Classes)
+        2.2. Saídas (Classes)
       
     </span>
   </a>
@@ -1130,10 +1186,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#1-tiling-vertical-accumulation" class="md-nav__link">
+  <a href="#31-tiling-vertical-accumulation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Tiling Vertical (Accumulation)
+        3.1. Tiling Vertical (Accumulation)
       
     </span>
   </a>
@@ -1141,44 +1197,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#2-tiling-horizontal-passadas" class="md-nav__link">
+  <a href="#32-tiling-horizontal-passadas" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Tiling Horizontal (Passadas)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#calibracao-inteligente-da-ppu" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Calibração "Inteligente" da PPU
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Calibração &#34;Inteligente&#34; da PPU">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#problema-o-over-shifting" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Problema: O "Over-Shifting"
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#solucao-calibracao-por-observacao" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Solução: Calibração por Observação
+        3.2. Tiling Horizontal (Passadas)
       
     </span>
   </a>
@@ -1187,6 +1209,40 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-calibracao-da-ppu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Calibração da PPU
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Calibração da PPU">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-problema-over-shifting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1. Problema: Over-Shifting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-solucao-calibracao-por-observacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2. Solução: Calibração por Observação
+      
+    </span>
+  </a>
   
 </li>
         
@@ -1200,6 +1256,17 @@
     <span class="md-ellipsis">
       
         4. Exemplo de Inferência
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Referências
       
     </span>
   </a>
@@ -1222,14 +1289,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../IRIS/" class="md-nav__link">
+      <a href="../fc_synthetic/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Classificação IRIS
+    Classificação de Dados Sintéticos
   
 
     
@@ -1328,10 +1395,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#entradas-features" class="md-nav__link">
+  <a href="#21-entradas-features" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Entradas (Features)
+        2.1. Entradas (Features)
       
     </span>
   </a>
@@ -1339,10 +1406,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#saidas-classes" class="md-nav__link">
+  <a href="#22-saidas-classes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Saídas (Classes)
+        2.2. Saídas (Classes)
       
     </span>
   </a>
@@ -1367,10 +1434,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#1-tiling-vertical-accumulation" class="md-nav__link">
+  <a href="#31-tiling-vertical-accumulation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Tiling Vertical (Accumulation)
+        3.1. Tiling Vertical (Accumulation)
       
     </span>
   </a>
@@ -1378,44 +1445,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#2-tiling-horizontal-passadas" class="md-nav__link">
+  <a href="#32-tiling-horizontal-passadas" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Tiling Horizontal (Passadas)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#calibracao-inteligente-da-ppu" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Calibração "Inteligente" da PPU
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Calibração &#34;Inteligente&#34; da PPU">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#problema-o-over-shifting" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Problema: O "Over-Shifting"
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#solucao-calibracao-por-observacao" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Solução: Calibração por Observação
+        3.2. Tiling Horizontal (Passadas)
       
     </span>
   </a>
@@ -1424,6 +1457,40 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-calibracao-da-ppu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Calibração da PPU
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Calibração da PPU">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-problema-over-shifting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1. Problema: Over-Shifting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-solucao-calibracao-por-observacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2. Solução: Calibração por Observação
+      
+    </span>
+  </a>
   
 </li>
         
@@ -1437,6 +1504,17 @@
     <span class="md-ellipsis">
       
         4. Exemplo de Inferência
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Referências
       
     </span>
   </a>
@@ -1463,13 +1541,19 @@
   
 
 
-<h1 id="documentacao-do-dataset-mnist">🔢 Documentação do Dataset MNIST</h1>
+<h1 id="documentacao-do-dataset-mnist">Documentação do Dataset MNIST 🔢</h1>
 <h2 id="1-visao-geral">1. Visão Geral</h2>
-<p>O <strong>MNIST Dataset</strong> foi o conjunto de dados utilizado para validar a capacidade de <strong>Tiling (Ladrilhamento)</strong> e o processamento de grandes volumes de dados na NPU. Ele consiste no reconhecimento de dígitos manuscritos (0 a 9) a partir de imagens em escala de cinza de 28x28 pixels.</p>
-<p>Diferente do Iris, este dataset excede as dimensões físicas da NPU (784 entradas vs 4 linhas físicas), exigindo que o driver de software fracione o problema em blocos menores que são acumulados temporalmente pelo hardware.</p>
+<p>O <strong>MNIST Dataset</strong> foi o conjunto de dados utilizado para validar a capacidade de <strong>Tiling (Ladrilhamento)</strong> e o processamento de grandes volumes de dados na NPU. </p>
+<div class="admonition info">
+<p class="admonition-title">MNIST Dataset</p>
+<p>O banco de dados <strong>MNIST</strong> (<em>Modified National Institute of Standards and Technology</em>) é um grande banco de dígitos manuscrítos comumente utilizado para o treinamento de diversos sistemas de processamento de imagens. Conta com 60.000 imagens de treinamento e 10.000 imagens de teste.</p>
+</div>
+<p><img alt="Mnist Dataset" class="hero-img" src="../../assets/mnist_dataset.png" /></p>
+<p>Utilizaremos para o treinamento de redes neurais para o reconhecimento de dígitos manuscritos (0 a 9) a partir de imagens em escala de cinza de <strong>28x28 pixels</strong>.</p>
+<p>Diferente do Iris, este dataset excede as dimensões físicas da NPU (784 entradas vs 4 linhas físicas), exigindo que o driver de software fracione o problema em blocos menores que são acumulados temporalmente pelo hardware - por isso, serve como teste para a técnica de <strong><em>tiling</em></strong>. </p>
 <h2 id="2-estrutura-dos-dados">2. Estrutura dos Dados</h2>
-<h3 id="entradas-features">Entradas (Features)</h3>
-<p>Cada amostra é uma imagem de <span class="arithmatex">\(28 \times 28\)</span> pixels, que é "achatada" (<em>flattened</em>) em um vetor linear de 784 bytes (Int8).</p>
+<h3 id="21-entradas-features">2.1. Entradas (Features)</h3>
+<p>Cada amostra é uma imagem de <span class="arithmatex">\(28 \times 28\)</span> pixels, que é "achatada" (<em>flattened</em>) em um vetor linear de 784 bytes (<code>INT8</code>).</p>
 <table>
 <thead>
 <tr>
@@ -1483,25 +1567,25 @@
 <tr>
 <td style="text-align: left;"><strong>0</strong></td>
 <td style="text-align: left;">Pixel (0,0) - Canto Sup. Esq.</td>
-<td style="text-align: left;">0 (Preto) a 255 (Branco)</td>
-<td style="text-align: left;">Int8 (Padronizado)</td>
+<td style="text-align: left;"><code>0</code> (<strong>Preto</strong>) a <code>255</code> (<strong>Branco</strong>)</td>
+<td style="text-align: left;"><code>INT8</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>1..782</strong></td>
 <td style="text-align: left;">Pixels intermediários</td>
-<td style="text-align: left;">0 a 255</td>
-<td style="text-align: left;">Int8 (Padronizado)</td>
+<td style="text-align: left;"><code>0</code> a <code>255</code></td>
+<td style="text-align: left;"><code>INT8</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>783</strong></td>
 <td style="text-align: left;">Pixel (27,27) - Canto Inf. Dir.</td>
-<td style="text-align: left;">0 a 255</td>
-<td style="text-align: left;">Int8 (Padronizado)</td>
+<td style="text-align: left;"><code>0</code> a <code>255</code></td>
+<td style="text-align: left;"><code>INT8</code></td>
 </tr>
 </tbody>
 </table>
-<h3 id="saidas-classes">Saídas (Classes)</h3>
-<p>A NPU deve calcular scores para 10 classes. Como o array tem largura 4, o processamento é feito em 3 passadas de colunas:</p>
+<h3 id="22-saidas-classes">2.2. Saídas (Classes)</h3>
+<p>A NPU deve calcular scores para <strong>10 classes</strong>. Como o array tem largura 4, o processamento é feito em 3 passadas de colunas:</p>
 <table>
 <thead>
 <tr>
@@ -1524,58 +1608,109 @@
 <tr>
 <td style="text-align: left;"><strong>8, 9</strong></td>
 <td style="text-align: left;">Dígitos <strong>8, 9</strong></td>
-<td style="text-align: left;">3ª Passada (+ Padding)</td>
+<td style="text-align: left;">3ª Passada (+ <strong>Padding</strong>)</td>
 </tr>
 </tbody>
 </table>
 <h2 id="3-mapeamento-no-hardware-tiling">3. Mapeamento no Hardware (Tiling)</h2>
-<p>O desafio do MNIST é mapear uma matriz de pesos virtual de <code>[784 entradas x 10 saídas]</code> em um hardware físico de <code>[4x4]</code>. Utilizamos a estratégia de <strong>Double Tiling</strong>:</p>
-<h3 id="1-tiling-vertical-accumulation">1. Tiling Vertical (Accumulation)</h3>
-<p>Como temos 784 entradas e apenas 4 linhas:
-* O driver divide as 784 entradas em <strong>196 blocos</strong> de 4 valores.
-* <strong>Controle:</strong>
-    * No 1º bloco: O driver envia flag <code>ACC_CLEAR</code> (zera acumuladores).
-    * Nos blocos centrais: A NPU soma os resultados parciais internamente.
-    * No 196º bloco: O driver envia flag <code>ACC_DUMP</code> (libera o resultado).</p>
-<h3 id="2-tiling-horizontal-passadas">2. Tiling Horizontal (Passadas)</h3>
-<p>Como temos 10 classes e apenas 4 colunas:
-* O processo acima é repetido 3 vezes para cobrir todas as colunas da matriz de pesos.</p>
-<h3 id="calibracao-inteligente-da-ppu">Calibração "Inteligente" da PPU</h3>
-<p>No MNIST, a dispersão dos dados é diferente do Iris (muitos zeros devido ao fundo preto das imagens). Uma calibração teórica baseada no pior caso leva à perda total de sinal.</p>
-<h4 id="problema-o-over-shifting">Problema: O "Over-Shifting"</h4>
-<p>O pior caso teórico (todos pixels brancos × todos pesos máximos) geraria um acumulador de ~12.000.000.
-* Para acomodar isso em 8 bits, precisaríamos de um <strong>Shift = 17</strong> (dividir por 131.072).
-* Porém, a soma real observada nas inferências raramente passa de <strong>32.000</strong>.
-* <strong>Resultado:</strong> <span class="arithmatex">\(32.000 \div 131.072 = 0\)</span>. A saída da NPU seria sempre zero.</p>
-<h4 id="solucao-calibracao-por-observacao">Solução: Calibração por Observação</h4>
-<p>Ajustamos o shift baseando-nos nos valores máximos reais observados durante a execução do conjunto de validação.</p>
-<p><strong>Configuração Otimizada (Smart Calibration):</strong>
-* <strong>Mult (0x08):</strong> <code>1</code> (Pass-through)
-* <strong>Shift (0x04):</strong> <code>9</code> (Divide por <span class="arithmatex">\(2^9 = 512\)</span>)</p>
-<p><strong>Matemática Real:</strong>
-$<span class="arithmatex">\(Saída = \frac{Acumulador \times 1}{512}\)</span>$</p>
-<p><strong>Exemplo Prático:</strong>
-Se o acumulador final para o dígito "7" for <code>32.700</code>:
-$<span class="arithmatex">\(\frac{32.700}{512} \approx 63\)</span>$</p>
+<p>O desafio do MNIST é mapear uma matriz de pesos virtual de <code>[784 entradas x 10 saídas]</code> em um hardware físico de <code>[4x4]</code>. Utilizamos a estratégia de <strong>Double Tiling</strong>. Em outras palavras, é feito o <em>tiling</em> tanto para matriz de pesos (<em>weights</em>) quanto de entradas (<em>inputs</em>).</p>
+<h3 id="31-tiling-vertical-accumulation">3.1. Tiling Vertical (Accumulation)</h3>
+<p>Como temos 784 entradas e apenas 4 linhas:</p>
 <ul>
-<li>O valor <strong>63</strong> é um score alto e válido em Int8.</li>
-<li>Isso permitiu atingir acurácia <strong>Bit-Exact</strong> em relação ao modelo de software.</li>
+<li>O driver divide as 784 entradas em <strong>196 blocos</strong> de 4 valores.</li>
+<li><strong>Controle:</strong><ul>
+<li>No 1º bloco: O driver envia flag <code>ACC_CLEAR</code> (zera acumuladores).</li>
+<li>Nos blocos centrais: A NPU soma os resultados parciais internamente.</li>
+<li>No 196º bloco: O driver envia flag <code>ACC_DUMP</code> (libera o resultado).</li>
+</ul>
+</li>
+</ul>
+<h3 id="32-tiling-horizontal-passadas">3.2. Tiling Horizontal (Passadas)</h3>
+<p>Como temos 10 classes e apenas 4 colunas:</p>
+<ul>
+<li>O processo acima é repetido 3 vezes para cobrir todas as colunas da matriz de pesos.</li>
+<li>Como são 10 classes, a última passada é realizada utilizando a técnica de <em>padding</em>. </li>
+</ul>
+<h2 id="4-calibracao-da-ppu">4. Calibração da PPU</h2>
+<p>No MNIST, a dispersão dos dados é diferente do Iris (muitos zeros devido ao fundo preto das imagens). Uma calibração teórica baseada no pior caso leva à perda total de sinal.</p>
+<h3 id="41-problema-over-shifting">4.1. Problema: Over-Shifting</h3>
+<p>O pior caso teórico (todos pixels brancos × todos pesos máximos) geraria um acumulador de ~12.000.000.</p>
+<ul>
+<li>Para acomodar isso em 8 bits, precisaríamos de um <strong>Shift = 17</strong> (dividir por 131.072).</li>
+<li>Porém, a soma real observada nas inferências raramente passa de <strong>32.000</strong>.</li>
+<li><strong>Resultado:</strong> <span class="arithmatex">\(32.000 \div 131.072 = 0\)</span>. A saída da NPU seria sempre zero.</li>
+</ul>
+<h3 id="42-solucao-calibracao-por-observacao">4.2. Solução: Calibração por Observação</h3>
+<p>Ajustamos o shift baseando-nos nos valores máximos reais observados durante a execução do conjunto de validação.</p>
+<p><strong>Configuração Otimizada (Smart Calibration):</strong></p>
+<ul>
+<li><strong>Mult (0x08):</strong> <code>1</code> (Pass-through)</li>
+<li><strong>Shift (0x04):</strong> <code>9</code> (Divide por <span class="arithmatex">\(2^9 = 512\)</span>)</li>
+</ul>
+<p><strong>Matemática Real:</strong>
+$$
+Saída = \frac{Acumulador \times 1}{512}
+$$</p>
+<p><strong>Exemplo Prático:</strong>
+Se o acumulador final para o dígito <code>7</code> for <code>32.700</code>:
+$$
+\frac{32.700}{512} \approx 63
+$$</p>
+<ul>
+<li>O valor <strong>63</strong> é um score alto e válido em <code>INT8</code>.</li>
+<li>Isso permitiu atingir acurácia <strong>bit-exact</strong> em relação ao modelo de software.</li>
 </ul>
 <h2 id="4-exemplo-de-inferencia">4. Exemplo de Inferência</h2>
 <p><strong>Entrada (Imagem de um "7"):</strong>
-* Vetor de 784 bytes, onde a maioria é 0 (fundo), mas os pixels centrais formam o desenho.</p>
-<p><strong>Processamento (Resumo):</strong>
-1.  <strong>Passada 1 (Dígitos 0-3):</strong> Acumuladores terminam baixos (ex: -10, -5, 2, -20).
-2.  <strong>Passada 2 (Dígitos 4-7):</strong>
-    * O acumulador da coluna 3 (Dígito 7) soma muita correlação positiva.
-    * Valor bruto atinge <code>32.000</code>.
-    * PPU aplica Shift 9 -&gt; Saída <strong>62</strong>.
-3.  <strong>Passada 3 (Dígitos 8-9):</strong> Acumuladores baixos.</p>
+- Vetor de 784 bytes, onde a maioria é <code>0</code> (fundo), mas os pixels centrais formam o desenho.</p>
+<div class="admonition note">
+<p class="admonition-title">Matrizes Esparsa</p>
+<p><strong>Matrizes esparsas são aquelas em que a maioria dos elementos é nula</strong>. EEm arquiteturas de aceleradores (NPUs) projetadas com fluxos de dados fixos (como arrays sistólicos padrão), todas as multiplicações são executadas independentemente do valor dos operandos. O processamento de operações <span class="arithmatex">\(0 \times x\)</span> consome os mesmos ciclos de clock e energia que operações com valores não nulos.</p>
+<p>Em contraste, processadores de propósito geral (CPUs) podem explorar a esparsidade via software, utilizando estruturas de dados dinâmicas ou desvios condicionais para evitar a execução de instruções inúteis. Assim, se a NPU não implementar técnicas de compressão nativa ou <em>zero-skipping</em> em hardware, a sua eficiência computacional despenca à medida que a esparsidade da matriz aumenta, reduzindo a vantagem relativa sobre a CPU.</p>
+<p>Assim, <strong>o ganho relativo de aceleração da NPU em relação à CPU diminui à medida que a matriz se torna mais esparsa</strong>, a menos que a arquitetura implemente técnicas de compressão ou <em>zero-skipping</em>.</p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Big-O Notation</p>
+<p>Considere uma multiplicação matriz-vetor típica de <strong>MLP</strong>s (<em>Multilayer Perceptrons</em>):</p>
+<div class="arithmatex">\[
+y_i = \sum _{j=1} ^n w_{ij} x_j
+\]</div>
+<p>Se a matriz é <span class="arithmatex">\(n \times m\)</span>:</p>
+<ul>
+<li>
+<p>No caso <strong>denso</strong> o número de multiplicações necessárias tem ordem de complexidade: $ O(n^2) $. </p>
+</li>
+<li>
+<p>No caso <strong>esparso</strong>, se definirmos <span class="arithmatex">\(k\)</span> como o número de elementos não nulos, a utilização de representações comprimidas em hardware deedicado reduz a complexidade temporal efetiva para $ O(k) $. O custo deixa de ser quadrático e passa a escalar linearmente apeenas com os dados úteis.  </p>
+</li>
+</ul>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Zero-Skipping</p>
+<p><em>Zero-skipping</em> é uma técnica de microarquitetura na qual operandos com valor zero são detectados antes de entrarem no <em>pipeline</em> de execução. As operações correspondentes não são emitidas para a unidade de multiplicação, economizando energia (via <em>clock gating</em>) ou liberando o recurso de hardware para processar os próximos valores úteis da fila, aumentando o <em>throughput</em> real do sistema.</p>
+</div>
+<p><strong>Processamento (Resumo):</strong></p>
+<ol>
+<li><strong>Passada 1 (Dígitos 0-3):</strong> Acumuladores terminam baixos (ex: -10, -5, 2, -20).</li>
+<li><strong>Passada 2 (Dígitos 4-7):</strong><ul>
+<li>O acumulador da coluna 3 (Dígito 7) soma muita correlação positiva.</li>
+<li>Valor bruto atinge <code>32.000</code>.</li>
+<li>PPU aplica Shift 9 -&gt; Saída <strong>62</strong>.</li>
+</ul>
+</li>
+<li><strong>Passada 3 (Dígitos 8-9):</strong> Acumuladores baixos.</li>
+</ol>
 <p><strong>Saída Final (Scores):</strong>
-```text
-[ -10, -5, 2, -20,  15, -8, -2,  62,  5,  -12 ]
-                                 ^
-                                 Dígito 7</p>
+<div class="highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>[ -10, -5, 2, -20,  15, -8, -2,  62,  5,  -12 ]
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>                                 ^
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>                                 Dígito 7
+</span></code></pre></div></p>
+<h2 id="referencias">Referências</h2>
+<ul>
+<li>KHODABAKHSH, H. MNIST Dataset. Disponível em: <a href="https://www.kaggle.com/datasets/hojjatk/mnist-dataset">https://www.kaggle.com/datasets/hojjatk/mnist-dataset</a>.</li>
+<li>LECUN, Yann. The MNIST database of handwritten digits. Disponível em: <a href="http://yann.lecun.com/exdb/mnist/">http://yann.lecun.com/exdb/mnist/</a>. 1998.
+‌</li>
+</ul>
 
 
 
@@ -1634,7 +1769,7 @@ $<span class="arithmatex">\(\frac{32.700}{512} \approx 63\)</span>$</p>
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../../dev/fpga_build/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Fluxo de Síntese (FPGA)">
+          <a href="../IRIS/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Classificação IRIS">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -1644,20 +1779,20 @@ $<span class="arithmatex">\(\frac{32.700}{512} \approx 63\)</span>$</p>
                 Previous
               </span>
               <div class="md-ellipsis">
-                Fluxo de Síntese (FPGA)
+                Classificação IRIS
               </div>
             </div>
           </a>
         
         
           
-          <a href="../IRIS/" class="md-footer__link md-footer__link--next" aria-label="Next: Classificação IRIS">
+          <a href="../fc_synthetic/" class="md-footer__link md-footer__link--next" aria-label="Next: Classificação de Dados Sintéticos">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Classificação IRIS
+                Classificação de Dados Sintéticos
               </div>
             </div>
             <div class="md-footer__button md-icon">
