@@ -71,6 +71,7 @@ nav:
   - Software e Integração:
       - API de Programação: software/api_programming.md
       - Hardware-in-the-Loop (HIL): software/hil.md
+      - Benchmark: hardware/benchmark.md
   - Simulação e Verificação:
       - Ambiente de Testes (Cocotb): dev/simulation.md     
       - Fluxo de Síntese (FPGA): dev/fpga_build.md         
