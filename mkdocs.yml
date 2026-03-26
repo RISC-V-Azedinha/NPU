@@ -67,18 +67,18 @@ nav:
       - Fluxo de Dados (Dataflow): hardware/systolic_array.md  
       - Unidade de Pós-Processamento (PPU): hardware/ppu.md 
       - Unidade de Controle (FSM): hardware/controller.md   
-      - Gestão e Reutilização de Dados: hardware/datapath.md     
+      - Gestão de Dados: hardware/datapath.md     
   - Software e Integração:
       - API de Programação: software/api_programming.md
       - Hardware-in-the-Loop (HIL): software/hil.md
-      - Benchmark: hardware/benchmark.md
-  - Simulação e Verificação:
+  - Desenvolvimento e Avaliação:
       - Ambiente de Testes (Cocotb): dev/simulation.md     
-      - Fluxo de Síntese (FPGA): dev/fpga_build.md         
+      - Fluxo de Síntese (FPGA): dev/fpga_build.md  
+      - Benchmark e Baselines: hardware/benchmark.md       
   - Aplicações:
       - Classificação IRIS: apps/IRIS.md
       - Classificação MNIST: apps/MNIST.md
-      - Classificação de Dados Sintéticos: apps/fc_synthetic.md
+      - Dados Sintéticos (FCN): apps/fc_synthetic.md
 
 extra_css:
   - stylesheets/extra.css

@@ -1,4 +1,4 @@
-# Guia de Início Rápido (*Quickstart*)
+# Primeiros Passos (*Quickstart*)
 
 Este guia foi desenhado para colocar você no controle da arquitetura o mais rápido possível. Em poucos minutos, você será capaz de executar simulações RTL completas e rodar sua primeira inferência de Rede Neural usando nossa stack de software em Python.
 
