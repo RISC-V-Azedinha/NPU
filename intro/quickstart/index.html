@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.3">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
@@ -78,6 +78,11 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
+      
+        
+        <a href="#guia-de-inicio-rapido-quickstart" class="md-skip">
+          Skip to content
+        </a>
       
     </div>
     <div data-md-component="announce">
@@ -473,6 +478,26 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Primeiros Passos
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
         
@@ -490,6 +515,80 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-configuracao-do-ambiente" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Configuração do Ambiente
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-executando-a-primeira-simulacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Executando a Primeira Simulação
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-hardware-fisico-fpga" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Hardware Físico (FPGA)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-rodando-uma-aplicacao-hil" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Rodando uma Aplicacao (HIL)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#proximos-passos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Próximos Passos
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -1084,6 +1183,71 @@
   
   
   
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-configuracao-do-ambiente" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Configuração do Ambiente
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-executando-a-primeira-simulacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Executando a Primeira Simulação
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-hardware-fisico-fpga" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Hardware Físico (FPGA)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-rodando-uma-aplicacao-hil" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Rodando uma Aplicacao (HIL)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#proximos-passos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Próximos Passos
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -1103,9 +1267,59 @@
   
 
 
-  <h1>Primeiros Passos</h1>
-
-
+<h1 id="guia-de-inicio-rapido-quickstart">Guia de Início Rápido (<em>Quickstart</em>)</h1>
+<p>Este guia foi desenhado para colocar você no controle da arquitetura o mais rápido possível. Em poucos minutos, você será capaz de executar simulações RTL completas e rodar sua primeira inferência de Rede Neural usando nossa stack de software em Python.</p>
+<h2 id="1-configuracao-do-ambiente">1. Configuração do Ambiente</h2>
+<p>Primeiro, clone o repositório e instale as dependências Python necessárias para a simulação e para a comunicação de software:
+<div class="highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Clone o repositório</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/RISC-V-Azedinha/NPU.git
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Crie e ative um ambiente virtual (recomendado)</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>venv
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="nb">source</span><span class="w"> </span>venv/bin/activate<span class="w"> </span><span class="c1"># No Windows: venv\Scripts\activate</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="c1"># Instale as dependências</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</span></code></pre></div></p>
+<h2 id="2-executando-a-primeira-simulacao">2. Executando a Primeira Simulação</h2>
+<p>Para garantir que o core da NPU, as memórias e a máquina de estados estão funcionando corretamente na sua máquina, utilize nossa infraestrutura de testes automatizados.</p>
+<p>O projeto conta com Makefiles modulares. Para rodar a bateria de testes de simulação de ponta a ponta (test_npu_top.py), basta executar:
+<div class="highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>make<span class="w"> </span>sim
+</span></code></pre></div></p>
+<div class="admonition note">
+<p class="admonition-title">Simulação</p>
+<p>Este comando invocará as regras definidas em <code>mk/rules_sim.mk</code>, compilando os arquivos VHDL e executando os testes em Python interligados ao RTL. Se tudo estiver correto, você verá os logs de PASS no terminal.</p>
+</div>
+<h2 id="3-hardware-fisico-fpga">3. Hardware Físico (FPGA)</h2>
+<p>Se você possui uma placa FPGA suportada, o fluxo de <em>build</em> também está automatizado via scripts TCL.</p>
+<p>Para gerar o Bitstream e programar a placa, utilize:
+<div class="highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Inicia a sintese, place &amp; route, geração do bitstream e programa a FPGA</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>make<span class="w"> </span>fpga<span class="w"> </span>
+</span></code></pre></div></p>
+<div class="admonition tip">
+<p class="admonition-title">Hardware-in-the-Loop</p>
+<p>Consulte as páginas <a href="https://risc-v-azedinha.github.io/NPU/software/hil/">Hardware in the Loop (HIL)</a> e <a href="https://risc-v-azedinha.github.io/NPU/dev/fpga_build/">FPGA Build</a> para detalhes mais aprofundados sobre a integração física.</p>
+</div>
+<h2 id="4-rodando-uma-aplicacao-hil">4. Rodando uma Aplicacao (HIL)</h2>
+<p>A verdadeira mágica acontece quando colocamos a NPU para resolver problemas reais. O diretório <code>sw/</code> contém a API de programação da NPU e exemplos práticos.</p>
+<p>Vamos testar a NPU executando a inferência do clássico <strong>Dataset IRIS</strong> (Classificação de Flores):
+<div class="highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>python<span class="w"> </span>sw/fpga_iris.py
+</span></code></pre></div></p>
+<p>O que este script faz:
+1. Carrega os pesos e vieses (biases) de um modelo pré-treinado.
+2. Injeta os dados na NPU via Memory-Mapped I/O (MMIO).
+3. Aciona a Unidade de Controle (FSM) para iniciar o processamento no Arranjo Sistólico.
+4. Lê os resultados quantizados descarregados pelas FIFOs e exibe a precisão da classificação no terminal.</p>
+<div class="admonition example">
+<p class="admonition-title">MNIST</p>
+<p>Quer um desafio maior? Tente rodar o script de reconhecimento de dígitos: python <code>sw/fpga_mnist.py</code>! </p>
+</div>
+<h2 id="proximos-passos">Próximos Passos</h2>
+<p>Agora que você já rodou o projeto, sugerimos explorar as seguintes áreas da documentação para aprofundar seu entendimento:</p>
+<ul>
+<li>📖 <a href="https://risc-v-azedinha.github.io/NPU/hardware/overview/">Visão Geral da Arquitetura</a>: Entenda como a arquitetura do hardware funciona!</li>
+<li>💻 <a href="https://risc-v-azedinha.github.io/NPU/software/api_programming/">Programação da API</a>: Aprenda como controlar o hardware da NPU.</li>
+</ul>
 
 
 
@@ -1126,7 +1340,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-datetime" title="March 26, 2026 18:18:23 UTC">March 26, 2026 18:18:23</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-datetime" title="March 26, 2026 20:39:06 UTC">March 26, 2026 20:39:06</span>
   </span>
 
     
