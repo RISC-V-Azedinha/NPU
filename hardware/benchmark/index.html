@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://RISC-V-Azedinha.github.io/NPU/hardware/systolic_array/">
+        <link rel="canonical" href="https://RISC-V-Azedinha.github.io/NPU/hardware/benchmark/">
       
       
-        <link rel="prev" href="../overview/">
+        <link rel="prev" href="../../software/hil/">
       
       
-        <link rel="next" href="../ppu/">
+        <link rel="next" href="../../dev/simulation/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>Fluxo de Dados (Dataflow) - Neural Processing Unit - NPU</title>
+        <title>Benchmark - Neural Processing Unit - NPU</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#arranjo-sistolico-systolic-array" class="md-skip">
+        <a href="#system-on-chip-soc-benchmark" class="md-skip">
           Skip to content
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Fluxo de Dados (Dataflow)
+              Benchmark
             
           </span>
         </div>
@@ -231,12 +231,10 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
+      <li class="md-tabs__item">
         <a href="../overview/" class="md-tabs__link">
           
   
@@ -253,10 +251,12 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
+      <li class="md-tabs__item md-tabs__item--active">
         <a href="../../software/api_programming/" class="md-tabs__link">
           
   
@@ -499,29 +499,24 @@
       
   
   
-    
   
   
-  
     
     
     
     
       
-        
-        
-      
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
         
           
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
             
   
   
@@ -539,7 +534,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             
@@ -582,37 +577,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Fluxo de Dados (Dataflow)
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../systolic_array/" class="md-nav__link">
         
   
   
@@ -628,37 +596,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#referencias" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Referências
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -759,24 +696,29 @@
       
   
   
+    
   
   
+  
     
     
     
     
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
             
   
   
@@ -794,7 +736,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -865,10 +807,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../benchmark/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Benchmark
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -884,6 +853,170 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-cpu-baselines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. CPU Baselines
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. CPU Baselines">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-motivacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1. Motivação
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-rv32i-multiciclo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2. RV32I Multiciclo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-comparacao-com-mcu-comercial" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3. Comparação com MCU Comercial
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-classe-de-arquiteturas-consideradas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4. Classe de Arquiteturas Consideradas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-justificativa-do-uso-de-um-core-rv32i-multiciclo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5. Justificativa do Uso de um Core RV32I Multiciclo
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-npu-speedup-bounds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. NPU Speedup Bounds
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. NPU Speedup Bounds">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-definicao-formal-de-speedup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1. Definição Formal de Speedup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-overhead-de-offload" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2. Overhead de Offload
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-lei-de-amdahl-aplicada-a-npu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3. Lei de Amdahl Aplicada à NPU
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-limite-pratico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4. Limite Prático
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Referências
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1177,6 +1310,139 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#1-cpu-baselines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. CPU Baselines
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. CPU Baselines">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-motivacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1. Motivação
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-rv32i-multiciclo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2. RV32I Multiciclo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-comparacao-com-mcu-comercial" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3. Comparação com MCU Comercial
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-classe-de-arquiteturas-consideradas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4. Classe de Arquiteturas Consideradas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-justificativa-do-uso-de-um-core-rv32i-multiciclo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5. Justificativa do Uso de um Core RV32I Multiciclo
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-npu-speedup-bounds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. NPU Speedup Bounds
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. NPU Speedup Bounds">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-definicao-formal-de-speedup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1. Definição Formal de Speedup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-overhead-de-offload" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2. Overhead de Offload
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-lei-de-amdahl-aplicada-a-npu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3. Lei de Amdahl Aplicada à NPU
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-limite-pratico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4. Limite Prático
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#referencias" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1207,47 +1473,219 @@
   
 
 
-<h1 id="arranjo-sistolico-systolic-array">Arranjo Sistólico (<em>Systolic Array</em>)</h1>
-<p>O principal desafio no projeto de NPUs não reside no custo computacional das operações aritméticas em si, mas no consumo energético e na latência associados à movimentação de dados entre os diferentes níveis da hierarquia de memória. Em muitos cenários, o gasto energético para acessar a memória - especialmente fora do chip - supera significativamente o custo de executar operações de multiplicação e acumulação. Essa limitação é conhecida como <strong>Memory Wall</strong>, fenômeno que descreve a crescente disparidade entre a capacidade de processamento dos sistemas e a largura de banda efetiva da memória. À medida que o desempenho computacional evolui em ritmo acelerado, a escalabilidade do subsistema de memória é restringida por limitações físicas e tecnológicas, como gargalos de entrada e saída (I/O) e desafios de integridade de sinal, tornando a movimentação de dados um fator dominante no consumo de energia e no tempo total de execução.</p>
-<p><img alt="Memory Wall" class="hero-img" src="../../assets/memory_wall.webp" /></p>
-<p>Para vencer esse desafio, a arquitetura mais clássica e eficiente (usada no Google TPU - Tensor Processing Unit) é o <strong>Arranjo Sistólico</strong>. Imagine um “grid” de unidades de cálculo (PEs - <em>Processing Elements</em>). Em vez de cada PE ir buscar dados na memória principal, eles passam dados para o vizinho. É como uma linha de montagem: os dados fluem ritmicamente (daí o nome “sistólico”, como o batimento cardíaco) através da matriz. </p>
-<div class="admonition tip">
-<p class="admonition-title">Redução de Acesso à Memória</p>
-<p>Isso reduz drasticamente o acesso à memória, pois um dado lido uma vez reutilizado por vários PEs. Sendo de suma importância para não congestionar a tráfego de dados pelo barramento principal do SoC (<em>System-on-Chip</em>).</p>
-</div>
-<p>Existem algumas abordagens possíveis para o fluxo de dados (<strong><em>dataflow</em></strong>) em Arranjos Sistólico, sendo as mais comuns: </p>
+<h1 id="system-on-chip-soc-benchmark">System-on-Chip (SoC) Benchmark</h1>
+<h2 id="1-cpu-baselines">1. CPU Baselines</h2>
+<h3 id="11-motivacao">1.1. Motivação</h3>
+<p>A avaliação de desempenho de aceleradores dedicados, como a NPU proposta neste trabalho depende da definição de uma <em>baseline</em> de CPU adequada. Comparações diretas de tempo de execução ou throughput absoluto tendem a ser fortemente influenciadas por fatores externos à arquitetura - como frequência de clock, tecnologia de fabricação, compiladores otimizados e microarquiteturas proprietárias - o que dificulta a análise do ganho arquitetura proporcionado pelo acelerador.</p>
+<p>Dessa forma, este trabalho adota como princípio metodológico a comparação em número de ciclos e em nível arquitetural, abstraindo deliberadamente a frequência de operação. O objetivo não é reproduzir fielmente o comportamento de um microcontrolador comercial específico, mas sim estabelecer limites plausíveis para uma CPU de classe de microprocessadores embarcados (<em>embedded</em>), contra a qual o ganho da NPU possa ser avaliado de forma justa e reprodutível.</p>
+<h3 id="12-rv32i-multiciclo">1.2. RV32I Multiciclo</h3>
+<p>A CPU utilizada como baseline neste SoC (System-on-a-Chip) é uma implementação RV32I-like estritamente multiciclo, sem pipeline, sem execução fora de ordem e sem extensões opcionais (M, F, V etc.). Cada instrução é decomposta em estágios funcionais sequenciais, com latências determinadas por restrições reais de FPGA, em especial:</p>
 <ul>
-<li>
-<p><strong><em>Weight Stationary</em></strong> (Pesos Estacionários): os pesos da rede neural são carregados nos PEs e ficam lá fixos. As entradas (ou ativações) fluem horizontalmente e as somas parciais fluem verticalmente (ou se acumulam localmente). Isso torna essa estratégia excelente para inferência e convoluções onde os mesmos filtros (pesos) são aplicados repetidamente sobre diferentes dados. Maximiza o reuso dos pesos. </p>
-</li>
-<li>
-<p><strong><em>Output Stationary</em></strong> (Saídas Estacionárias): o resultado da multiplicação (o acumulador) fica parado no PE. As entradas e os pesos fluem através do arranjo. Quando precisamos calcular somas muito grandes que não precisam sair do chip imediatamente, mas requer uma lógica de controle um pouco diferente. Útil para multiplicação de matrizes geral (<strong>GEMM</strong>).</p>
-</li>
-<li>
-<p><strong><em>Input Sationary</em></strong> (Entradas Estacionárias): as ativações (dados de entrada) são carregadas nos PEs e permanecem fixas lá, enquanto os pesos e as somas parciais fluem através do arranjo de processamento. Essa estratégia é extremamente vantajosa quando uma mesma entrada precisa ser processada por diversos filtros diferentes (por exemplo, em camadas convolucionais com muitos canais de saída). O foco aqui é maximizar o reuso das entradas, minimizando o custo energético de buscar os mesmos dados repetidamente na memória principal.</p>
-</li>
-<li>
-<p><strong><em>Hybrid Approaches</em></strong> (Abordagem Híbridas): combinam elementos das estratégias anteriores para equilibrar o fluxo de dados, adaptando-se de forma dinâmica ou arquitetural às dimensões específicas de cada camada da rede neural (tamanho do filtro, tamanho da imagem, número de canais). O objetivo principal é otimizar simultaneamente o reuso de pesos, entradas e saídas.</p>
-</li>
+<li>Latência de memória síncrona (IF e MEM com múltiplos ciclos);</li>
+<li>Caminhos críticos de lógica combinacional;</li>
+<li>Reuso de unidades funcionais para minimizar área.</li>
 </ul>
-<p><img alt="Systolic Array Dataflow" class="hero-img" src="../../assets/npu_dataflow.png" /></p>
-<p>Neste projeto, é adotado o fluxo de dados de tipo <strong><em>Output Stationary</em></strong>. Dessa forma, as somas parciais (<em>partial sums</em>) são acumuladas localmente nos <em>Processing Elements</em> (PEs), levando a uma redução drástica na largura de banda necessária para escrever os resultados intermediários de volta na memória.</p>
-<p><img alt="Output Stationary" class="hero-img" src="../../assets/output_stationary.png" /></p>
-<p>Essa abordagem, entretanto, não pressupõe a existência de um número ilimitado de PEs capaz de processar toda a carga de dados simultaneamente. Na prática, o tamanho do array sistólico é limitado por restrições de área, consumo energético e complexidade de interconexão. Para acomodar matrizes de entrada maiores do que a capacidade física do array, o processamento é particionado no tempo, e o fluxo de dados é mediado por buffers FIFO (First-In, First-Out). Esses buffers atuam como um mecanismo de desacoplamento entre o subsistema de memória — potencialmente mais lento ou com latência variável — e o array sistólico, que requer um fornecimento contínuo e regular de dados para operar de forma eficiente. Dessa forma, os FIFOs funcionam como um “pulmão” do sistema, absorvendo variações de latência da memória e garantindo que o pipeline computacional do array sistólico permaneça plenamente ocupado.</p>
-<p>Consequentemente, a arquitetura opta por <strong>trocar paralelismo espacial por paralelismo temporal</strong>, utilizando um conjunto finito de recursos de hardware ao longo de múltiplos ciclos de clock. Esse trade-off entre área de silício e tempo de execução é um princípio fundamental no projeto de sistemas digitais e está diretamente associado ao conceito de <strong>multiplexação no tempo (<em>time multiplexing</em>)</strong>. Quando não há área suficiente para instanciar unidades de processamento capazes de operar sobre todos os dados simultaneamente, os mesmos recursos são reutilizados sequencialmente, distribuindo a computação ao longo do tempo. Dessa forma, a limitação física de área é compensada por um aumento controlado na latência, permitindo implementar funcionalidades complexas com um custo de silício reduzido.</p>
-<p>Como consequência direta da multiplexação no tempo, parte da computação originalmente paralela é serializada, sendo distribuída ao longo de múltiplos ciclos de clock. Essa serialização não decorre de limitações algorítmicas, mas de uma decisão arquitetural motivada por restrições de área e consumo energético. Em arrays sistólicos de NPUs, essa abordagem se materializa na divisão da carga de trabalho em blocos menores (<strong><em>tiling</em></strong>), processados sequencialmente pelo mesmo conjunto de processing elements (PEs). Assim, a reutilização temporal dos recursos físicos permite executar operações de grande porte com um array de dimensão finita, à custa de um aumento controlado na latência total, preservando eficiência energética e simplicidade de interconexão.</p>
-<p>Como os resultados tornam-se disponíveis de forma <strong>parcial a cada ciclo de clock</strong>, é necessário acumular essas contribuições ao longo do tempo. Para isso, combina-se um <strong>somador</strong> com um <strong>registrador</strong>, permitindo que os valores intermediários sejam acumulados sequencialmente. Em FPGAs, essa estrutura é tipicamente implementada utilizando <strong>blocos dedicados de DSP (Digital Signal Processing)</strong> — unidades de hardware especializadas em operações aritméticas intensivas, como multiplicação, soma e acumulação, com alta eficiência energética e temporal. A partir desses blocos, constrói-se a <strong>MAC Unit (<em>Multiply–Accumulate</em>)</strong>, composta por um <strong>multiplicador</strong>, seguido por um <strong>somador</strong> e um <strong>registrador de acumulação</strong>, capaz de executar operações do tipo:</p>
-<div class="arithmatex">\[
-\text{Resultado}=(\text{Peso}\times \text{Entrada})+\text{Acumulador}
+<p>Uma configuração típica de latências por instrução é apresentada abaixo:</p>
+<table>
+<thead>
+<tr>
+<th>Estágio</th>
+<th>Latência (ciclos)</th>
+<th>Observações</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>IF</strong></td>
+<td>2</td>
+<td>Memória síncrona</td>
+</tr>
+<tr>
+<td><strong>ID</strong></td>
+<td>1</td>
+<td>Decodificação e leitura de registradores</td>
+</tr>
+<tr>
+<td><strong>EX</strong></td>
+<td>1-2</td>
+<td>Branches com latência adicional</td>
+</tr>
+<tr>
+<td><strong>MEM</strong></td>
+<td>1-2</td>
+<td>Dependente da operação</td>
+</tr>
+<tr>
+<td><strong>WB</strong></td>
+<td>1</td>
+<td>Escrita em registradores</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition quote">
+<p class="admonition-title">CPI Médio</p>
+<p>Assim, o custo médio por instrução (CPI - <em>Cycles per Instruction</em>) situa-se tipicamente entre 6 e 8 ciclos, dependendo do código sendo executado pelo processador.</p>
+</div>
+<p>Essa CPU representa um ponto de referência conservador, porém realista, para sistemas embedded minimalistas, educacionais ou orientados a baixo consumo.</p>
+<h3 id="13-comparacao-com-mcu-comercial">1.3. Comparação com MCU Comercial</h3>
+<p>Microcontroladores modernos baseados em RISC-V - como o ESP32-C3 - ou ARM (série M) incorporam uma série de otimizações microarquiteturais que dificultam uma comparação direta:</p>
+<ul>
+<li>Pipeline profundo (tipicamente 3 a 5 estágios);</li>
+<li>Execução especulativa e prefetch;</li>
+<li>Unidades aritméticas dedicadas e paralelas;</li>
+<li>Barramentos e hierarquias de memória otimizadas.</li>
+</ul>
+<p>Embora essas técnicas reduzam o número médio de ciclos por instrução, elas existem principalmente para viabilizar frequências mais altas, e não necessariamente para reduzir o trabalho arquitetural intrínseco da computação.</p>
+<p>Comparar diretamente tempos absolutos ou benchmarks compilados para tais CPUs introduziria variáveis difíceis de isolar, como qualidade do compilador, agressividade de otimizações e detalhes proprietários não documentados.</p>
+<h3 id="14-classe-de-arquiteturas-consideradas">1.4. Classe de Arquiteturas Consideradas</h3>
+<p>O <em>baseline</em> proposto representa a classe de processadores com as seguintes características:</p>
+<ul>
+<li>ISA: RV32I com extensão de multiplicação (RV32IM);</li>
+<li>Execução escalar (1 operação aritmética por instrução);</li>
+<li>Sem unidades vetoriais ou SIMD;</li>
+<li>Sem aceleração dedicada para MACs.</li>
+</ul>
+<p>Essa classe inclui tanto processadores multi-cycles simples quanto microcontroladores modernos com pipeline e multiplicador em hardware. Diferenças microarquiteturais afetam latência e frequência, mas não alteram os limites fundamentais impostos pela ISA.</p>
+<p>Considere a computação de um único MAC escalar:</p>
+<div class="arithmatex">\[ 
+\text{acc} \ \leftarrow \ \text{acc}+(a\times b)
 \]</div>
-<p>Essa unidade deve também ser capaz de receber um sinal de reset, responsável por reinicializar o valor do registrador de acumulação, além de realizar a extração do resultado acumulado em cada PE (através do sinal de <code>acc_dump</code>). Dessa forma, ao término do processamento de um conjunto de dados previamente definido, o sistema retorna a um estado inicial bem definido, permitindo o início de uma nova computação sem interferência de resultados anteriores.</p>
+<p>Em <strong>RV32IM</strong>, mesmo assumindo otimizações ideais, essa operação exige no mínimo:</p>
+<ol>
+<li>Um <code>load</code> para o operando <code>a</code>;</li>
+<li>Um <code>load</code>para o operando <code>b</code>;</li>
+<li>Uma instrução de multiplicação (<code>mul</code>);</li>
+<li>Uma instrução de soma (<code>add</code>).</li>
+</ol>
+<p>Portanto, cada MAC requer pelo menos <strong>4 instruções</strong>.</p>
+<p>Assumindo-se um cenário otimista:</p>
+<ul>
+<li>CPI = 1;</li>
+<li>Pipeline ideal;</li>
+<li>Cache perfeito;</li>
+<li>Sem stalls.</li>
+</ul>
+<p>Obtém-se o limite inferior teórico: <span class="arithmatex">\(\text{Ciclos}_{\text{CPU}}\ge 4\times N_{\text{MAC}}\)</span>. Esse resultado é independente de frequência, tecnologia ou microarquitetura específica.</p>
+<p>Com base nas observações anteriores, define-se o modelo matemático do baseline de CPU como:</p>
+<div class="arithmatex">\[
+T_{\text{CPU}}^{\text{min}}=4\cdot N_{\text{MAC}}
+\]</div>
+<p>Onde:</p>
+<ul>
+<li><span class="arithmatex">\(N_{\text{MAC}}\)</span> = número total de operações MAC do workload;</li>
+<li><span class="arithmatex">\(T_{\text{CPU}}^{\text{min}}\)</span> = tempo mínimo em ciclos.</li>
+</ul>
+<p>Esse modelo não representa um processador real, mas sim um limite inferior teórico para qualquer CPU RV32 escalar compatível com a ISA.</p>
+<h3 id="15-justificativa-do-uso-de-um-core-rv32i-multiciclo">1.5. Justificativa do Uso de um Core RV32I Multiciclo</h3>
+<p>A implementação de um core RV32I multi-cycle no SoC proposto não busca competir em desempenho absoluto, mas sim:</p>
+<ul>
+<li>Evidenciar de forma clara os gargalos arquiteturais da execução escalar;</li>
+<li>Facilitar análise ciclo-a-ciclo e verificação funcional;</li>
+<li>Servir como plataforma educacional e experimental.</li>
+</ul>
+<p>Importante ressaltar que, <strong>mesmo substituindo esse core por uma CPU pipelined ideal</strong>, o limite inferior definido permanece válido.</p>
+<h2 id="2-npu-speedup-bounds">2. NPU Speedup Bounds</h2>
+<p>A aceleração obtida por meio de unidades especializadas, como NPUs (Neural Processing Units), é frequentemente reportada como um fator de <em>speedup</em> em relação à execução puramente em software. No entanto, tais valores isolados podem ser enganosos se não forem contextualizados por limites teóricos e arquiteturais bem definidos.</p>
+<p>Este capítulo busca estabelecer:</p>
+<ul>
+<li>A natureza do <em>workload</em> (operações matriciais e convolucionais);</li>
+<li>Restrições impostas por memória, DMA e interconexão;</li>
+<li>Grau de paralelismo efetivamente explorável.</li>
+</ul>
+<p>Dessa forma, busca-se responder à pergunta central:</p>
+<div class="admonition question">
+<p class="admonition-title">Speedup</p>
+<p>O speedup observado representa um limite estrutural da arquitetura ou um artefato da CPU baseline escolhida?</p>
+</div>
+<h3 id="21-definicao-formal-de-speedup">2.1. Definição Formal de Speedup</h3>
+<p>O speedup é definido de forma clássica como:</p>
+<div class="arithmatex">\[
+S=\cfrac{T_{\text{CPU}}}{T_{\text{CPU+NPU}}}
+\]</div>
+<p>onde:</p>
+<ul>
+<li><span class="arithmatex">\(T_{\text{CPU}}\)</span> = tempo de execução do workload completo utilizando apenas a CPU;</li>
+<li><span class="arithmatex">\(T_{\text{CPU+NPU}}\)</span> = tempo de execução considerando offload da computação para a NPU.</li>
+</ul>
+<p>Como a análise é feita em termos arquiteturais, o tempo é expresso em <strong>número de ciclos de clock</strong>, não em segundos, eliminando a dependência de frequência de clock.</p>
+<h3 id="22-overhead-de-offload">2.2. Overhead de Offload</h3>
+<p>O primeiro limite fundamental é que nenhuma NPU pode ser mais rápida do que o custo de invocá-la. O tempo total com aceleração pode ser decomposto como:</p>
+<div class="arithmatex">\[
+T_{\text{CPU+NPU}}=T_{\text{setup}}+T_{\text{DMA}}+T_{\text{NPU}}+T_{\text{sync}}
+\]</div>
+<p>Onde:</p>
+<ul>
+<li><span class="arithmatex">\(T_{\text{setup}}\)</span> = escrita de CSRs e comandos;</li>
+<li><span class="arithmatex">\(T_{\text{DMA}}\)</span> = transferência de dados;</li>
+<li><span class="arithmatex">\(T_{\text{NPU}}\)</span> = computação efetiva;</li>
+<li><span class="arithmatex">\(T_{\text{sync}}\)</span> = polling ou interrupção.</li>
+</ul>
+<p>Isso implica que workloads pequenos ou com baixa intensidade aritmética possuem <strong>speedup próximo de 1 ou até &lt; 1</strong>, independentemente da NPU.</p>
+<p>Esse limite explica porque: vetores curtos; poucas iterações; ou kernels pouco densos, não se beneficiam significativamente da aceleração. </p>
+<p>O limite superior teórico ocorre quando:</p>
+<ol>
+<li>Todo o tempo de computação da CPU é substituído por computação paralela na NPU;</li>
+<li>Overheads de comunicação são desprezíveis;</li>
+<li>A NPU opera com utilização plena.</li>
+</ol>
+<p>Nesse cenário hipotético:</p>
+<div class="arithmatex">\[
+S_{\text{max}}\approx\cfrac{C_{\text{CPU}}}{C_{\text{NPU}}}
+\]</div>
+<p>onde:</p>
+<ul>
+<li><span class="arithmatex">\(C_{\text{CPU}}\)</span> = ciclos necessários para executar o kernel em software;</li>
+<li><span class="arithmatex">\(C_{\text{NPU}}\)</span> = ciclos necessários para executar o mesmo kernel na NPU.</li>
+</ul>
+<p>Para workloads típicos de inferência (MACs, convoluções, GEMMs):</p>
+<div class="arithmatex">\[
+C_{\text{CPU}} \propto N_{\text{ops}}
+\]</div>
+<div class="arithmatex">\[
+C_{\text{NPU}} \propto \ \cfrac{N_{\text{ops}}}{P}
+\]</div>
+<p>onde <span class="arithmatex">\(P\)</span> é o grau de paralelismo da NPU.</p>
+<p>Assim, o <em>speedup</em> máximo teórico é aproximadamente: <span class="arithmatex">\(S_{\text{max}}\approx P\)</span>. Esse resultado é consistente com literatura clássica de arquiteturas SIMD, arranjos sistólicos e aceleradores.</p>
+<h3 id="23-lei-de-amdahl-aplicada-a-npu">2.3. Lei de Amdahl Aplicada à NPU</h3>
+<p>Na prática, apenas uma fração do código é acelerável. Aplicando a Lei de Amdahl:</p>
+<div class="arithmatex">\[
+S=\cfrac{1}{(1-f)+\cfrac{f}{s_{\text{acc}}}}
+\]</div>
+<p>onde:</p>
+<ul>
+<li><span class="arithmatex">\(f\)</span> = fração do tempo total originalmente gasta em computação acelerável;</li>
+<li><span class="arithmatex">\(S_{\text{acc}}\)</span> = speedup do trecho acelerado.</li>
+</ul>
+<p>Mesmo com <span class="arithmatex">\(S_{\text{acc}} \rightarrow \infty\)</span>, o speedup total é limitado por <span class="arithmatex">\(1\ / \ (1-f)\)</span>. No contexto deste SoC:</p>
+<ul>
+<li>loops de MACs e ReLU <span class="arithmatex">\(\rightarrow\)</span>  alto <span class="arithmatex">\(f\)</span>;</li>
+<li>controle, configuração, I/O <span class="arithmatex">\(\rightarrow\)</span> baixo <span class="arithmatex">\(f\)</span>.</li>
+</ul>
+<p>Isso explica porque o speedup observado <strong>satura</strong> mesmo quando a NPU é escalada.</p>
+<h3 id="24-limite-pratico">2.4. Limite Prático</h3>
+<p>Na implementação real de um SoC, o teto de speedup é reduzido por:</p>
+<ol>
+<li><strong>Largura de banda da memória</strong>: a NPU só é tão rápida quanto o fornecimento de dados;</li>
+<li><strong>Arbitragem do barramento</strong>: mesmo com comportamento determinístico, há ciclos não produtivos;</li>
+<li><strong>Granularidade do DMA</strong>: transferências em blocos impõem latência mínima.</li>
+</ol>
+<p>Esses fatores impõem um teto prático:</p>
+<div class="arithmatex">\[
+S_{\text{prático}}&lt;S_{\text{max}}
+\]</div>
+<p>A observação de ciclos praticamente constantes entre execuções reforça que:</p>
+<ul>
+<li>O sistema opera em regime determinístico e previsível;</li>
+<li>O teto observado é estrutural, não estatístico.</li>
+</ul>
+<p>O speedup máximo medido experimentalmente deve ser interpretado como: o teto de aceleração da arquitetura atual para aquele padrão de workload e hierarquia de memória. Não se trata de um limite universal - mas, sim, um ponto de equilíbrio entre paralelismo computacional, capacidade de alimentação de dados e custo de orquestração pela CPU.</p>
 <h2 id="referencias">Referências</h2>
 <ul>
-<li>JOUPPI, Norman P. et al. In-datacenter performance analysis of a tensor processing unit. In: Proceedings of the 44th annual international symposium on computer architecture. 2017. p. 1-12.</li>
-<li>SASASATORI. Revisão do projeto de arquitetura de arrays sistólicos. Disponível em: <a href="https://www.cnblogs.com/sasasatori/p/19038607">https://www.cnblogs.com/sasasatori/p/19038607</a>. Acesso em: 26 mar. 2026.</li>
-<li>XU, Rui et al. Heterogeneous systolic array architecture for compact CNNs hardware accelerators. IEEE Transactions on Parallel and Distributed Systems, v. 33, n. 11, p. 2860-2871, 2021.</li>
-<li>STAFF. What is the memory wall in computing? Disponível em: <a href="https://ayarlabs.com/glossary/memory-wall/">https://ayarlabs.com/glossary/memory-wall/</a>.</li>
+<li>AMDAHL, Gene M. Validity of the single processor approach to achieving large scale computing capabilities. In: Proceedings of the April 18-20, 1967, spring joint computer conference. 1967. p. 483-485.</li>
+<li>Espressif Documentation. Disponível em: <a href="https://documentation.espressif.com/esp32-c3_datasheet_en.pdf">https://documentation.espressif.com/esp32-c3_datasheet_en.pdf</a>.</li>
 <li>HENNESSY, John L.; PATTERSON, David A. Computer architecture: a quantitative approach. Elsevier, 2011.</li>
+<li>PATTERSON, David A.; HENNESSY, John L. Computer organization and Design. The Hardware/Soft, 2022.</li>
+<li>HARRIS, Sarah; HARRIS, David. Digital Design and Computer Architecture, RISC-V Edition. Morgan Kaufmann, 2021.</li>
 </ul>
 
 
@@ -1269,7 +1707,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-datetime" title="March 26, 2026 18:18:46 UTC">March 26, 2026 18:18:46</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-datetime" title="March 26, 2026 21:08:12 UTC">March 26, 2026 21:08:12</span>
   </span>
 
     
@@ -1307,7 +1745,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../overview/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Visão Geral do Top-Level">
+          <a href="../../software/hil/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Hardware-in-the-Loop (HIL)">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -1317,20 +1755,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Visão Geral do Top-Level
+                Hardware-in-the-Loop (HIL)
               </div>
             </div>
           </a>
         
         
           
-          <a href="../ppu/" class="md-footer__link md-footer__link--next" aria-label="Next: Unidade de Pós-Processamento (PPU)">
+          <a href="../../dev/simulation/" class="md-footer__link md-footer__link--next" aria-label="Next: Ambiente de Testes (Cocotb)">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Unidade de Pós-Processamento (PPU)
+                Ambiente de Testes (Cocotb)
               </div>
             </div>
             <div class="md-footer__button md-icon">
