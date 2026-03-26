@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://RISC-V-Azedinha.github.io/NPU/hardware/overview/">
       
       
-        <link rel="prev" href="../../intro/setup/">
+        <link rel="prev" href="../../intro/quickstart/">
       
       
         <link rel="next" href="../systolic_array/">
@@ -467,7 +467,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../intro/quickstart.md" class="md-nav__link">
+      <a href="../../intro/quickstart/" class="md-nav__link">
         
   
   
@@ -566,6 +566,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral do Top-Level
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -582,6 +600,80 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-interface-de-comunicacao-e-registradores-mmio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Interface de Comunicação e Registradores (MMIO)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-unidade-de-controle-fsm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Unidade de Controle (FSM)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-gestao-de-memoria-local-scratchpads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Gestão de Memória Local (Scratchpads)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-arranjo-sistolico-systolic-array" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Arranjo Sistólico (Systolic Array)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-unidade-de-pos-processamento-ppu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Unidade de Pós-Processamento (PPU)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -602,7 +694,7 @@
   <span class="md-ellipsis">
     
   
-    O Array Sistólico 4x4
+    Fluxo de Dados (Dataflow)
   
 
     
@@ -623,7 +715,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../ppu.md" class="md-nav__link">
+      <a href="../ppu/" class="md-nav__link">
         
   
   
@@ -651,14 +743,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../controller.md" class="md-nav__link">
+      <a href="../controller/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Unidade de Controlo (FSM)
+    Unidade de Controle (FSM)
   
 
     
@@ -679,42 +771,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../datapath.md" class="md-nav__link">
+      <a href="../datapath/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Gestão de Memória e Datapath
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../registers.md" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Mapa de Registos (MMIO)
+    Gestão e Reutilização de Dados
   
 
     
@@ -828,34 +892,6 @@
     
   
     Hardware-in-the-Loop (HIL)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../software/soc_integration.md" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Integração no SoC RISC-V
   
 
     
@@ -1123,34 +1159,6 @@
 
               
             
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../apps/MLP.md" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Inferência MLP
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
           </ul>
         </nav>
       
@@ -1178,6 +1186,69 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-interface-de-comunicacao-e-registradores-mmio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Interface de Comunicação e Registradores (MMIO)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-unidade-de-controle-fsm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Unidade de Controle (FSM)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-gestao-de-memoria-local-scratchpads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Gestão de Memória Local (Scratchpads)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-arranjo-sistolico-systolic-array" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Arranjo Sistólico (Systolic Array)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-unidade-de-pos-processamento-ppu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Unidade de Pós-Processamento (PPU)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -1197,14 +1268,20 @@
 
 
 <h1 id="arquitetura-e-design">Arquitetura e Design</h1>
-<div class="admonition abstract">
-<p class="admonition-title">Dataflow: Output-Stationary</p>
-<p>O design implementa uma arquitetura <strong>Output-Stationary</strong>. Dessa forma, as somas parciais (<em>partial sums</em>) são acumuladas localmente nos <em>Processing Elements</em> (PEs), levando a uma redução drástica na largura de banda necessária para escrever os resultados intermediários de volta na memória.</p>
-</div>
-<div class="admonition abstract">
-<p class="admonition-title">Princípio da Localidade</p>
-<p>Essa abordagem aproveita o princípio da localidade, que é garantido pelas <strong>memórias locais (<em>scratchpads</em>)</strong> da NPU, para maximizar o reuso de dados internos. </p>
-</div>
+<p>Do ponto de vista de projeto de hardware, o desenvolvimento de um coprocessador - incluindo uma NPU - envolve decisões arquiteturais como o modelo de comunicação com a CPU, o grau de compartilhamento de memória, os mecanismos de sincronização e a definição do conjunto de operações suportadas. Esses aspectos posicionam o coprocessamento como um tema central na arquitetura de computadores moderna, conectando conceitos clássicos de organização de sistemas com tendências atuais de aceleração de domínio específico. </p>
+<p>A arquitetura <strong><em>top-level</em></strong> da nossa NPU foi projetada de forma modular, separando claramente as responsabilidades de comunicação, controle, armazenamento local e processamento intensivo. O diagrama abaixo ilustra os principais blocos funcionais e o fluxo de sinais e dados entre eles.</p>
+<p><img alt="Neural Processing Unit Architecture" src="../../assets/npu_top.svg" /></p>
+<h2 id="1-interface-de-comunicacao-e-registradores-mmio">1. Interface de Comunicação e Registradores (MMIO)</h2>
+<p>A comunicação entre o processador hospedeiro (CPU) e a NPU é realizada através de Memory-Mapped I/O (MMIO). O barramento recebe sinais padrão de escrita (<code>addr_i</code>, <code>data_i</code>, <code>we_i</code>) e leitura (<code>data_o</code>), permitindo que a CPU configure os parâmetros da rede neural, carregue os dados de entrada e leia os resultados finais.</p>
+<p>Além do fluxo de dados, a interface gerencia as interrupções de hardware (sinal <code>irq_done_o</code>), notificando a CPU de forma assíncrona quando um lote de inferências é concluído, liberando o processador principal para outras tarefas enquanto a NPU trabalha.</p>
+<h2 id="2-unidade-de-controle-fsm">2. Unidade de Controle (FSM)</h2>
+<p>O "cérebro" da NPU é a sua Unidade de Controle, implementada como uma Máquina de Estados Finita (FSM - Finite State Machine). Ela é ativada pelo sinal <code>cmd_start</code> (escrito pela CPU via MMIO) e é responsável por orquestrar todo o pipeline de execução. A FSM gerencia os ponteiros de leitura locais (<em>local read pointers</em>), garantindo que os dados corretos sejam injetados no arranjo sistólico no momento exato. Durante a operação, ela sinaliza seu estado através de <code>sts_busy</code> e, ao finalizar, emite o <code>sts_done</code>.</p>
+<h2 id="3-gestao-de-memoria-local-scratchpads">3. Gestão de Memória Local (Scratchpads)</h2>
+<p>Para evitar o <strong><em>Memory Wall</em></strong> (comentado posteriormente) e não sobrecarregar o barramento principal do sistema, a NPU possui memórias SRAM internas dedicadas (representadas pelos ícones de memória RAM no diagrama). Esses <strong><em>scratchpads</em></strong> armazenam temporariamente os pesos (Weights) e as ativações de entrada (Input Activations). A CPU escreve os dados nessas memórias através da interface MMIO antes do início do processamento.</p>
+<h2 id="4-arranjo-sistolico-systolic-array">4. Arranjo Sistólico (Systolic Array)</h2>
+<p>O coração computacional do sistema. É o bloco responsável por realizar as operações intensivas de multiplicação e acumulação de matrizes (MAC). Os dados fluem ritmicamente a partir das memórias locais através da matriz de Processing Elements (PEs). A arquitetura é otimizada para maximizar a reutilização temporal e espacial dos dados, reduzindo drasticamente o acesso às memórias principais compartilhadas e o consumo de energia por operação aritmética.</p>
+<h2 id="5-unidade-de-pos-processamento-ppu">5. Unidade de Pós-Processamento (PPU)</h2>
+<p>Após o cálculo das somas parciais no Arranjo Sistólico, os resultados brutos são descarregados (através do sinal <code>output_dump</code>) na <strong>Unidade de Pós-Processamento (PPU)</strong>. Este bloco é tipicamente responsável por aplicar as funções de ativação (como ReLU), realizar o redimensionamento ou quantização dos valores e armazenar os resultados em buffers FIFO. A PPU também fornece um sinal de feedback (<code>fifo_ready_feedback</code>) para a unidade de controle, garantindo que não haja perda de dados em caso de estrangulamento (bottleneck) na leitura de saída.</p>
 
 
 
@@ -1263,7 +1340,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../../intro/setup/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Requisitos e Setup">
+          <a href="../../intro/quickstart/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Primeiros Passos">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -1273,20 +1350,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Requisitos e Setup
+                Primeiros Passos
               </div>
             </div>
           </a>
         
         
           
-          <a href="../systolic_array/" class="md-footer__link md-footer__link--next" aria-label="Next: O Array Sistólico 4x4">
+          <a href="../systolic_array/" class="md-footer__link md-footer__link--next" aria-label="Next: Fluxo de Dados (Dataflow)">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                O Array Sistólico 4x4
+                Fluxo de Dados (Dataflow)
               </div>
             </div>
             <div class="md-footer__button md-icon">
