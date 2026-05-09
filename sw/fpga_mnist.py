@@ -15,7 +15,7 @@ from datetime import datetime
 # CONFIGURAÇÃO DE HARDWARE
 # ==============================================================================
 
-SERIAL_PORT = 'COM6'  
+SERIAL_PORT = '/dev/ttyUSB1'  
 BAUD_RATE   = 921600
 
 # Mapa de Registradores

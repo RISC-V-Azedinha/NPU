@@ -8,7 +8,7 @@ from datetime import datetime
 # ==============================================================================
 # CONFIGURAÇÃO
 # ==============================================================================
-SERIAL_PORT = 'COM6'
+SERIAL_PORT = '/dev/ttyUSB1'
 BAUD_RATE   = 921600
 
 # Cores ANSI

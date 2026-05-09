@@ -11,6 +11,7 @@ __pycache__/
 # Ignora arquivos de teste temporários
 mnist.npz
 sim_build
+data/
 
 # FPGA
 .Xil
