@@ -9,7 +9,8 @@
 -- ██║  ██║███████╗╚██████╔╝███████╗██║     ██║███████╗███████╗
 -- ╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚══════╝╚═╝     ╚═╝╚══════╝╚══════╝  
 --                                                        
--- Descrição: NPU - Register File & MMIO Decoder (Atualizado: Dual-Path Fast Streaming / Edge Guard)
+-- Descrição: NPU - Register File & MMIO Decoder 
+--            (Atualizado: True Burst Data Strobes e Edge Guard no Controle)
 --
 -- Autor    : [André Maiolini]
 -- Data     : [21/01/2026]
@@ -17,9 +18,9 @@
 -------------------------------------------------------------------------------------------------------------
 
 library ieee;
-use ieee.std_logic_1164.all;                                     -- Tipos de lógica digital
-use ieee.numeric_std.all;                                        -- Tipos numéricos (signed, unsigned)
-use work.npu_pkg.all;                                            -- Pacote de definições do NPU
+use ieee.std_logic_1164.all;                                     
+use ieee.numeric_std.all;                                        
+use work.npu_pkg.all;                                            
 
 -------------------------------------------------------------------------------------------------------------
 -- ENTIDADE: Definição da interface do banco de registradores
@@ -28,25 +29,14 @@ use work.npu_pkg.all;                                            -- Pacote de de
 entity npu_register_file is
 
     generic (
-        
-        ACC_W       : integer := 32;                             -- Largura do Acumulador de Entrada
-        DATA_W      : integer := 8;                              -- Largura do Dado de Saída
-        QUANT_W     : integer := 32;                             -- Largura dos Parâmetros de Quantização
-        COLS        : integer := 4                               -- Quantidade de Colunas do Array Sistólico
-    
+        ACC_W       : integer := 32;                             
+        DATA_W      : integer := 8;                              
+        QUANT_W     : integer := 32;                             
+        COLS        : integer := 4                               
     );
     port (
-
-        -----------------------------------------------------------------------------------------------------
-        -- Sinais de Controle e Sincronização
-        -----------------------------------------------------------------------------------------------------
-
         clk           : in  std_logic;
         rst_n         : in  std_logic;
-
-        -----------------------------------------------------------------------------------------------------
-        -- Interface MMIO 
-        -----------------------------------------------------------------------------------------------------
 
         vld_i         : in  std_logic;
         rdy_o         : out std_logic;
@@ -55,29 +45,17 @@ entity npu_register_file is
         data_i        : in  std_logic_vector(31 downto 0);
         data_o        : out std_logic_vector(31 downto 0);
 
-        -----------------------------------------------------------------------------------------------------
-        -- Interface com Controller (Status & Comandos)
-        -----------------------------------------------------------------------------------------------------
-
         sts_busy      : in  std_logic;
         sts_done      : in  std_logic;
         cmd_start     : out std_logic;
         cmd_clear     : out std_logic;
         cmd_no_drain  : out std_logic;
-        cmd_rst_w     : out std_logic;                           -- Reset Read Ptr Weights
-        cmd_rst_i     : out std_logic;                           -- Reset Read Ptr Inputs
-
-        -----------------------------------------------------------------------------------------------------
-        -- Interface com Datapath (FIFO Read)
-        -----------------------------------------------------------------------------------------------------
+        cmd_rst_w     : out std_logic; 
+        cmd_rst_i     : out std_logic; 
 
         fifo_r_valid  : in  std_logic;
         fifo_r_data   : in  std_logic_vector(31 downto 0);
         fifo_pop      : out std_logic;
-
-        -----------------------------------------------------------------------------------------------------
-        -- Interface com Datapath (RAM Write Control)
-        -----------------------------------------------------------------------------------------------------
 
         ram_w_data    : out std_logic_vector(31 downto 0);
         wgt_we        : out std_logic;
@@ -85,24 +63,17 @@ entity npu_register_file is
         wgt_wr_ptr    : out unsigned(31 downto 0);
         inp_wr_ptr    : out unsigned(31 downto 0);
 
-        -----------------------------------------------------------------------------------------------------
-        -- Configurações Exportadas
-        -----------------------------------------------------------------------------------------------------
-
         cfg_run_size  : out unsigned(31 downto 0);
         cfg_relu      : out std_logic;
         cfg_quant_sh  : out std_logic_vector(4 downto 0);
         cfg_quant_zo  : out std_logic_vector(DATA_W-1 downto 0);
         cfg_quant_mul : out std_logic_vector(QUANT_W-1 downto 0);
         cfg_bias_vec  : out std_logic_vector((COLS*ACC_W)-1 downto 0)
-
-        -----------------------------------------------------------------------------------------------------
-
     );
 end entity npu_register_file;
 
 -------------------------------------------------------------------------------------------------------------
--- ARQUITETURA: Implementação comportamental do banco de registradores
+-- ARQUITETURA
 -------------------------------------------------------------------------------------------------------------
 
 architecture rtl of npu_register_file is
@@ -110,7 +81,7 @@ architecture rtl of npu_register_file is
     -- Trava Síncrona do Edge Guard para o Slow Path (Controle)
     signal r_rdy_spath   : std_logic := '0';
 
-    -- Registradores Internos
+    -- Registradores Internos (Ponteiros de Datapath)
     signal r_run_size    : unsigned(31 downto 0) := (others => '0');
     signal r_wgt_wr_ptr  : unsigned(31 downto 0) := (others => '0');
     signal r_inp_wr_ptr  : unsigned(31 downto 0) := (others => '0');
@@ -126,7 +97,7 @@ architecture rtl of npu_register_file is
     signal s_cmd_start   : std_logic := '0';
     signal s_acc_clear   : std_logic := '0';
 
-    -- Sinais auxiliares para decodificação combinacional estável
+    -- Sinais auxiliares combinacionais
     signal s_addr_idx    : integer range 0 to 255 := 0;
     signal s_is_data_port: boolean;
 
@@ -145,12 +116,12 @@ begin
     cmd_start     <= s_cmd_start;
     cmd_clear     <= s_acc_clear;
 
-    -- Decodificação Combinacional de Endereço e Classificação de Fluxo
+    -- Decodificação Combinacional
     s_addr_idx     <= to_integer(unsigned(addr_i(7 downto 0))) when not is_x(addr_i(7 downto 0)) else 0;
     s_is_data_port <= (s_addr_idx = 16#10#) or (s_addr_idx = 16#14#) or (s_addr_idx = 16#18#);
 
     -- ========================================================================
-    -- MULTIPLEXAÇÃO COMBINACIONAL DE PRONTIDÃO E LEITURA (Zero Latency Bar)
+    -- MULTIPLEXAÇÃO COMBINACIONAL (Zero Latency Bar)
     -- ========================================================================
     rdy_o  <= vld_i when s_is_data_port else r_rdy_spath;
 
@@ -158,7 +129,17 @@ begin
               fifo_r_data when s_addr_idx = 16#18# else
               (others => '0');
 
-    -- Processo Síncrono principal (Genciamento de Escrita e Mutação de Estado)
+    -- ========================================================================
+    -- STROBES COMBINACIONAIS DE DADOS (FAST PATH - CORREÇÃO DE BURST)
+    -- ========================================================================
+    -- Estes sinais não podem ser registrados (FF), pois precisam habilitar a
+    -- RAM/FIFO no exato instante em que o DMA apresenta o dado no barramento.
+    wgt_we   <= '1' when (s_is_data_port and vld_i = '1' and we_i = '1' and s_addr_idx = 16#10#) else '0';
+    inp_we   <= '1' when (s_is_data_port and vld_i = '1' and we_i = '1' and s_addr_idx = 16#14#) else '0';
+    fifo_pop <= '1' when (s_is_data_port and vld_i = '1' and we_i = '0' and s_addr_idx = 16#18#) else '0';
+
+
+    -- Processo Síncrono (Atualização de Pointers e Slow Path)
     process(clk)
     begin
         if rising_edge(clk) then
@@ -166,9 +147,6 @@ begin
                 r_rdy_spath  <= '0';
                 r_wgt_wr_ptr <= (others => '0');
                 r_inp_wr_ptr <= (others => '0');
-                wgt_we       <= '0';
-                inp_we       <= '0';
-                fifo_pop     <= '0';
                 s_cmd_start  <= '0';
                 s_acc_clear  <= '0';
                 cmd_no_drain <= '0';
@@ -181,44 +159,34 @@ begin
                 r_quant_mult <= (others => '0');
                 r_bias_vec   <= (others => '0');
             else
-                -- Defaults para Strobes (Limpam automaticamente no ciclo seguinte)
-                wgt_we      <= '0';
-                inp_we      <= '0';
-                fifo_pop    <= '0';
+                -- Defaults para Strobes Síncronos
                 s_cmd_start <= '0'; 
                 s_acc_clear <= '0';
 
                 -- --------------------------------------------------------------------
-                -- CAMINHO 1: FAST PATH (Portas de Dados - Capazes de aceitar rajadas contínuas)
+                -- CAMINHO 1: FAST PATH (Apenas Pointers)
                 -- --------------------------------------------------------------------
                 if s_is_data_port then
                     if vld_i = '1' then
                         if we_i = '1' then
                             if s_addr_idx = 16#10# then
-                                wgt_we <= '1';
                                 r_wgt_wr_ptr <= r_wgt_wr_ptr + 1;
                             elsif s_addr_idx = 16#14# then
-                                inp_we <= '1';
                                 r_inp_wr_ptr <= r_inp_wr_ptr + 1;
-                            end if;
-                        else
-                            if s_addr_idx = 16#18# then
-                                fifo_pop <= '1'; -- Consome a palavra da FIFO interna na borda
                             end if;
                         end if;
                     end if;
-                    r_rdy_spath <= '0'; -- Reseta o prontidão do Slow Path para transições consecutivas
+                    r_rdy_spath <= '0'; 
 
                 -- --------------------------------------------------------------------
-                -- CAMINHO 2: SLOW PATH (Registradores de Controle/Configuração com Edge Guard)
+                -- CAMINHO 2: SLOW PATH (Registradores de Controle com Edge Guard)
                 -- --------------------------------------------------------------------
                 else
                     if vld_i = '1' and r_rdy_spath = '0' then
-                        r_rdy_spath <= '1'; -- Trava o ciclo de Handshake
+                        r_rdy_spath <= '1'; 
                         
                         if we_i = '1' and sts_busy = '0' then
                             case s_addr_idx is
-                                -- [0x04] CMD
                                 when 16#04# => 
                                     if data_i(0) = '1' then 
                                         r_wgt_wr_ptr <= (others => '0');
@@ -231,7 +199,7 @@ begin
                                         r_inp_wr_ptr <= (others => '0');
                                     end if;
                                     
-                                    s_acc_clear <= data_i(2); -- Gatilho de Clear do Acumulador
+                                    s_acc_clear <= data_i(2);
                                     
                                     if data_i(1) = '1' then
                                         s_cmd_start  <= '1';
@@ -240,17 +208,12 @@ begin
                                         cmd_rst_i    <= data_i(5); 
                                     end if;
 
-                                -- [0x08] CONFIG
                                 when 16#08# => r_run_size <= unsigned(data_i);
-
-                                -- Parâmetros de Quantização
                                 when 16#40# => 
                                     r_quant_shift <= data_i(4 downto 0);
                                     r_quant_zero  <= data_i(15 downto 8);
                                 when 16#44# => r_quant_mult <= data_i;
                                 when 16#48# => r_en_relu    <= data_i(0);
-                                
-                                -- Vetor de Bias Sistólico
                                 when 16#80# => r_bias_vec(31 downto 0)   <= data_i;
                                 when 16#84# => r_bias_vec(63 downto 32)  <= data_i;
                                 when 16#88# => r_bias_vec(95 downto 64)  <= data_i;
@@ -259,7 +222,7 @@ begin
                             end case;
                         end if;
                     elsif vld_i = '0' then
-                        r_rdy_spath <= '0'; -- Destrava o Edge Guard quando a CPU solta o barramento
+                        r_rdy_spath <= '0'; 
                     end if;
                 end if;
 
