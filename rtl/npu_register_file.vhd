@@ -7,16 +7,16 @@
 -- ██████╔╝█████╗  ██║  ███╗        █████╗  ██║██║     █████╗  
 -- ██╔══██╗██╔══╝  ██║   ██║        ██╔══╝  ██║██║     ██╔══╝  
 -- ██║  ██║███████╗╚██████╔╝███████╗██║     ██║███████╗███████╗
--- ╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚══════╝╚═╝     ╚═╝╚══════╝╚══════╝                                                         
---
--- Descrição: NPU - Register File & MMIO Decoder
+-- ╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚══════╝╚═╝     ╚═╝╚══════╝╚══════╝  
+--                                                        
+-- Descrição: NPU - Register File & MMIO Decoder (Atualizado com Edge Guard)
 --
 -- Autor    : [André Maiolini]
 -- Data     : [21/01/2026]
 --
 -------------------------------------------------------------------------------------------------------------
 
-library ieee;                                                    -- Biblioteca padrão IEEE
+library ieee;
 use ieee.std_logic_1164.all;                                     -- Tipos de lógica digital
 use ieee.numeric_std.all;                                        -- Tipos numéricos (signed, unsigned)
 use work.npu_pkg.all;                                            -- Pacote de definições do NPU
@@ -35,7 +35,6 @@ entity npu_register_file is
         COLS        : integer := 4                               -- Quantidade de Colunas do Array Sistólico
     
     );
-
     port (
 
         -----------------------------------------------------------------------------------------------------
@@ -80,7 +79,7 @@ entity npu_register_file is
         -- Interface com Datapath (RAM Write Control)
         -----------------------------------------------------------------------------------------------------
 
-        ram_w_data    : out std_logic_vector(31 downto 0); -- Pass-through
+        ram_w_data    : out std_logic_vector(31 downto 0);
         wgt_we        : out std_logic;
         inp_we        : out std_logic;
         wgt_wr_ptr    : out unsigned(31 downto 0);
@@ -100,7 +99,6 @@ entity npu_register_file is
         -----------------------------------------------------------------------------------------------------
 
     );
-
 end entity npu_register_file;
 
 -------------------------------------------------------------------------------------------------------------
@@ -109,35 +107,28 @@ end entity npu_register_file;
 
 architecture rtl of npu_register_file is
 
-    -- Sinais para Mapeamento -------------------------------------------------------------------------------
-
-    signal s_ack        : std_logic := '0';
+    -- Sinais para Mapeamento (Substitui o s_ack) -----------------------------------------------------------
+    signal r_rdy         : std_logic := '0';
 
     -- Registradores Internos -------------------------------------------------------------------------------
-
     signal r_run_size    : unsigned(31 downto 0) := (others => '0');
     signal r_wgt_wr_ptr  : unsigned(31 downto 0) := (others => '0');
     signal r_inp_wr_ptr  : unsigned(31 downto 0) := (others => '0');
-    
-    -- Configs ----------------------------------------------------------------------------------------------
 
+    -- Configs ----------------------------------------------------------------------------------------------
     signal r_en_relu     : std_logic := '0';
     signal r_quant_shift : std_logic_vector(4 downto 0) := (others => '0');
     signal r_quant_zero  : std_logic_vector(DATA_W-1 downto 0) := (others => '0');
     signal r_quant_mult  : std_logic_vector(QUANT_W-1 downto 0) := (others => '0');
     signal r_bias_vec    : std_logic_vector((COLS*ACC_W)-1 downto 0) := (others => '0');
 
-    -- Comandos (Pulsos ou Níveis) --------------------------------------------------------------------------
-
+    -- Comandos (Pulsos) ------------------------------------------------------------------------------------
     signal s_cmd_start   : std_logic := '0';
     signal s_acc_clear   : std_logic := '0';
-
-    ---------------------------------------------------------------------------------------------------------
 
 begin
 
     -- Wiring outputs ---------------------------------------------------------------------------------------
-
     cfg_run_size  <= r_run_size;
     cfg_relu      <= r_en_relu;
     cfg_quant_sh  <= r_quant_shift;
@@ -149,24 +140,20 @@ begin
     ram_w_data    <= data_i; 
     cmd_start     <= s_cmd_start;
     cmd_clear     <= s_acc_clear;
+    
+    rdy_o         <= r_rdy; -- Associa a porta de saída ao nosso Edge Guard interno
 
     process(clk)
-
         variable v_addr_idx : integer range 0 to 255 := 0;
-
     begin
-
         if rising_edge(clk) then
-
             if rst_n = '0' then
 
-                rdy_o <= '0';
-                s_ack <= '0';
+                r_rdy <= '0';
                 data_o <= (others => '0');
                 
                 r_wgt_wr_ptr <= (others => '0');
                 r_inp_wr_ptr <= (others => '0');
-                
                 wgt_we <= '0';
                 inp_we <= '0';
                 fifo_pop <= '0';
@@ -186,114 +173,103 @@ begin
                     v_addr_idx := to_integer(unsigned(addr_i(7 downto 0)));
                 end if;
 
-                -- Defaults (Strobes)
+                -- Defaults (Strobes limpos automaticamente)
                 wgt_we <= '0';
                 inp_we <= '0';
                 fifo_pop <= '0';
                 s_cmd_start <= '0'; 
+                s_acc_clear <= '0'; 
 
-                -- Auto-clear do sinal de clear (dura 1 ciclo de ack)
-                if s_ack = '1' then 
-                    s_acc_clear <= '0'; 
-                end if;
+                -- ====================================================================
+                -- IMPLEMENTAÇÃO DO EDGE GUARD (Atômico de 1 ciclo)
+                -- ====================================================================
+                r_rdy <= '0';
 
-                -- Handshake MMIO
-                if vld_i = '1' then
-                    rdy_o <= '1';
+                if vld_i = '1' and r_rdy = '0' then
+                    r_rdy <= '1';
                     
-                    if s_ack = '0' then
-                        s_ack <= '1';
-                        
-                        -------------------------------------------------------------------------------------
-                        -- ESCRITA (MMIO)
-                        -- Só é aceita se a NPU estiver IDLE
-                        -------------------------------------------------------------------------------------
-
-                        if we_i = '1' and sts_busy = '0' then
-                            case v_addr_idx is
-                                -- [0x04] CMD
-                                when 16#04# => 
-                                    -- Bit 0: Global Pointers Reset (DMA Write Ptrs) 
-                                    if data_i(0) = '1' then 
-                                        r_wgt_wr_ptr <= (others => '0');
-                                        r_inp_wr_ptr <= (others => '0');
-                                    end if;
-                                    -- Bit 6: Reset apenas Wgt Write Ptr (NOVO)
-                                    if data_i(6) = '1' then 
-                                        r_wgt_wr_ptr <= (others => '0');
-                                    end if;
-                                    -- Bit 7: Reset apenas Inp Write Ptr (NOVO)
-                                    if data_i(7) = '1' then 
-                                        r_inp_wr_ptr <= (others => '0');
-                                    end if;
-                                    -- Bit 2: ACC_CLEAR
-                                    s_acc_clear <= data_i(2);
-                                    -- Bit 1: START
-                                    if data_i(1) = '1' then
-                                        s_cmd_start <= '1';
-                                        cmd_no_drain <= data_i(3);
-                                        cmd_rst_w <= data_i(4); -- Reset Read Ptr Weights (to Controller)
-                                        cmd_rst_i <= data_i(5); -- Reset Read Ptr Inputs (to Controller)
-                                    end if;
+                    -------------------------------------------------------------------
+                    -- ESCRITA (MMIO)
+                    -- Só é aceita se a NPU estiver IDLE
+                    -------------------------------------------------------------------
+                    if we_i = '1' and sts_busy = '0' then
+                        case v_addr_idx is
+                            -- [0x04] CMD
+                            when 16#04# => 
+                                -- Bit 0: Global Pointers Reset (DMA Write Ptrs) 
+                                if data_i(0) = '1' then 
+                                    r_wgt_wr_ptr <= (others => '0');
+                                    r_inp_wr_ptr <= (others => '0');
+                                end if;
+                                -- Bit 6: Reset apenas Wgt Write Ptr
+                                if data_i(6) = '1' then 
+                                    r_wgt_wr_ptr <= (others => '0');
+                                end if;
+                                -- Bit 7: Reset apenas Inp Write Ptr
+                                if data_i(7) = '1' then 
+                                    r_inp_wr_ptr <= (others => '0');
+                                end if;
+                                -- Bit 2: ACC_CLEAR (Agora um Strobo puro de 1 ciclo)
+                                s_acc_clear <= data_i(2);
                                 
-                                -- [0x08] CONFIG
-                                when 16#08# => r_run_size <= unsigned(data_i);
-                                
-                                -- [0x10] W_PORT (Auto-Inc)
-                                when 16#10# =>
-                                    wgt_we <= '1';
-                                    r_wgt_wr_ptr <= r_wgt_wr_ptr + 1;
+                                -- Bit 1: START
+                                if data_i(1) = '1' then
+                                    s_cmd_start <= '1';
+                                    cmd_no_drain <= data_i(3);
+                                    cmd_rst_w <= data_i(4); 
+                                    cmd_rst_i <= data_i(5); 
+                                end if;
 
-                                -- [0x14] I_PORT (Auto-Inc)
-                                when 16#14# =>
-                                    inp_we <= '1';
-                                    r_inp_wr_ptr <= r_inp_wr_ptr + 1;
+                            -- [0x08] CONFIG
+                            when 16#08# => r_run_size <= unsigned(data_i);
 
-                                -- Configurações Estáticas
-                                when 16#40# => -- QUANT_CFG
-                                    r_quant_shift <= data_i(4 downto 0);
-                                    r_quant_zero  <= data_i(15 downto 8);
-                                when 16#44# => r_quant_mult <= data_i;
-                                when 16#48# => r_en_relu <= data_i(0);
-                                
-                                -- Bias
-                                when 16#80# => r_bias_vec(31 downto 0)   <= data_i;
-                                when 16#84# => r_bias_vec(63 downto 32)  <= data_i;
-                                when 16#88# => r_bias_vec(95 downto 64)  <= data_i;
-                                when 16#8C# => r_bias_vec(127 downto 96) <= data_i;
-                                when others => null;
-                            end case;
-                        
-                        -------------------------------------------------------------------------------------
-                        -- LEITURA (MMIO)
-                        -------------------------------------------------------------------------------------
+                            -- [0x10] W_PORT (Auto-Inc)
+                            when 16#10# =>
+                                wgt_we <= '1';
+                                r_wgt_wr_ptr <= r_wgt_wr_ptr + 1;
 
-                        else
-                            case v_addr_idx is
-                                -- [0x00] STATUS
-                                when 16#00# =>
-                                    data_o <= (0 => sts_busy, 1 => sts_done, 3 => fifo_r_valid, others => '0');
-                                -- [0x18] OUT_DATA
-                                when 16#18# =>
-                                    data_o <= fifo_r_data;
-                                    fifo_pop <= '1';
-                                when others => 
-                                    data_o <= (others => '0');
-                            end case;
-                        end if;
+                            -- [0x14] I_PORT (Auto-Inc)
+                            when 16#14# =>
+                                inp_we <= '1';
+                                r_inp_wr_ptr <= r_inp_wr_ptr + 1;
+
+                            -- Configurações Estáticas
+                            when 16#40# => -- QUANT_CFG
+                                r_quant_shift <= data_i(4 downto 0);
+                                r_quant_zero  <= data_i(15 downto 8);
+                            when 16#44# => r_quant_mult <= data_i;
+                            when 16#48# => r_en_relu <= data_i(0);
+                            
+                            -- Bias
+                            when 16#80# => r_bias_vec(31 downto 0)   <= data_i;
+                            when 16#84# => r_bias_vec(63 downto 32)  <= data_i;
+                            when 16#88# => r_bias_vec(95 downto 64)  <= data_i;
+                            when 16#8C# => r_bias_vec(127 downto 96) <= data_i;
+                            when others => null;
+                        end case;
+
+                    -------------------------------------------------------------------
+                    -- LEITURA (MMIO)
+                    -------------------------------------------------------------------
+                    elsif we_i = '0' then
+                        case v_addr_idx is
+                            -- [0x00] STATUS
+                            when 16#00# =>
+                                data_o <= (0 => sts_busy, 1 => sts_done, 3 => fifo_r_valid, others => '0');
+
+                            -- [0x18] OUT_DATA
+                            when 16#18# =>
+                                data_o <= fifo_r_data;
+                                fifo_pop <= '1';
+
+                            when others => 
+                                data_o <= (others => '0');
+                        end case;
                     end if;
-
-                else
-                    rdy_o <= '0';
-                    s_ack <= '0';
                 end if;
 
             end if;
         end if;
     end process;
 
-    ---------------------------------------------------------------------------------------------------------
-
-end architecture; -- rtl
-
--------------------------------------------------------------------------------------------------------------
+end architecture;
