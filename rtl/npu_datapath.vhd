@@ -29,17 +29,18 @@ use work.npu_pkg.all;
 entity npu_datapath is
 
     generic (
-        ROWS        : integer := 4;                              
-        COLS        : integer := 4;                              
-        ACC_W       : integer := 32;                             
-        DATA_W      : integer := 8;                              
-        QUANT_W     : integer := 32;                             
-        FIFO_DEPTH  : integer := 2048                            
+        ROWS           : integer := 4;
+        COLS           : integer := 4;
+        ACC_W          : integer := 32;
+        DATA_W         : integer := 8;
+        QUANT_W        : integer := 32;
+        FIFO_DEPTH     : integer := 2048;
+        DOUBLE_BUFFER  : boolean := false     -- Retrocompatível: false = 1 banco (RTL/recursos idênticos ao legado)
     );
     port (
         clk                 : in  std_logic;
         rst_n               : in  std_logic;
-        soc_en_i            : in  std_logic;
+        soc_en_i            : in  std_logic := '1';              -- default '1': habilitado se não conectado
 
         -- Controle de Memória (Escrita - MMIO Fast Path)
         wgt_we              : in  std_logic;
@@ -51,6 +52,10 @@ entity npu_datapath is
         -- Controle de Memória (Leitura - Controller)
         wgt_rd_ptr          : in  unsigned(31 downto 0);
         inp_rd_ptr          : in  unsigned(31 downto 0);
+
+        -- Double Buffering (Ping-Pong): ignorado quando DOUBLE_BUFFER = false
+        wr_bank             : in  std_logic := '0';
+        rd_bank             : in  std_logic := '0';
 
         -- Controle do Core
         ctl_acc_clear       : in  std_logic;
@@ -111,27 +116,108 @@ begin
     wgt_rd_addr_calc <= std_logic_vector(wgt_rd_ptr - 1);
     inp_rd_addr_calc <= std_logic_vector(inp_rd_ptr - 1);
 
-    u_ram_w : entity work.ram_dual
-        generic map (DATA_W => 32, DEPTH => FIFO_DEPTH)
-        port map (
-            clk     => clk,
-            wr_en   => wgt_we, 
-            wr_addr => wgt_wr_addr_calc,
-            wr_data => w_data,
-            rd_addr => wgt_rd_addr_calc,
-            rd_data => wgt_ram_rdata
-        );
+    -- CASO 1: Buffer Único (Comportamento Legado) -----------------------------------------------------------
+    -- Retrocompatível: quando DOUBLE_BUFFER = false (default), esta é a MESMA estrutura de sempre,
+    -- sem qualquer mux ou recurso extra de BRAM.
+    GEN_SINGLE_BUF : if not DOUBLE_BUFFER generate
+    begin
 
-    u_ram_i : entity work.ram_dual
-        generic map (DATA_W => 32, DEPTH => FIFO_DEPTH)
-        port map (
-            clk     => clk,
-            wr_en   => inp_we, 
-            wr_addr => inp_wr_addr_calc, 
-            wr_data => w_data,
-            rd_addr => inp_rd_addr_calc, 
-            rd_data => inp_ram_rdata
-        );
+        u_ram_w : entity work.ram_dual
+            generic map (DATA_W => 32, DEPTH => FIFO_DEPTH)
+            port map (
+                clk     => clk,
+                wr_en   => wgt_we,
+                wr_addr => wgt_wr_addr_calc,
+                wr_data => w_data,
+                rd_addr => wgt_rd_addr_calc,
+                rd_data => wgt_ram_rdata
+            );
+
+        u_ram_i : entity work.ram_dual
+            generic map (DATA_W => 32, DEPTH => FIFO_DEPTH)
+            port map (
+                clk     => clk,
+                wr_en   => inp_we,
+                wr_addr => inp_wr_addr_calc,
+                wr_data => w_data,
+                rd_addr => inp_rd_addr_calc,
+                rd_data => inp_ram_rdata
+            );
+
+    end generate GEN_SINGLE_BUF;
+
+    -- CASO 2: Double Buffering (Ping-Pong) -------------------------------------------------------------------
+    -- Dois bancos físicos por stream (A/B). O host escreve o próximo tile no banco "wr_bank" via
+    -- MMIO enquanto o Core lê o tile corrente do banco "rd_bank" — a movimentação de dados do
+    -- próximo tile fica sobreposta (overlap) com a computação/drain do tile atual, em vez de ficar
+    -- em série como no modo de buffer único.
+    GEN_DOUBLE_BUF : if DOUBLE_BUFFER generate
+
+        signal wgt_rdata_a, wgt_rdata_b : std_logic_vector(31 downto 0);
+        signal inp_rdata_a, inp_rdata_b : std_logic_vector(31 downto 0);
+
+        -- Write-enables qualificados por banco (sinais próprios: mantém os port maps abaixo como
+        -- simples nomes estáticos, evitando restrições de expressão em port map dentro de generate)
+        signal s_wgt_we_a, s_wgt_we_b : std_logic;
+        signal s_inp_we_a, s_inp_we_b : std_logic;
+
+    begin
+
+        s_wgt_we_a <= wgt_we and (not wr_bank);
+        s_wgt_we_b <= wgt_we and wr_bank;
+        s_inp_we_a <= inp_we and (not wr_bank);
+        s_inp_we_b <= inp_we and wr_bank;
+
+        u_ram_w_a : entity work.ram_dual
+            generic map (DATA_W => 32, DEPTH => FIFO_DEPTH)
+            port map (
+                clk     => clk,
+                wr_en   => s_wgt_we_a,
+                wr_addr => wgt_wr_addr_calc,
+                wr_data => w_data,
+                rd_addr => wgt_rd_addr_calc,
+                rd_data => wgt_rdata_a
+            );
+
+        u_ram_w_b : entity work.ram_dual
+            generic map (DATA_W => 32, DEPTH => FIFO_DEPTH)
+            port map (
+                clk     => clk,
+                wr_en   => s_wgt_we_b,
+                wr_addr => wgt_wr_addr_calc,
+                wr_data => w_data,
+                rd_addr => wgt_rd_addr_calc,
+                rd_data => wgt_rdata_b
+            );
+
+        u_ram_i_a : entity work.ram_dual
+            generic map (DATA_W => 32, DEPTH => FIFO_DEPTH)
+            port map (
+                clk     => clk,
+                wr_en   => s_inp_we_a,
+                wr_addr => inp_wr_addr_calc,
+                wr_data => w_data,
+                rd_addr => inp_rd_addr_calc,
+                rd_data => inp_rdata_a
+            );
+
+        u_ram_i_b : entity work.ram_dual
+            generic map (DATA_W => 32, DEPTH => FIFO_DEPTH)
+            port map (
+                clk     => clk,
+                wr_en   => s_inp_we_b,
+                wr_addr => inp_wr_addr_calc,
+                wr_data => w_data,
+                rd_addr => inp_rd_addr_calc,
+                rd_data => inp_rdata_b
+            );
+
+        -- Mux de leitura: o Core sempre enxerga o banco "rd_bank" corrente (registrado dentro da RAM,
+        -- então o mux não acrescenta latência: continua sendo 1 ciclo endereço -> dado, como no legado)
+        wgt_ram_rdata <= wgt_rdata_b when rd_bank = '1' else wgt_rdata_a;
+        inp_ram_rdata <= inp_rdata_b when rd_bank = '1' else inp_rdata_a;
+
+    end generate GEN_DOUBLE_BUF;
 
     ---------------------------------------------------------------------------------------------------------
     -- Core Sistólico

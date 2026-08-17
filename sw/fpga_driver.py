@@ -44,6 +44,8 @@ CMD_RST_W_RD     = (1 << 4)
 CMD_RST_I_RD     = (1 << 5)
 CMD_RST_WR_W     = (1 << 6)
 CMD_RST_WR_I     = (1 << 7)
+CMD_DBUF_EN      = (1 << 8)  # Double Buffering (Ping-Pong): só tem efeito se o bitstream
+                              # foi gerado com o generic DOUBLE_BUFFER => true no npu_top.
 
 OP_WRITE = 0x01
 OP_READ  = 0x02

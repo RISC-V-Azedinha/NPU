@@ -31,6 +31,12 @@
 --   - Bit[5]: RST_I_RD     (1=Zera ponteiro leitura Inputs, 0=Continua de onde parou)
 --   - Bit[6]: RST_WR_W     (1=Zera ponteiro de escrita Pesos, 0=Continua de onde parou)
 --   - Bit[7]: RST_WR_I     (1=Zera ponteiro de escrita Inputs, 0=Continua de onde parou)
+--   - Bit[8]: DBUF_EN      (1=Double Buffering/Ping-Pong neste START, 0=Modo legado/banco único)
+--
+--   Bit[8] só tem efeito se o IP for gerado com o generic DOUBLE_BUFFER => true (default: false,
+--   idêntico ao comportamento/recursos originais). Com DOUBLE_BUFFER=true, o host pode carregar o
+--   próximo tile (W_PORT/I_PORT) enquanto a NPU ainda está BUSY computando/drenando o tile atual,
+--   pois escrita e leitura passam a usar bancos físicos distintos (ping-pong).
 --
 --  0x08 : CONFIG (RW) [Tamanho do Tile / Ciclos]
 --  0x10 : W_PORT (WO) [Porta de Pesos - Fixed Dest]
@@ -64,7 +70,8 @@ entity npu_top is
         ACC_W       : integer := 32;                             -- Largura do Acumulador de Entrada
         DATA_W      : integer := 8;                              -- Largura do Dado de Saída
         QUANT_W     : integer := 32;                             -- Largura dos Parâmetros de Quantização
-        FIFO_DEPTH  : integer := 2048                            -- Define o tamanho da RAM (4KB = 1024 * 32b)
+        FIFO_DEPTH  : integer := 2048;                           -- Define o tamanho da RAM (4KB = 1024 * 32b)
+        DOUBLE_BUFFER : boolean := false                         -- Retrocompatível: false = recursos originais
 
     );
 
@@ -76,7 +83,7 @@ entity npu_top is
 
         clk         : in  std_logic;                             -- Clock do sistema
         rst_n       : in  std_logic;                             -- Reset síncrono (ativo em nível baixo)
-        soc_en_i    : in  std_logic;                             -- Sinal de ENABLE
+        soc_en_i    : in  std_logic := '1';                      -- Sinal de ENABLE (default '1': testbenches que não conectam continuam habilitadas)
 
         -----------------------------------------------------------------------------------------------------
         -- Interface para Mapeamento em Memória (MMIO)
@@ -113,9 +120,15 @@ architecture rtl of npu_top is
     signal s_cmd_no_drain        : std_logic := '0';
     signal s_cmd_rst_w           : std_logic := '0';
     signal s_cmd_rst_i           : std_logic := '0';
+    signal s_cmd_dbuf_en         : std_logic := '0';
     signal s_sts_busy            : std_logic := '0';
     signal s_sts_done            : std_logic := '0';
     signal s_cfg_run_size        : unsigned(31 downto 0) := (others => '0');
+
+    -- Double Buffering (Ping-Pong) ---------------------------------------------------------------------------
+
+    signal s_wr_bank             : std_logic := '0';
+    signal s_rd_bank             : std_logic := '0';
 
     -- Register File <-> Datapath ---------------------------------------------------------------------------
 
@@ -211,11 +224,12 @@ begin
             -- Controller Interface
             sts_busy      => s_sts_busy, 
             sts_done      => s_sts_done,
-            cmd_start     => s_cmd_start, 
-            cmd_clear     => s_cmd_clear, 
+            cmd_start     => s_cmd_start,
+            cmd_clear     => s_cmd_clear,
             cmd_no_drain  => s_cmd_no_drain,
-            cmd_rst_w     => s_cmd_rst_w, 
+            cmd_rst_w     => s_cmd_rst_w,
             cmd_rst_i     => s_cmd_rst_i,
+            cmd_dbuf_en   => s_cmd_dbuf_en,
 
             -- Datapath Interface
             fifo_r_valid  => s_fifo_r_valid, 
@@ -254,22 +268,27 @@ begin
             soc_en_i      => soc_en_i,
 
             -- RegFile Interface
-            cmd_start     => s_cmd_start, 
+            cmd_start     => s_cmd_start,
             cmd_no_drain  => s_cmd_no_drain,
-            cmd_rst_w     => s_cmd_rst_w, 
+            cmd_rst_w     => s_cmd_rst_w,
             cmd_rst_i     => s_cmd_rst_i,
+            cmd_dbuf_en   => s_cmd_dbuf_en,
             cfg_run_size  => s_cfg_run_size,
-            
+
             -- System Interface
-            sts_busy      => s_sts_busy, 
+            sts_busy      => s_sts_busy,
             sts_done      => s_sts_done,
 
             -- Datapath Interface
-            wgt_rd_ptr    => s_wgt_rd_ptr, 
+            wgt_rd_ptr    => s_wgt_rd_ptr,
             inp_rd_ptr    => s_inp_rd_ptr,
             ctl_ram_re    => open,                                -- Usado internamente para gerar core_vld
-            ctl_core_vld  => s_ctl_core_vld, 
+            ctl_core_vld  => s_ctl_core_vld,
             ctl_acc_dump  => s_ctl_acc_dump,
+
+            -- Double Buffering (Ping-Pong)
+            rd_bank_o     => s_rd_bank,
+            wr_bank_o     => s_wr_bank,
 
             -- Backpressure (STALL)
             fifo_ready_i => s_fifo_ready_feedback
@@ -282,32 +301,37 @@ begin
 
     u_datapath : entity work.npu_datapath
         generic map (
-            ROWS          => ROWS, 
-            COLS          => COLS, 
-            ACC_W         => ACC_W, 
-            DATA_W        => DATA_W, 
-            QUANT_W       => QUANT_W, 
-            FIFO_DEPTH    => FIFO_DEPTH
+            ROWS          => ROWS,
+            COLS          => COLS,
+            ACC_W         => ACC_W,
+            DATA_W        => DATA_W,
+            QUANT_W       => QUANT_W,
+            FIFO_DEPTH    => FIFO_DEPTH,
+            DOUBLE_BUFFER => DOUBLE_BUFFER
         )
         port map (
 
-            clk                 => clk, 
+            clk                 => clk,
             rst_n               => rst_n,
             soc_en_i            => soc_en_i,
 
             -- Write Side (RegFile)
-            wgt_we              => s_wgt_we, 
-            inp_we              => s_inp_we, 
+            wgt_we              => s_wgt_we,
+            inp_we              => s_inp_we,
             w_data              => s_ram_w_data,
-            wgt_wr_ptr          => s_wgt_wr_ptr, 
+            wgt_wr_ptr          => s_wgt_wr_ptr,
             inp_wr_ptr          => s_inp_wr_ptr,
 
             -- Read Side (Controller)
-            wgt_rd_ptr          => s_wgt_rd_ptr, 
+            wgt_rd_ptr          => s_wgt_rd_ptr,
             inp_rd_ptr          => s_inp_rd_ptr,
-            ctl_acc_clear       => s_cmd_clear, 
-            ctl_acc_dump        => s_ctl_acc_dump, 
+            ctl_acc_clear       => s_cmd_clear,
+            ctl_acc_dump        => s_ctl_acc_dump,
             ctl_valid_in        => s_ctl_core_vld,
+
+            -- Double Buffering (Ping-Pong)
+            wr_bank             => s_wr_bank,
+            rd_bank             => s_rd_bank,
 
             -- Configs
             cfg_relu            => s_cfg_relu, 

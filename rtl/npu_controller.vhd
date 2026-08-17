@@ -42,7 +42,7 @@ entity npu_controller is
 
         clk           : in  std_logic;
         rst_n         : in  std_logic;
-        soc_en_i      : in  std_logic;
+        soc_en_i      : in  std_logic := '1';                    -- Default '1': testbenches que não conectam este pino continuam habilitadas (retrocompatível com npu_fpga_top, que já amarra em '1')
 
         -----------------------------------------------------------------------------------------------------
         -- Interface Register File
@@ -52,6 +52,7 @@ entity npu_controller is
         cmd_no_drain  : in  std_logic;
         cmd_rst_w     : in  std_logic;                           -- Reset Wgt Ptr
         cmd_rst_i     : in  std_logic;                           -- Reset Inp Ptr
+        cmd_dbuf_en   : in  std_logic := '0';                    -- Double Buffering neste START (Ping-Pong)
         cfg_run_size  : in  unsigned(31 downto 0);
 
         -----------------------------------------------------------------------------------------------------
@@ -71,6 +72,10 @@ entity npu_controller is
         ctl_ram_re    : out std_logic;                           -- Read Enable
         ctl_core_vld  : out std_logic;                           -- Valid In (Delayed)
         ctl_acc_dump  : out std_logic;
+
+        -- Double Buffering: banco lido pelo Core / banco liberado para escrita (MMIO)
+        rd_bank_o     : out std_logic;
+        wr_bank_o     : out std_logic;
 
         -----------------------------------------------------------------------------------------------------
         -- Backpressure
@@ -112,6 +117,15 @@ architecture rtl of npu_controller is
 
     signal r_no_drain   : std_logic := '0';
 
+    -- Double Buffering (Ping-Pong) ---------------------------------------------------------------------------
+    -- r_wr_bank: banco atualmente aberto para escrita via MMIO (W_PORT/I_PORT).
+    -- r_rd_bank: banco que o Core está consumindo na COMPUTE/DRAIN corrente.
+    -- Quando cmd_dbuf_en = '0' em um START, ambos são forçados a '0' (banco único),
+    -- reproduzindo exatamente o endereçamento legado (retrocompatível).
+
+    signal r_wr_bank    : std_logic := '0';
+    signal r_rd_bank    : std_logic := '0';
+
     ---------------------------------------------------------------------------------------------------------
 
 begin
@@ -119,6 +133,8 @@ begin
     wgt_rd_ptr <= r_wgt_rd_ptr;
     inp_rd_ptr <= r_inp_rd_ptr;
     ctl_ram_re <= s_ram_read_en;
+    rd_bank_o  <= r_rd_bank;
+    wr_bank_o  <= r_wr_bank;
 
     process(clk)
     begin
@@ -134,7 +150,9 @@ begin
                 sts_busy <= '0';
                 sts_done <= '0';
                 r_no_drain <= '0';
-            
+                r_wr_bank <= '0';
+                r_rd_bank <= '0';
+
             elsif soc_en_i = '1' then
 
                 -- Pipeline do Valid (Acompanha latência de 1 ciclo da BRAM)
@@ -155,6 +173,18 @@ begin
                             
                             -- Capture configs
                             r_no_drain <= cmd_no_drain;
+
+                            -- Double Buffering: troca de bancos no instante do START.
+                            -- Habilitado (cmd_dbuf_en=1): passa a ler o banco que acabou de ser
+                            -- preenchido (r_wr_bank) e libera o outro banco para a próxima escrita.
+                            -- Desabilitado: força banco único (0), idêntico ao comportamento legado.
+                            if cmd_dbuf_en = '1' then
+                                r_rd_bank <= r_wr_bank;
+                                r_wr_bank <= not r_wr_bank;
+                            else
+                                r_rd_bank <= '0';
+                                r_wr_bank <= '0';
+                            end if;
 
                             -- Reset Pointers caso requisitado
                             if cmd_rst_w = '1' then r_wgt_rd_ptr <= (others => '0'); end if;

@@ -43,7 +43,7 @@ entity input_buffer is
 
         clk         : in  std_logic;                         -- Sinal de clock
         rst_n       : in  std_logic;                         -- Sinal de reset síncrono local (ativo baixo)
-        soc_en_i    : in  std_logic;                         -- Sinal de ENABLE
+        soc_en_i    : in  std_logic := '1';                  -- Sinal de ENABLE (default '1': habilitado se não conectado)
 
         -----------------------------------------------------------------------------------------------------
         -- Entradas (Vetores Empacotados)

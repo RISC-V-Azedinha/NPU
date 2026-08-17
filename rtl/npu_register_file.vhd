@@ -50,8 +50,9 @@ entity npu_register_file is
         cmd_start     : out std_logic;
         cmd_clear     : out std_logic;
         cmd_no_drain  : out std_logic;
-        cmd_rst_w     : out std_logic; 
-        cmd_rst_i     : out std_logic; 
+        cmd_rst_w     : out std_logic;
+        cmd_rst_i     : out std_logic;
+        cmd_dbuf_en   : out std_logic;                           -- Double Buffering (Ping-Pong) neste START
 
         fifo_r_valid  : in  std_logic;
         fifo_r_data   : in  std_logic_vector(31 downto 0);
@@ -152,6 +153,7 @@ begin
                 cmd_no_drain <= '0';
                 cmd_rst_w    <= '0';
                 cmd_rst_i    <= '0';
+                cmd_dbuf_en  <= '0';
                 r_en_relu    <= '0';
                 r_run_size   <= (others => '0');
                 r_quant_shift<= (others => '0');
@@ -204,8 +206,9 @@ begin
                                     if data_i(1) = '1' then
                                         s_cmd_start  <= '1';
                                         cmd_no_drain <= data_i(3);
-                                        cmd_rst_w    <= data_i(4); 
-                                        cmd_rst_i    <= data_i(5); 
+                                        cmd_rst_w    <= data_i(4);
+                                        cmd_rst_i    <= data_i(5);
+                                        cmd_dbuf_en  <= data_i(8);
                                     end if;
 
                                 when 16#08# => r_run_size <= unsigned(data_i);

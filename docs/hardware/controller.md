@@ -8,6 +8,8 @@ A FSM opera de forma simplificada e robusta através de três estados principais
 
 É o estado de repouso. A NPU aguarda o sinal cmd_start enviado pela interface MMIO. Ao receber o gatilho, a FSM captura as configurações de execução (como o tamanho da execução `cfg_run_size` e o modo de operação `cmd_no_drain`) e transita para o estado de processamento. Se requisitado, zera os ponteiros de leitura da RAM.
 
+Se o Datapath foi gerado com [Double Buffering](datapath.md#3-double-buffering-ping-pong) e o bit `DBUF_EN` acompanha esse `START`, é também neste instante que a FSM troca os bancos: passa a ler o banco que o host acabou de preencher (`rd_bank`) e libera o outro banco para a próxima escrita via MMIO (`wr_bank`), mesmo enquanto o Core ainda estiver ocupado com o tile atual. Sem o bit, ambos os bancos permanecem fixos em 0 — comportamento idêntico ao de banco único.
+
 ## 2. Estado `COMPUTE`
 
 Neste estado, o controlador orquestra o fluxo contínuo de dados para as memórias locais.

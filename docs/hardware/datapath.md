@@ -24,3 +24,12 @@ O Datapath mapeia de forma arquitetural a transição dos dados pela topologia e
 
 3. Filas e Sincronização: Após a quantização e ativação, as PPUs validam os resultados. O Datapath concentra essas saídas em um buffer circular (`fifo_sync`). Este componente é essencial para dessincronizar o fim do processamento ultrarrápido do hardware da velocidade variável com que a CPU lê esses resultados via software, enviando o sinal `fifo_ready_feedback` de volta à FSM para regular o fluxo (Backpressure).
 
+## 3. Double Buffering (Ping-Pong)
+
+Por padrão, os Scratchpads de Pesos e Entradas são um único banco: a mesma região de memória é usada tanto para a escrita (host, via MMIO) quanto para a leitura (Core), o que obriga o host a esperar o fim do `COMPUTE`/`DRAIN` de um tile antes de poder carregar o próximo — a movimentação de dados fica em série com a computação.
+
+Quando o IP é gerado com o generic `DOUBLE_BUFFER => true`, o Datapath duplica cada Scratchpad em dois bancos físicos (A/B). A cada `START` com o bit `DBUF_EN` habilitado, o controlador troca de banco em *ping-pong*: passa a ler o banco que acabou de ser preenchido e libera o outro banco para a próxima escrita via MMIO — que pode acontecer imediatamente, mesmo com a NPU ainda `BUSY` computando/drenando o tile anterior. Isso sobrepõe a movimentação de dados do próximo tile com a computação do tile corrente, em vez de serializá-las.
+
+!!! info "Retrocompatibilidade"
+    O generic `DOUBLE_BUFFER` tem default `false`, o que preserva exatamente a estrutura de RTL e o consumo de BRAM da versão de banco único. Mesmo com `DOUBLE_BUFFER => true`, o bit `DBUF_EN` do registrador `CMD` (bit 8) é opcional: se o host nunca o define, a NPU permanece presa ao banco 0, reproduzindo bit-a-bit o comportamento legado.
+
