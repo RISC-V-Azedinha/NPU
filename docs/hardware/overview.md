@@ -27,3 +27,13 @@ O coração computacional do sistema. É o bloco responsável por realizar as op
 ## 5. Unidade de Pós-Processamento (PPU)
 
 Após o cálculo das somas parciais no Arranjo Sistólico, os resultados brutos são descarregados (através do sinal `output_dump`) na **Unidade de Pós-Processamento (PPU)**. Este bloco é tipicamente responsável por aplicar as funções de ativação (como ReLU), realizar o redimensionamento ou quantização dos valores e armazenar os resultados em buffers FIFO. A PPU também fornece um sinal de feedback (`fifo_ready_feedback`) para a unidade de controle, garantindo que não haja perda de dados em caso de estrangulamento (bottleneck) na leitura de saída.
+
+## 6. Mecanismos de Movimentação de Dados
+
+Além dos blocos acima, o top-level integra os mecanismos que reduzem o tráfego entre a RAM principal e a NPU:
+
+- **`npu_im2col`**: monta as janelas de uma convolução a partir da imagem crua recebida pela porta `IMG`;
+- **`wgt_mem_banked`**: memória de pesos em 4 bancos, que entrega um peso distinto por PE no modo GEMV;
+- **`npu_cmd_proc`**: processador de comandos que executa programas de configuração (descritores de camada) recebidos pela porta `DESC`, sem intervenção da CPU.
+
+O funcionamento de cada um está em [Movimentação de Dados e Autonomia](data_movement.md).

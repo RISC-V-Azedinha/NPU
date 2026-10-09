@@ -32,6 +32,9 @@ Em sistemas contemporâneos, NPUs são frequentemente integradas como coprocessa
 
 * **Arquitetura**: Array Sistólico (**Output Stationary**) 4x4.
 * **Otimização**: Alto reuso de memória interna via localidade de registradores.
+* **Movimentação de dados**: pesos e biases residentes, im2col em hardware, modo GEMV para densas, tiles encadeados, *streaming* e fusão de camadas (ver [Movimentação de Dados](hardware/data_movement.md)).
+* **Autonomia**: processador de comandos (descritores de camada) que executa a rede inteira a partir de um programa enviado por DMA.
+* **Desempenho**: 12,2 MACs/ciclo em GEMM (76% do pico de 16) no SoC RISC-V; CNN MNIST em 1.506 ciclos por imagem.
 * **Precisão**: Quantização `INT8` para Entradas e Pesos; `INT32` para os Acumuladores MAC.
 * **Comunicação**: UART de Alta Velocidade (**921.600 bps**).
 * **Integração**: Hardware-in-the-Loop (HIL) em tempo real com interface Python/PyQt6.
@@ -42,7 +45,7 @@ O repositório está organizado para separar o design de hardware (RTL), os *tes
 
 ```text
 npu/
-├── rtl/               # Código fonte VHDL (Core, PPU, FIFOs)
+├── rtl/               # Código fonte VHDL (Core, PPU, FIFOs, im2col, processador de comandos)
 ├── sim/               # Testbenches em Python (Cocotb)
 ├── fpga/              # Constraints do Vivado (XDC) e Scripts de Build
 ├── sw/                # Drivers de Host (Python) e Aplicações HIL

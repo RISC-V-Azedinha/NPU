@@ -27,3 +27,12 @@ Para descarregar os resultados, a FSM emite o sinal `ctl_acc_dump`, forçando os
 - A FSM monitora constantemente o sinal `fifo_ready_i` vindo da FIFO de saída.
 
 - Se a CPU não estiver lendo os dados da saída rápido o suficiente e a FIFO encher, o controlador congela o pipeline (pausa o `ctl_acc_dump`), mantendo as somas parciais a salvo dentro dos PEs do Arranjo Sistólico até que haja espaço para recebê-las.
+
+## 4. Extensões do Controller
+
+O Controller também implementa os mecanismos descritos em [Movimentação de Dados e Autonomia](data_movement.md):
+
+- **Sequenciador de tiles:** um START executa `TILES[15:0]` tiles, com retorno opcional dos ponteiros de leitura às bases (`RW_W`/`RW_I`) e troca do banco de bias por tile.
+- **Interlocks de streaming:** com `STREAM_I`/`STREAM_W`, cada leitura só é emitida quando o seu dado já foi escrito na RAM local (ou na imagem do im2col); o cômputo avança junto com a carga.
+- **Tiles encadeados:** com `OVERLAP`, o fim de cada tile é marcado nas ativações, e o retorno dos ponteiros é aplicado na emissão seguinte, sem esvaziar o arranjo.
+- **Modo GEMV:** gera o endereçamento dos 4 bancos de pesos e o atraso por PE.

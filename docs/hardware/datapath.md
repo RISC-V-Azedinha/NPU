@@ -33,3 +33,13 @@ Quando o IP é gerado com o generic `DOUBLE_BUFFER => true`, o Datapath duplica 
 !!! info "Retrocompatibilidade"
     O generic `DOUBLE_BUFFER` tem default `false`, o que preserva exatamente a estrutura de RTL e o consumo de BRAM da versão de banco único. Mesmo com `DOUBLE_BUFFER => true`, o bit `DBUF_EN` do registrador `CMD` (bit 8) é opcional: se o host nunca o define, a NPU permanece presa ao banco 0, reproduzindo bit-a-bit o comportamento legado.
 
+
+## 4. Extensões do Datapath
+
+- **Bases de região (`W_BASE`/`I_BASE`):** dividem os Scratchpads em regiões, para que os pesos de cada camada fiquem residentes.
+- **Memória de pesos em bancos:** no modo GEMV, a Weight RAM é organizada em 4 bancos (`wgt_mem_banked`) e cada PE recebe o seu próprio peso; as 4 somas parciais de cada coluna são reduzidas antes da PPU.
+- **im2col:** a Input RAM pode ser substituída pelas 4 cópias da imagem do `npu_im2col`.
+- **Formatador de saída e fusão:** `OUT_CFG` ordena e desempacota as linhas e, com `LOOP`, escreve a saída na Input RAM, alimentando a camada seguinte sem passar pela RAM principal.
+- **Banco de bias:** 8 vetores de 4 colunas, selecionados por tile.
+
+Ver [Movimentação de Dados e Autonomia](data_movement.md).

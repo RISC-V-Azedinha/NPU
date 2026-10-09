@@ -47,7 +47,11 @@ markdown_extensions:
       generic: true
   - admonition
   - pymdownx.details
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.emoji:
@@ -67,7 +71,8 @@ nav:
       - Fluxo de Dados (Dataflow): hardware/systolic_array.md  
       - Unidade de Pós-Processamento (PPU): hardware/ppu.md 
       - Unidade de Controle (FSM): hardware/controller.md   
-      - Gestão de Dados: hardware/datapath.md     
+      - Gestão de Dados: hardware/datapath.md
+      - Movimentação de Dados e Autonomia: hardware/data_movement.md     
   - Software e Integração:
       - API de Programação: software/api_programming.md
       - Hardware-in-the-Loop (HIL): software/hil.md
