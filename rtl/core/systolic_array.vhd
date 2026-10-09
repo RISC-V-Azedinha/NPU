@@ -60,6 +60,19 @@ entity systolic_array is
         input_weights : in  std_logic_vector((COLS * DATA_W)-1 downto 0);
         input_acts    : in  std_logic_vector((ROWS * DATA_W)-1 downto 0);
 
+        -- Modo GEMV: cada PE(i,j) recebe o seu próprio peso (índice i*COLS + j), em vez do peso
+        -- que desce pela coluna. O alinhamento temporal (atraso i + j) é responsabilidade de quem
+        -- alimenta esta porta (npu_core).
+        gemv_en       : in  std_logic := '0';
+        gemv_weights  : in  std_logic_vector((ROWS * COLS * DATA_W)-1 downto 0) := (others => '0');
+
+        -- Tiles encadeados: a marca de fim de tile entra com a ativação de cada linha (mesmo atraso)
+        -- e, ao sair pela borda direita, indica que a linha está pronta no acumulador sombra
+        ovl_en        : in  std_logic := '0';
+        input_last    : in  std_logic_vector(ROWS-1 downto 0) := (others => '0');
+        ovl_valid     : out std_logic;
+        ovl_accs      : out std_logic_vector((COLS * ACC_W)-1 downto 0);
+
         -----------------------------------------------------------------------------------------------------
         -- Saídas (Vetores Empacotados)
         -----------------------------------------------------------------------------------------------------
@@ -100,6 +113,11 @@ architecture rtl of systolic_array is
     type v_wires_a_t is array (0 to (ROWS + 1) * COLS - 1) of npu_acc_t;
     signal acc_wires : v_wires_a_t;
 
+    type h_last_t is array (0 to ROWS * (COLS + 1) - 1) of std_logic;
+    signal last_wires : h_last_t;
+    type shadow_arr_t is array (0 to ROWS * COLS - 1) of npu_acc_t;
+    signal shadows    : shadow_arr_t;
+
     -- Calcula índice linear para fios HORIZONTAIS
     -- Imagine esticar as linhas uma depois da outra.
     -- Largura da "linha virtual" é COLS + 1
@@ -130,6 +148,10 @@ begin
     end generate;
 
     -- Borda Superior (Pesos): Conecta a porta de entrada no índice (0, col)
+    GEN_INPUT_LAST: for i in 0 to ROWS-1 generate
+        last_wires(get_h_idx(i, 0)) <= input_last(i);
+    end generate;
+
     GEN_INPUT_WEIGHTS: for j in 0 to COLS-1 generate
         weight_wires(get_v_idx(0, j)) <= signed(input_weights((j+1)*DATA_W-1 downto j*DATA_W));
     end generate;
@@ -143,6 +165,11 @@ begin
 
     GEN_ROWS: for i in 0 to ROWS-1 generate
         GEN_COLS: for j in 0 to COLS-1 generate
+            signal s_pe_weight : npu_data_t;
+        begin
+            s_pe_weight <= signed(gemv_weights((i*COLS + j + 1)*DATA_W-1 downto (i*COLS + j)*DATA_W))
+                           when gemv_en = '1' else weight_wires(get_v_idx(i, j));
+
             pe_inst: entity work.mac_pe
                 port map (
                     clk          => clk,
@@ -150,17 +177,41 @@ begin
                     soc_en_i     => soc_en_i,
                     clear_acc    => clear_acc,
                     drain_output => drain_output,
-                    weight_in    => weight_wires(get_v_idx(i, j)),
+                    weight_in    => s_pe_weight,
                     weight_out   => weight_wires(get_v_idx(i+1, j)),
                     act_in       => act_wires(get_h_idx(i, j)),
                     act_out      => act_wires(get_h_idx(i, j+1)),
                     acc_in       => acc_wires(get_v_idx(i, j)),
-                    acc_out      => acc_wires(get_v_idx(i+1, j))
+                    acc_out      => acc_wires(get_v_idx(i+1, j)),
+                    ovl_en       => ovl_en,
+                    last_in      => last_wires(get_h_idx(i, j)),
+                    last_out     => last_wires(get_h_idx(i, j+1)),
+                    shadow_out   => shadows(i*COLS + j)
                 );
         end generate GEN_COLS;
     end generate GEN_ROWS;
 
     -- Coleta de Saídas  ------------------------------------------------------------------------------------
+
+    -- Leitura dos tiles encadeados: a linha cuja marca sai pela borda direita neste ciclo (com
+    -- CONFIG >= COLS + 1, no máximo uma por ciclo; as linhas saem na ordem 0, 1, ..., ROWS-1)
+    process(last_wires, shadows)
+        variable v_valid : std_logic;
+        variable v_accs  : std_logic_vector((COLS * ACC_W)-1 downto 0);
+    begin
+        v_valid := '0';
+        v_accs  := (others => '0');
+        for i in 0 to ROWS-1 loop
+            if last_wires(get_h_idx(i, COLS)) = '1' then
+                v_valid := '1';
+                for j in 0 to COLS-1 loop
+                    v_accs((j+1)*ACC_W-1 downto j*ACC_W) := std_logic_vector(shadows(i*COLS + j));
+                end loop;
+            end if;
+        end loop;
+        ovl_valid <= v_valid;
+        ovl_accs  <= v_accs;
+    end process;
 
     GEN_OUTPUTS: for j in 0 to COLS-1 generate
         output_accs((j+1)*ACC_W-1 downto j*ACC_W) <= std_logic_vector(acc_wires(get_v_idx(ROWS, j)));

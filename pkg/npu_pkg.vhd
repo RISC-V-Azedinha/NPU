@@ -15,6 +15,9 @@ package npu_pkg is
     -- Deve ser maior que DATA_WIDTH para evitar overflow imediato
     constant ACC_WIDTH  : integer := 32;
 
+    -- Banco de bias: um vetor de bias (COLS valores) por tile de uma sequência (TILES com BIAS_PER_TILE)
+    constant BIAS_TILES : integer := 8;
+
     -- =========================================================================
     -- Definição de Tipos Padrão
     -- =========================================================================

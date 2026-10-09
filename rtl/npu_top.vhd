@@ -20,7 +20,7 @@
 -- 
 -- Base (Controle DMA/FSM)
 --
---  0x00 : STATUS (RO) [0=Busy, 1=Done]
+--  0x00 : STATUS (RO) [0=Busy, 1=Done, 3=Saída disponível, 4=Programa de descritores terminado]
 --  0x04 : CMD    (WO) 
 --
 --   - Bit[0]: RST_DMA_PTRS (Zera ponteiros de escrita - Nova Carga)
@@ -38,17 +38,48 @@
 --   próximo tile (W_PORT/I_PORT) enquanto a NPU ainda está BUSY computando/drenando o tile atual,
 --   pois escrita e leitura passam a usar bancos físicos distintos (ping-pong).
 --
+--  0x0C : DESC   (WO) [Programa do processador de comandos - Fixed Dest: WRITE/WAIT/END, ver npu_cmd_proc]
 --  0x08 : CONFIG (RW) [Tamanho do Tile / Ciclos]
 --  0x10 : W_PORT (WO) [Porta de Pesos - Fixed Dest]
 --  0x14 : I_PORT (WO) [Porta de Inputs - Fixed Dest]
 --  0x18 : O_DATA (RO) [Leitura de Saída]
+--  0x1C : IMG    (WO) [Porta da imagem crua do im2col - Fixed Dest; 4 pixels int8 por palavra]
+--  0x20 : W_BASE (RW) [Base da região de Pesos: destino de RST_DMA_PTRS/RST_WR_W/RST_W_RD]
+--  0x24 : I_BASE (RW) [Base da região de Inputs: destino de RST_DMA_PTRS/RST_WR_I/RST_I_RD]
+--
+--   Com as bases, várias camadas mantêm seus pesos residentes na RAM local (cada uma
+--   na sua região), carregados uma única vez. Reset = 0 (comportamento original).
+--
+--  0x28 : IM2COL_CTRL (RW) [Bit 0: 1 = Inputs gerados pelo im2col a partir da imagem (porta IMG)]
+--  0x2C : IM2COL_GEOM (RW) [7:0 IN_W | 15:8 OUT_W | 19:16 STRIDE | 23:20 KW]
+--  0x30 : IM2COL_NWIN (RW) [15:0 Total de janelas; as excedentes do último grupo leem zero]
+--
+--   Com o im2col ligado, cada START consome um grupo de ROWS janelas (K = CONFIG taps) e o
+--   próximo START segue para o grupo seguinte; RST_I_RD no START volta à janela 0. O ponteiro
+--   da porta IMG volta a zero com RST_DMA_PTRS ou RST_WR_I.
+--
+--  0x34 : TILES   (RW) [15:0 Tiles por START (0/1 = um tile) | 16 RW_W | 17 RW_I]
+--  0x38 : OUT_CFG (RW) [0 ORDER: linhas na ordem 0..ROWS-1 | 1 UNPACK: uma ativação por palavra |
+--                       2 LOOP: a saída vai para a RAM de Inputs a partir de I_BASE (fusão de camadas)]
+--  0x3C : MODE    (RW) [0 GEMV: densa com lote 1; linha r acumula as features k = r mod ROWS, um
+--                       peso por PE (memória de pesos em 4 bancos); as ROWS linhas são somadas
+--                       antes da PPU, que entrega uma palavra por tile. Base dos pesos múltipla de 4 |
+--                       1 STREAM_I: cada leitura espera o seu Input (ou os pixels do im2col) ser escrito |
+--                       2 STREAM_W: idem para os Pesos | 3 OVERLAP: tiles encadeados, sem esvaziar o array
+--                       (acumuladores sombra; exige CONFIG > COLS; UNPACK não é suportado nesse modo)]
+--  0x80+  : BIAS   (RW) [Banco: 0x80 + 16*tile + 4*coluna; TILES bit 18 = um vetor por tile]
+--
+--   Com TILES = N, um START executa N tiles em sequência: cada tile computa CONFIG ciclos, esvazia
+--   o array (ROWS linhas) na FIFO e segue; RW_W/RW_I voltam a leitura de Pesos/Inputs à base a
+--   cada tile. A drenagem de um tile só começa quando ele cabe inteiro na FIFO. Enquanto a NPU
+--   está BUSY, ler a O_DATA com a FIFO vazia segura o barramento até chegar o próximo resultado
+--   (o DMA, em modo de origem fixa, esvazia a FIFO em paralelo com o cômputo).
 --
 -- Configuração Estática 
 -- 
 --  0x40 : QUANT_CFG
 --  0x44 : QUANT_MULT
 --  0x48 : CONTROL_FLAGS (ReLU, etc)
---  0x80+: BIAS
 --
 -------------------------------------------------------------------------------------------------------------
 
@@ -71,7 +102,8 @@ entity npu_top is
         DATA_W      : integer := 8;                              -- Largura do Dado de Saída
         QUANT_W     : integer := 32;                             -- Largura dos Parâmetros de Quantização
         FIFO_DEPTH  : integer := 2048;                           -- Define o tamanho da RAM (4KB = 1024 * 32b)
-        DOUBLE_BUFFER : boolean := false                         -- Retrocompatível: false = recursos originais
+        DOUBLE_BUFFER : boolean := false;                        -- Retrocompatível: false = recursos originais
+        IM2COL      : boolean := true                            -- false = NPU sem o hardware de im2col
 
     );
 
@@ -124,6 +156,19 @@ architecture rtl of npu_top is
     signal s_sts_busy            : std_logic := '0';
     signal s_sts_done            : std_logic := '0';
     signal s_cfg_run_size        : unsigned(31 downto 0) := (others => '0');
+    signal s_wgt_base            : unsigned(31 downto 0) := (others => '0');
+    signal s_inp_base            : unsigned(31 downto 0) := (others => '0');
+
+    -- im2col em hardware ------------------------------------------------------------------------------------
+
+    signal s_img_we              : std_logic := '0';
+    signal s_img_wr_ptr          : unsigned(31 downto 0) := (others => '0');
+    signal s_cfg_im2col_en       : std_logic := '0';
+    signal s_cfg_im_in_w         : unsigned(7 downto 0) := (others => '0');
+    signal s_cfg_im_out_w        : unsigned(7 downto 0) := (others => '0');
+    signal s_cfg_im_stride       : unsigned(3 downto 0) := (others => '0');
+    signal s_cfg_im_kw           : unsigned(3 downto 0) := (others => '0');
+    signal s_cfg_im_nwin         : unsigned(15 downto 0) := (others => '0');
 
     -- Double Buffering (Ping-Pong) ---------------------------------------------------------------------------
 
@@ -148,7 +193,26 @@ architecture rtl of npu_top is
     signal s_cfg_quant_sh        : std_logic_vector(4 downto 0) := (others => '0');
     signal s_cfg_quant_zo        : std_logic_vector(DATA_W-1 downto 0) := (others => '0');
     signal s_cfg_quant_mul       : std_logic_vector(QUANT_W-1 downto 0) := (others => '0');
-    signal s_cfg_bias_vec        : std_logic_vector((COLS*ACC_W)-1 downto 0) := (others => '0');
+    signal s_cfg_bias_vec        : std_logic_vector((BIAS_TILES*COLS*ACC_W)-1 downto 0) := (others => '0');
+    signal s_cfg_bias_per_tile   : std_logic := '0';
+    signal s_cfg_bias_base       : unsigned(2 downto 0) := (others => '0');
+
+    -- Descritores de camada (processador de comandos) ------------------------------------------------------
+
+    signal s_desc_we             : std_logic := '0';
+    signal s_cp_we               : std_logic := '0';
+    signal s_cp_addr             : std_logic_vector(7 downto 0) := (others => '0');
+    signal s_cp_data             : std_logic_vector(31 downto 0) := (others => '0');
+    signal s_cp_idle             : std_logic := '1';
+    signal s_desc_ready          : std_logic := '1';
+    signal s_cfg_gemv            : std_logic := '0';
+    signal s_cfg_stream_i        : std_logic := '0';
+    signal s_cfg_stream_w        : std_logic := '0';
+    signal s_cfg_overlap         : std_logic := '0';
+    signal s_cfg_out_loop        : std_logic := '0';
+    signal s_ctl_issue           : std_logic := '0';
+    signal s_ctl_core_last       : std_logic := '0';
+    signal s_im2col_ready        : std_logic := '1';
 
     -- Controller <-> Datapath ------------------------------------------------------------------------------
 
@@ -156,7 +220,16 @@ architecture rtl of npu_top is
     signal s_inp_rd_ptr          : unsigned(31 downto 0) := (others => '0');
     signal s_ctl_acc_dump        : std_logic := '0';
     signal s_ctl_core_vld        : std_logic := '0';
-    signal s_fifo_ready_feedback : std_logic := '1';
+    signal s_out_space_ok        : std_logic := '1';
+    signal s_out_busy            : std_logic := '0';
+
+    -- Sequenciador de tiles e formato da saída ----------------------------------------------------------------
+
+    signal s_cfg_tiles           : unsigned(15 downto 0) := (others => '0');
+    signal s_cfg_tile_rw_w       : std_logic := '0';
+    signal s_cfg_tile_rw_i       : std_logic := '0';
+    signal s_cfg_out_order       : std_logic := '0';
+    signal s_cfg_out_unpack      : std_logic := '0';
 
     -- Sinal Auxiliar para Edge Detector --------------------------------------------------------------------
 
@@ -240,6 +313,21 @@ begin
             inp_we        => s_inp_we, 
             wgt_wr_ptr    => s_wgt_wr_ptr, 
             inp_wr_ptr    => s_inp_wr_ptr,
+            wgt_base      => s_wgt_base,
+            inp_base      => s_inp_base,
+            img_we        => s_img_we,
+            img_wr_ptr    => s_img_wr_ptr,
+            cfg_im2col_en => s_cfg_im2col_en,
+            cfg_im_in_w   => s_cfg_im_in_w,
+            cfg_im_out_w  => s_cfg_im_out_w,
+            cfg_im_stride => s_cfg_im_stride,
+            cfg_im_kw     => s_cfg_im_kw,
+            cfg_im_nwin   => s_cfg_im_nwin,
+            cfg_tiles     => s_cfg_tiles,
+            cfg_tile_rw_w => s_cfg_tile_rw_w,
+            cfg_tile_rw_i => s_cfg_tile_rw_i,
+            cfg_out_order => s_cfg_out_order,
+            cfg_out_unpack=> s_cfg_out_unpack,
 
             -- Configs Interface
             cfg_run_size  => s_cfg_run_size, 
@@ -247,8 +335,41 @@ begin
             cfg_quant_sh  => s_cfg_quant_sh, 
             cfg_quant_zo  => s_cfg_quant_zo, 
             cfg_quant_mul => s_cfg_quant_mul, 
-            cfg_bias_vec  => s_cfg_bias_vec
+            cfg_bias_vec  => s_cfg_bias_vec,
+            cfg_bias_per_tile => s_cfg_bias_per_tile,
+            cfg_bias_base => s_cfg_bias_base,
+            cfg_gemv      => s_cfg_gemv,
+            cfg_stream_i  => s_cfg_stream_i,
+            cfg_stream_w  => s_cfg_stream_w,
+            cfg_overlap   => s_cfg_overlap,
+            cfg_out_loop  => s_cfg_out_loop,
+            desc_we       => s_desc_we,
+            cp_we         => s_cp_we,
+            cp_addr       => s_cp_addr,
+            cp_data       => s_cp_data,
+            cp_idle       => s_cp_idle,
+            desc_ready    => s_desc_ready
 
+        );
+
+    ---------------------------------------------------------------------------------------------------------
+    -- Instância: Processador de comandos (descritores de camada, porta DESC)
+    ---------------------------------------------------------------------------------------------------------
+
+    u_cmd_proc : entity work.npu_cmd_proc
+        port map (
+            clk           => clk,
+            rst_n         => rst_n,
+            soc_en_i      => soc_en_i,
+            desc_we       => s_desc_we,
+            desc_data     => data_i,
+            cp_we         => s_cp_we,
+            cp_addr       => s_cp_addr,
+            cp_data       => s_cp_data,
+            sts_busy      => s_sts_busy,
+            sts_done      => s_sts_done,
+            cp_idle       => s_cp_idle,
+            desc_ready    => s_desc_ready
         );
 
     ---------------------------------------------------------------------------------------------------------
@@ -274,6 +395,21 @@ begin
             cmd_rst_i     => s_cmd_rst_i,
             cmd_dbuf_en   => s_cmd_dbuf_en,
             cfg_run_size  => s_cfg_run_size,
+            wgt_base      => s_wgt_base,
+            inp_base      => s_inp_base,
+            cfg_tiles     => s_cfg_tiles,
+            cfg_tile_rw_w => s_cfg_tile_rw_w,
+            cfg_tile_rw_i => s_cfg_tile_rw_i,
+            cfg_gemv      => s_cfg_gemv,
+            cfg_stream_i  => s_cfg_stream_i,
+            cfg_stream_w  => s_cfg_stream_w,
+            inp_wr_ptr    => s_inp_wr_ptr,
+            wgt_wr_ptr    => s_wgt_wr_ptr,
+            cfg_im2col_en => s_cfg_im2col_en,
+            im2col_ready  => s_im2col_ready,
+            cfg_overlap   => s_cfg_overlap,
+            ctl_issue     => s_ctl_issue,
+            ctl_core_last => s_ctl_core_last,
 
             -- System Interface
             sts_busy      => s_sts_busy,
@@ -282,7 +418,7 @@ begin
             -- Datapath Interface
             wgt_rd_ptr    => s_wgt_rd_ptr,
             inp_rd_ptr    => s_inp_rd_ptr,
-            ctl_ram_re    => open,                                -- Usado internamente para gerar core_vld
+            ctl_ram_re    => open,
             ctl_core_vld  => s_ctl_core_vld,
             ctl_acc_dump  => s_ctl_acc_dump,
 
@@ -291,7 +427,8 @@ begin
             wr_bank_o     => s_wr_bank,
 
             -- Backpressure (STALL)
-            fifo_ready_i => s_fifo_ready_feedback
+            out_space_ok  => s_out_space_ok,
+            out_busy      => s_out_busy
 
         );
 
@@ -307,7 +444,8 @@ begin
             DATA_W        => DATA_W,
             QUANT_W       => QUANT_W,
             FIFO_DEPTH    => FIFO_DEPTH,
-            DOUBLE_BUFFER => DOUBLE_BUFFER
+            DOUBLE_BUFFER => DOUBLE_BUFFER,
+            IM2COL        => IM2COL
         )
         port map (
 
@@ -329,6 +467,19 @@ begin
             ctl_acc_dump        => s_ctl_acc_dump,
             ctl_valid_in        => s_ctl_core_vld,
 
+            -- im2col em hardware
+            img_we              => s_img_we,
+            img_wr_ptr          => s_img_wr_ptr,
+            cfg_im2col_en       => s_cfg_im2col_en,
+            cfg_im_in_w         => s_cfg_im_in_w,
+            cfg_im_out_w        => s_cfg_im_out_w,
+            cfg_im_stride       => s_cfg_im_stride,
+            cfg_im_kw           => s_cfg_im_kw,
+            cfg_im_nwin         => s_cfg_im_nwin,
+            cfg_run_size        => s_cfg_run_size,
+            ctl_start           => s_cmd_start,
+            ctl_rst_i           => s_cmd_rst_i,
+
             -- Double Buffering (Ping-Pong)
             wr_bank             => s_wr_bank,
             rd_bank             => s_rd_bank,
@@ -344,7 +495,19 @@ begin
             fifo_pop            => s_fifo_pop, 
             fifo_r_valid        => s_fifo_r_valid, 
             fifo_r_data         => s_fifo_r_data,
-            fifo_ready_feedback => s_fifo_ready_feedback
+            cfg_bias_per_tile   => s_cfg_bias_per_tile,
+            cfg_bias_base       => s_cfg_bias_base,
+            cfg_gemv            => s_cfg_gemv,
+            ctl_last            => s_ctl_core_last,
+            ctl_issue           => s_ctl_issue,
+            im2col_ready_o      => s_im2col_ready,
+            cfg_overlap         => s_cfg_overlap,
+            cfg_out_loop        => s_cfg_out_loop,
+            inp_base            => s_inp_base,
+            cfg_out_order       => s_cfg_out_order,
+            cfg_out_unpack      => s_cfg_out_unpack,
+            out_space_ok        => s_out_space_ok,
+            out_busy            => s_out_busy
         
         );
 

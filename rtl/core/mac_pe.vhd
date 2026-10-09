@@ -43,6 +43,11 @@ entity mac_pe is
         clear_acc   : in  std_logic;                      -- Zera o acumulador interno
         drain_output: in  std_logic;                      -- 1: Desloca dados (Shift Vertical), 0: Calcula
 
+        -- Tiles encadeados: a MAC marcada com last_in fecha o tile; o resultado vai para o
+        -- acumulador sombra (lido sem parar o array) e o acumulador recomeça do zero
+        ovl_en      : in  std_logic := '0';
+        last_in     : in  std_logic := '0';               -- Marca de fim de tile (viaja com a ativação)
+
         -----------------------------------------------------------------------------------------------------
         -- Entradas de Dados
         -----------------------------------------------------------------------------------------------------
@@ -57,7 +62,9 @@ entity mac_pe is
 
         weight_out : out npu_data_t;                      -- Saída de peso (8 bits assinados)
         act_out    : out npu_data_t;                      -- Saída de ativação (8 bits assinados)
-        acc_out    : out npu_acc_t                        -- Saída de acumulador (32 bits assinados)
+        acc_out    : out npu_acc_t;                       -- Saída de acumulador (32 bits assinados)
+        last_out   : out std_logic;                       -- Marca de fim de tile para o PE à direita
+        shadow_out : out npu_acc_t                        -- Resultado do último tile fechado (modo encadeado)
 
         -----------------------------------------------------------------------------------------------------
 
@@ -76,6 +83,8 @@ architecture rtl of mac_pe is
     signal weight_reg : npu_data_t := (others => '0');    -- Registro de peso
     signal act_reg    : npu_data_t := (others => '0');    -- Registro de ativação
     signal acc_reg    : npu_acc_t  := (others => '0');    -- Registro de acumulador
+    signal last_reg   : std_logic  := '0';                -- Marca de fim de tile
+    signal shadow_reg : npu_acc_t  := (others => '0');    -- Acumulador sombra (tiles encadeados)
 
     ---------------------------------------------------------------------------------------------------------
 
@@ -86,6 +95,8 @@ begin
     act_out    <= act_reg;                                -- Saída da ativação
     weight_out <= weight_reg;                             -- Saída do peso
     acc_out    <= acc_reg;                                -- Saída do acumulador
+    last_out   <= last_reg;                               -- Marca de fim de tile
+    shadow_out <= shadow_reg;                             -- Resultado do último tile fechado
 
     -- Processo Síncrono ------------------------------------------------------------------------------------
 
@@ -98,6 +109,8 @@ begin
                 weight_reg <= (others => '0');
                 act_reg    <= (others => '0');
                 acc_reg    <= (others => '0');
+                last_reg   <= '0';
+                shadow_reg <= (others => '0');
 
             elsif soc_en_i = '1' then
 
@@ -107,6 +120,7 @@ begin
 
                 weight_reg <= weight_in;
                 act_reg    <= act_in;
+                last_reg   <= last_in;
 
                 -- 2. Lógica do Acumulador (Output Stationary)
                 if clear_acc = '1' then
@@ -120,7 +134,13 @@ begin
                     -- Pega o dado do PE de cima (acc_in) e passa para baixo.
                     acc_reg <= acc_in;
 
-                    
+                elsif ovl_en = '1' and last_in = '1' then
+
+                    -- Modo ENCADEADO: a última MAC do tile vai para o acumulador sombra, de onde o
+                    -- resultado é lido enquanto o acumulador já recomeça o próximo tile
+                    shadow_reg <= acc_reg + resize(weight_in * act_in, ACC_WIDTH);
+                    acc_reg    <= (others => '0');
+
                 else
 
                     -- Modo COMPUTAÇÃO: MAC (Multiply-Accumulate)

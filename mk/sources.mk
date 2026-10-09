@@ -6,11 +6,14 @@ VHDL_SRCS += $(PKG_DIR)/npu_pkg.vhd
 # Common & Core
 VHDL_SRCS += $(RTL_DIR)/common/fifo_sync.vhd
 VHDL_SRCS += $(RTL_DIR)/common/ram_dual.vhd
+VHDL_SRCS += $(RTL_DIR)/common/wgt_mem_banked.vhd
 VHDL_SRCS += $(RTL_DIR)/core/mac_pe.vhd
 VHDL_SRCS += $(RTL_DIR)/core/systolic_array.vhd
 VHDL_SRCS += $(RTL_DIR)/core/input_buffer.vhd
 VHDL_SRCS += $(RTL_DIR)/core/npu_core.vhd
 VHDL_SRCS += $(RTL_DIR)/ppu/post_process.vhd
+VHDL_SRCS += $(RTL_DIR)/npu_im2col.vhd
+VHDL_SRCS += $(RTL_DIR)/npu_cmd_proc.vhd
 VHDL_SRCS += $(RTL_DIR)/npu_controller.vhd
 VHDL_SRCS += $(RTL_DIR)/npu_datapath.vhd
 VHDL_SRCS += $(RTL_DIR)/npu_register_file.vhd
