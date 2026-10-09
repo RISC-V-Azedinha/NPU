@@ -16,7 +16,7 @@
         <link rel="prev" href="../controller/">
       
       
-        <link rel="next" href="../../software/api_programming/">
+        <link rel="next" href="../data_movement/">
       
       
         
@@ -750,10 +750,60 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#3-double-buffering-ping-pong" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Double Buffering (Ping-Pong)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-extensoes-do-datapath" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Extensões do Datapath
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../data_movement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Movimentação de Dados e Autonomia
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -1209,6 +1259,28 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#3-double-buffering-ping-pong" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Double Buffering (Ping-Pong)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-extensoes-do-datapath" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Extensões do Datapath
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1255,6 +1327,22 @@
 <p>Filas e Sincronização: Após a quantização e ativação, as PPUs validam os resultados. O Datapath concentra essas saídas em um buffer circular (<code>fifo_sync</code>). Este componente é essencial para dessincronizar o fim do processamento ultrarrápido do hardware da velocidade variável com que a CPU lê esses resultados via software, enviando o sinal <code>fifo_ready_feedback</code> de volta à FSM para regular o fluxo (Backpressure).</p>
 </li>
 </ol>
+<h2 id="3-double-buffering-ping-pong">3. Double Buffering (Ping-Pong)</h2>
+<p>Por padrão, os Scratchpads de Pesos e Entradas são um único banco: a mesma região de memória é usada tanto para a escrita (host, via MMIO) quanto para a leitura (Core), o que obriga o host a esperar o fim do <code>COMPUTE</code>/<code>DRAIN</code> de um tile antes de poder carregar o próximo — a movimentação de dados fica em série com a computação.</p>
+<p>Quando o IP é gerado com o generic <code>DOUBLE_BUFFER =&gt; true</code>, o Datapath duplica cada Scratchpad em dois bancos físicos (A/B). A cada <code>START</code> com o bit <code>DBUF_EN</code> habilitado, o controlador troca de banco em <em>ping-pong</em>: passa a ler o banco que acabou de ser preenchido e libera o outro banco para a próxima escrita via MMIO — que pode acontecer imediatamente, mesmo com a NPU ainda <code>BUSY</code> computando/drenando o tile anterior. Isso sobrepõe a movimentação de dados do próximo tile com a computação do tile corrente, em vez de serializá-las.</p>
+<div class="admonition info">
+<p class="admonition-title">Retrocompatibilidade</p>
+<p>O generic <code>DOUBLE_BUFFER</code> tem default <code>false</code>, o que preserva exatamente a estrutura de RTL e o consumo de BRAM da versão de banco único. Mesmo com <code>DOUBLE_BUFFER =&gt; true</code>, o bit <code>DBUF_EN</code> do registrador <code>CMD</code> (bit 8) é opcional: se o host nunca o define, a NPU permanece presa ao banco 0, reproduzindo bit-a-bit o comportamento legado.</p>
+</div>
+<h2 id="4-extensoes-do-datapath">4. Extensões do Datapath</h2>
+<ul>
+<li><strong>Bases de região (<code>W_BASE</code>/<code>I_BASE</code>):</strong> dividem os Scratchpads em regiões, para que os pesos de cada camada fiquem residentes.</li>
+<li><strong>Memória de pesos em bancos:</strong> no modo GEMV, a Weight RAM é organizada em 4 bancos (<code>wgt_mem_banked</code>) e cada PE recebe o seu próprio peso; as 4 somas parciais de cada coluna são reduzidas antes da PPU.</li>
+<li><strong>im2col:</strong> a Input RAM pode ser substituída pelas 4 cópias da imagem do <code>npu_im2col</code>.</li>
+<li><strong>Formatador de saída e fusão:</strong> <code>OUT_CFG</code> ordena e desempacota as linhas e, com <code>LOOP</code>, escreve a saída na Input RAM, alimentando a camada seguinte sem passar pela RAM principal.</li>
+<li><strong>Banco de bias:</strong> 8 vetores de 4 colunas, selecionados por tile.</li>
+</ul>
+<p>Ver <a href="../data_movement/">Movimentação de Dados e Autonomia</a>.</p>
 
 
 
@@ -1275,7 +1363,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-datetime" title="March 26, 2026 18:18:46 UTC">March 26, 2026 18:18:46</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-datetime" title="October 9, 2026 04:25:43 UTC">October 9, 2026 04:25:43</span>
   </span>
 
     
@@ -1330,13 +1418,13 @@
         
         
           
-          <a href="../../software/api_programming/" class="md-footer__link md-footer__link--next" aria-label="Next: API de Programação">
+          <a href="../data_movement/" class="md-footer__link md-footer__link--next" aria-label="Next: Movimentação de Dados e Autonomia">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                API de Programação
+                Movimentação de Dados e Autonomia
               </div>
             </div>
             <div class="md-footer__button md-icon">

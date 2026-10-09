@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://RISC-V-Azedinha.github.io/NPU/software/api_programming/">
       
       
-        <link rel="prev" href="../../hardware/datapath/">
+        <link rel="prev" href="../../hardware/data_movement/">
       
       
         <link rel="next" href="../hil/">
@@ -685,6 +685,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hardware/data_movement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Movimentação de Dados e Autonomia
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -879,6 +907,72 @@
     <span class="md-ellipsis">
       
         Estratégia de Tiling (Output Stationary)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pesos-residentes-w_base-i_base" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pesos Residentes (W_BASE / I_BASE)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#im2col-em-hardware" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        im2col em Hardware
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sequenciador-de-tiles-e-saida-por-dma" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sequenciador de Tiles e Saída por DMA
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modo-gemv-densa-com-lote-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Modo GEMV (Densa com Lote 1)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#streaming-tiles-encadeados-e-fusao-de-camadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Streaming, Tiles Encadeados e Fusão de Camadas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#biases-residentes-e-descritores-de-camada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Biases Residentes e Descritores de Camada
       
     </span>
   </a>
@@ -1309,6 +1403,72 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#pesos-residentes-w_base-i_base" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pesos Residentes (W_BASE / I_BASE)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#im2col-em-hardware" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        im2col em Hardware
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sequenciador-de-tiles-e-saida-por-dma" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sequenciador de Tiles e Saída por DMA
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modo-gemv-densa-com-lote-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Modo GEMV (Densa com Lote 1)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#streaming-tiles-encadeados-e-fusao-de-camadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Streaming, Tiles Encadeados e Fusão de Camadas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#biases-residentes-e-descritores-de-camada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Biases Residentes e Descritores de Camada
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1380,6 +1540,72 @@
 <td style="text-align: left;">Porta de leitura de Resultados.</td>
 </tr>
 <tr>
+<td style="text-align: left;"><code>0x1C</code></td>
+<td style="text-align: left;"><strong>WRITE_IMG</strong></td>
+<td style="text-align: left;">WO</td>
+<td style="text-align: left;">Porta da imagem crua do im2col (4 pixels int8 por palavra).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>0x20</code></td>
+<td style="text-align: left;"><strong>W_BASE</strong></td>
+<td style="text-align: left;">RW</td>
+<td style="text-align: left;">Base da região de Pesos na RAM local (reset = 0).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>0x24</code></td>
+<td style="text-align: left;"><strong>I_BASE</strong></td>
+<td style="text-align: left;">RW</td>
+<td style="text-align: left;">Base da região de Inputs na RAM local (reset = 0).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>0x28</code></td>
+<td style="text-align: left;"><strong>IM2COL_EN</strong></td>
+<td style="text-align: left;">RW</td>
+<td style="text-align: left;">Bit 0: Inputs gerados pelo im2col em hardware.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>0x2C</code></td>
+<td style="text-align: left;"><strong>IM2COL_GEOM</strong></td>
+<td style="text-align: left;">RW</td>
+<td style="text-align: left;"><code>[7:0]</code> IN_W, <code>[15:8]</code> OUT_W, <code>[19:16]</code> STRIDE, <code>[23:20]</code> KW.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>0x30</code></td>
+<td style="text-align: left;"><strong>IM2COL_NWIN</strong></td>
+<td style="text-align: left;">RW</td>
+<td style="text-align: left;">Total de janelas da convolução.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>0x0C</code></td>
+<td style="text-align: left;"><strong>DESC</strong></td>
+<td style="text-align: left;">WO</td>
+<td style="text-align: left;">Programa do processador de comandos (descritores de camada).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>0x34</code></td>
+<td style="text-align: left;"><strong>TILES</strong></td>
+<td style="text-align: left;">RW</td>
+<td style="text-align: left;"><code>[15:0]</code> tiles por START (0/1 = um); bit 16 <code>RW_W</code>; bit 17 <code>RW_I</code>; bit 18 <code>BIAS_PER_TILE</code>; <code>[21:19]</code> banco de bias do primeiro tile.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>0x38</code></td>
+<td style="text-align: left;"><strong>OUT_CFG</strong></td>
+<td style="text-align: left;">RW</td>
+<td style="text-align: left;">Bit 0 <code>ORDER</code> (linhas em ordem); bit 1 <code>UNPACK</code> (uma ativação por palavra); bit 2 <code>LOOP</code> (saída na RAM de Inputs).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>0x3C</code></td>
+<td style="text-align: left;"><strong>MODE</strong></td>
+<td style="text-align: left;">RW</td>
+<td style="text-align: left;">Bit 0 <code>GEMV</code>; bit 1 <code>STREAM_I</code>; bit 2 <code>STREAM_W</code>; bit 3 <code>OVERLAP</code> (ver abaixo).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>0x80</code>–<code>0xFC</code></td>
+<td style="text-align: left;"><strong>BIAS</strong></td>
+<td style="text-align: left;">RW</td>
+<td style="text-align: left;">Banco de bias: 8 tiles × 4 colunas (<code>0x80 + 16·tile + 4·coluna</code>).</td>
+</tr>
+<tr>
 <td style="text-align: left;"><code>0x40</code></td>
 <td style="text-align: left;"><strong>QUANT_CFG</strong></td>
 <td style="text-align: left;">RW</td>
@@ -1390,12 +1616,6 @@
 <td style="text-align: left;"><strong>QUANT_MULT</strong></td>
 <td style="text-align: left;">RW</td>
 <td style="text-align: left;">Multiplicador Inteiro da PPU.</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>0x80</code></td>
-<td style="text-align: left;"><strong>BIAS_BASE</strong></td>
-<td style="text-align: left;">RW</td>
-<td style="text-align: left;">Vetor de Bias (4 x 32-bit).</td>
 </tr>
 </tbody>
 </table>
@@ -1414,7 +1634,7 @@
 <tr>
 <td style="text-align: left;"><strong>0</strong></td>
 <td style="text-align: left;"><code>RST_DMA_PTRS</code></td>
-<td style="text-align: left;">Reseta TODOS os ponteiros de escrita e leitura para zero. Usado no início de uma nova inferência.</td>
+<td style="text-align: left;">Leva os ponteiros de escrita de Pesos e Inputs para as suas bases (<code>W_BASE</code>/<code>I_BASE</code>). Usado no início de uma nova inferência.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>1</strong></td>
@@ -1429,22 +1649,22 @@
 <tr>
 <td style="text-align: left;"><strong>4</strong></td>
 <td style="text-align: left;"><code>RST_W_RD</code></td>
-<td style="text-align: left;">Reseta apenas o ponteiro de <strong>leitura</strong> de Pesos.</td>
+<td style="text-align: left;">Leva apenas o ponteiro de <strong>leitura</strong> de Pesos para <code>W_BASE</code>.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>5</strong></td>
 <td style="text-align: left;"><code>RST_I_RD</code></td>
-<td style="text-align: left;">Reseta apenas o ponteiro de <strong>leitura</strong> de Inputs.</td>
+<td style="text-align: left;">Leva apenas o ponteiro de <strong>leitura</strong> de Inputs para <code>I_BASE</code>.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>6</strong></td>
 <td style="text-align: left;"><code>RST_WR_W</code></td>
-<td style="text-align: left;">Reseta apenas o ponteiro de <strong>escrita</strong> de Pesos (Recarga parcial).</td>
+<td style="text-align: left;">Leva apenas o ponteiro de <strong>escrita</strong> de Pesos para <code>W_BASE</code> (Recarga parcial).</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>7</strong></td>
 <td style="text-align: left;"><code>RST_WR_I</code></td>
-<td style="text-align: left;">Reseta apenas o ponteiro de <strong>escrita</strong> de Inputs.</td>
+<td style="text-align: left;">Leva apenas o ponteiro de <strong>escrita</strong> de Inputs para <code>I_BASE</code>.</td>
 </tr>
 </tbody>
 </table>
@@ -1483,6 +1703,57 @@
 </ul>
 </li>
 </ol>
+<h2 id="pesos-residentes-w_base-i_base">Pesos Residentes (W_BASE / I_BASE)</h2>
+<p>Os pesos de uma rede treinada não mudam entre inferências. Com os registradores de base, cada camada ocupa a sua própria região da RAM de pesos e é carregada <strong>uma única vez</strong>; a cada inferência, apenas as ativações trafegam pelo barramento.</p>
+<ol>
+<li>Na carga do modelo, para cada camada: escreva a base da região em <code>W_BASE</code>, envie <code>CMD_RST_WR_W</code> e transfira os pesos pela <code>WRITE_W</code>.</li>
+<li>Na inferência, antes de cada camada: escreva a base da região em <code>W_BASE</code>, envie <code>CMD_RST_WR_I</code>, transfira os Inputs e dispare com <code>CMD_START | RST_W_RD | RST_I_RD</code>.</li>
+</ol>
+<p>Como as bases valem zero após o reset, o software que não as usa mantém o comportamento original.</p>
+<h2 id="im2col-em-hardware">im2col em Hardware</h2>
+<p>Em convoluções, a NPU monta as janelas sozinha a partir da imagem crua, sem que a CPU precise desdobrar a imagem (im2col) e empacotar as janelas.</p>
+<ol>
+<li>Envie <code>CMD_RST_WR_I</code> e transfira a imagem pela <code>WRITE_IMG</code> (4 pixels int8 por palavra, em ordem de varredura).</li>
+<li>Configure <code>IM2COL_GEOM</code> (largura da imagem, janelas por linha da saída, passo e largura do kernel) e <code>IM2COL_NWIN</code>, e ligue <code>IM2COL_EN</code>.</li>
+<li>Escreva <code>CONFIG = KW x KH</code> (taps por janela) e dispare um START por grupo de 4 janelas: o primeiro com <code>RST_I_RD</code> (volta à janela 0) e os seguintes sem ele. A linha <code>r</code> do array processa a janela <code>4g + r</code>; as janelas além de <code>IM2COL_NWIN</code> leem zero.</li>
+<li>Desligue <code>IM2COL_EN</code> antes de camadas que leem a RAM de Inputs.</li>
+</ol>
+<p>Restrições: <code>OUT_W &gt;= 4</code>, <code>IN_W &lt;= 255</code>, imagem de até 1 KB (generic <code>IMG_WORDS</code> do <code>npu_im2col</code>). O im2col não é usado junto com o Double Buffering.</p>
+<h2 id="sequenciador-de-tiles-e-saida-por-dma">Sequenciador de Tiles e Saída por DMA</h2>
+<p>Um único START pode executar vários tiles, tirando a CPU do laço de controle:</p>
+<ol>
+<li><code>TILES = N | RW_W | RW_I</code>: <code>N</code> tiles por START. A cada tile, <code>RW_W</code> volta a leitura dos Pesos a <code>W_BASE</code> (os mesmos pesos para várias janelas, como numa convolução) e <code>RW_I</code> volta a dos Inputs a <code>I_BASE</code> (as mesmas entradas para vários blocos de neurônios, como numa densa). O que não volta segue de onde parou.</li>
+<li><code>OUT_CFG</code>: <code>ORDER</code> entrega as linhas na ordem 0..3 (sem ele, a última linha sai primeiro); <code>UNPACK</code> entrega uma ativação por palavra (estendida com zeros), o formato que a RAM de Inputs de uma densa seguinte espera.</li>
+<li>Os acumuladores se zeram sozinhos no drain de cada tile; o drain só começa quando o tile inteiro cabe na FIFO (64 palavras).</li>
+<li>Enquanto a NPU está BUSY, uma leitura da <code>READ_OUT</code> com a FIFO vazia segura o barramento até chegar o próximo resultado. Com o DMA em origem fixa (<code>DMA_CTRL_FIXED_SRC</code>, <code>hal_dma_drain</code>), a saída vai para a RAM em paralelo com o cômputo.</li>
+</ol>
+<p>O bias é o mesmo para todos os tiles de uma sequência; camadas que trocam o bias por bloco de neurônios continuam com um START por bloco.</p>
+<h2 id="modo-gemv-densa-com-lote-1">Modo GEMV (Densa com Lote 1)</h2>
+<p>Com uma única amostra, a camada densa é um produto matriz-vetor, e o modo normal só aproveita 1 das 4 linhas do array. Com <code>MODE.GEMV = 1</code>:</p>
+<ul>
+<li>A palavra de entrada <code>t</code> traz as features <code>4t..4t+3</code> (byte <code>r</code> = feature <code>4t + r</code>), e a linha <code>r</code> acumula as features <code>k ≡ r (mod 4)</code>.</li>
+<li>A coluna <code>c</code> acumula o neurônio <code>4j + c</code> do bloco <code>j</code>; cada PE recebe o seu próprio peso a cada ciclo, lido de 4 palavras consecutivas da memória de pesos (organizada em 4 bancos).</li>
+<li>Os pesos seguem o layout de sempre (palavra <code>k</code> do bloco <code>j</code> = neurônios <code>4j..4j+3</code> da feature <code>k</code>), a partir de uma base <strong>múltipla de 4</strong>.</li>
+<li><code>CONFIG = K/4</code> (ciclos por bloco). As 4 somas parciais de cada coluna são somadas antes da PPU, que entrega <strong>uma palavra por bloco</strong> (byte <code>c</code> = neurônio <code>4j + c</code>).</li>
+<li>Com <code>TILES = blocos | RW_I | BIAS_PER_TILE</code> (bit 18), todos os blocos rodam num único START, cada um com o seu vetor de bias (<code>0x80 + 16·j</code>).</li>
+</ul>
+<h2 id="streaming-tiles-encadeados-e-fusao-de-camadas">Streaming, Tiles Encadeados e Fusão de Camadas</h2>
+<ul>
+<li><strong>Streaming (<code>MODE.STREAM_I</code>/<code>STREAM_W</code>):</strong> o START pode vir <strong>antes</strong> da carga dos dados. Cada leitura do Controller só é emitida quando o seu dado já foi escrito: a entrada <code>k</code> precisa de <code>I_BASE + k &lt; ponteiro de escrita</code> (ou, com o im2col, todos os pixels do tap corrente já escritos na porta <code>IMG</code>), e o peso, da mesma forma. O DMA da carga corre então em paralelo com o cômputo. Os ponteiros de escrita devem ser zerados (<code>RST_WR_I</code>/<code>RST_WR_W</code>) antes do START.</li>
+<li><strong>Tiles encadeados (<code>MODE.OVERLAP</code>):</strong> os tiles de uma sequência seguem sem esvaziar o array. Cada PE guarda o resultado do tile que terminou num acumulador sombra e recomeça do zero; a marca de fim de tile viaja com as ativações e, ao sair pela borda direita da linha <code>r</code>, faz a linha <code>r</code> ser lida. As linhas saem na ordem 0..3 (com ou sem <code>ORDER</code>); <code>UNPACK</code> não é suportado nesse modo. Exige <code>CONFIG &gt; 4</code> (abaixo disso, a execução volta ao modo normal).</li>
+<li><strong>Fusão de camadas (<code>OUT_CFG.LOOP</code>):</strong> a saída vai para a RAM de Inputs da NPU, a partir de <code>I_BASE</code>, em vez da FIFO. A camada seguinte (ex.: a densa em GEMV, cuja entrada é exatamente a saída da Conv com 4 canais por palavra) lê dali, sem passar pela RAM principal.</li>
+<li>A FIFO de saída tem 256 palavras.</li>
+</ul>
+<h2 id="biases-residentes-e-descritores-de-camada">Biases Residentes e Descritores de Camada</h2>
+<ul>
+<li><strong>Biases residentes:</strong> o campo <code>TILES[21:19]</code> escolhe o banco de bias do primeiro tile. Cada camada usa os seus bancos (ex.: Conv no banco 3, densa nos bancos 0..2), gravados uma única vez na carga do modelo.</li>
+<li><strong>Descritores de camada:</strong> a porta <code>DESC</code> (0x0C) alimenta uma fila (128 palavras) de um processador de comandos dentro da NPU. O programa é montado uma vez na RAM e enviado por DMA a cada inferência:</li>
+<li><code>WRITE</code> — cabeçalho <code>0x1000_00rr</code> (<code>rr</code> = offset do registrador) seguido do dado;</li>
+<li><code>WAIT</code> — <code>0x2000_0000</code>: espera a execução disparada pelo último START terminar;</li>
+<li><code>END</code> — <code>0x3000_0000</code>: fim do programa (<code>STATUS</code> bit 4 = 1 quando a fila esvazia).</li>
+<li>Regras: todo START deve ser seguido de um <code>WAIT</code>; durante um programa, escritas de configuração pelo barramento esperam o programa terminar (as portas de dados continuam livres); com a fila cheia, a porta <code>DESC</code> segura o barramento (nada se perde).</li>
+<li>A <code>O_DATA</code> também segura o barramento enquanto um programa executa, então a CPU (ou um DMA) pode ler os resultados sem consultar o status. Cuidado: com uma leitura da <code>O_DATA</code> presa, o crossbar mantém a NPU ocupada por aquele mestre; leia a saída só depois de enviar todas as entradas.</li>
+</ul>
 
 
 
@@ -1503,7 +1774,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-datetime" title="January 23, 2026 20:14:26 UTC">January 23, 2026 20:14:26</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-datetime" title="October 9, 2026 03:48:14 UTC">October 9, 2026 03:48:14</span>
   </span>
 
     
@@ -1541,7 +1812,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../../hardware/datapath/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Gestão de Dados">
+          <a href="../../hardware/data_movement/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Movimentação de Dados e Autonomia">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -1551,7 +1822,7 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Gestão de Dados
+                Movimentação de Dados e Autonomia
               </div>
             </div>
           </a>

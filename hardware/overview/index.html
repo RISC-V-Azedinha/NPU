@@ -671,6 +671,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#6-mecanismos-de-movimentacao-de-dados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Mecanismos de Movimentação de Dados
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -779,6 +790,34 @@
     
   
     Gestão de Dados
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../data_movement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Movimentação de Dados e Autonomia
   
 
     
@@ -1275,6 +1314,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#6-mecanismos-de-movimentacao-de-dados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Mecanismos de Movimentação de Dados
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1310,6 +1360,14 @@
 <p>O coração computacional do sistema. É o bloco responsável por realizar as operações intensivas de multiplicação e acumulação de matrizes (MAC). Os dados fluem ritmicamente a partir das memórias locais através da matriz de Processing Elements (PEs). A arquitetura é otimizada para maximizar a reutilização temporal e espacial dos dados, reduzindo drasticamente o acesso às memórias principais compartilhadas e o consumo de energia por operação aritmética.</p>
 <h2 id="5-unidade-de-pos-processamento-ppu">5. Unidade de Pós-Processamento (PPU)</h2>
 <p>Após o cálculo das somas parciais no Arranjo Sistólico, os resultados brutos são descarregados (através do sinal <code>output_dump</code>) na <strong>Unidade de Pós-Processamento (PPU)</strong>. Este bloco é tipicamente responsável por aplicar as funções de ativação (como ReLU), realizar o redimensionamento ou quantização dos valores e armazenar os resultados em buffers FIFO. A PPU também fornece um sinal de feedback (<code>fifo_ready_feedback</code>) para a unidade de controle, garantindo que não haja perda de dados em caso de estrangulamento (bottleneck) na leitura de saída.</p>
+<h2 id="6-mecanismos-de-movimentacao-de-dados">6. Mecanismos de Movimentação de Dados</h2>
+<p>Além dos blocos acima, o top-level integra os mecanismos que reduzem o tráfego entre a RAM principal e a NPU:</p>
+<ul>
+<li><strong><code>npu_im2col</code></strong>: monta as janelas de uma convolução a partir da imagem crua recebida pela porta <code>IMG</code>;</li>
+<li><strong><code>wgt_mem_banked</code></strong>: memória de pesos em 4 bancos, que entrega um peso distinto por PE no modo GEMV;</li>
+<li><strong><code>npu_cmd_proc</code></strong>: processador de comandos que executa programas de configuração (descritores de camada) recebidos pela porta <code>DESC</code>, sem intervenção da CPU.</li>
+</ul>
+<p>O funcionamento de cada um está em <a href="../data_movement/">Movimentação de Dados e Autonomia</a>.</p>
 
 
 
@@ -1330,7 +1388,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-datetime" title="March 26, 2026 18:18:46 UTC">March 26, 2026 18:18:46</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-datetime" title="October 9, 2026 04:25:43 UTC">October 9, 2026 04:25:43</span>
   </span>
 
     
