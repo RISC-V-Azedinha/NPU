@@ -1,98 +1,441 @@
-/* =============================================================================
-   TRAVAR HEADER NO NOME DO PROJETO
-   ============================================================================= */
+/* ==========================================================================
+   AXON-OS — tema visual alinhado à apresentação do TCC (RISC-V-Azedinha)
 
-.md-header__topic:first-child {
-    opacity: 1 !important;
-    visibility: visible !important;
-    transform: none !important;
+   Paleta (mesmos valores da apresentação Beamer):
+     marinho    #14213D   cabeçalho, títulos
+     azul       #1F5FA8   links, destaques, informação
+     laranja    #E07B1A   acento (hover, barra de progresso, avisos)
+     laranjaesc #A8550D   ênfase em texto
+     verde      #2E8B57   dicas, sucesso
+     vermelho   #C0392B   perigo, erro
+     fundo      #FBFBF8   fundo da página
+     corpo      #3A4555   texto corrido
+   Tipografia: IBM Plex Sans / IBM Plex Mono (definidas no mkdocs.yml).
+   ========================================================================== */
+
+:root {
+  --ax-marinho: #14213d;
+  --ax-azul: #1f5fa8;
+  --ax-laranja: #e07b1a;
+  --ax-laranjaesc: #a8550d;
+  --ax-verde: #2e8b57;
+  --ax-vermelho: #c0392b;
+  --ax-fundo: #fbfbf8;
+  --ax-corpo: #3a4555;
 }
 
-.md-header__topic:last-child {
-    display: none !important;
+/* --- Modo claro ----------------------------------------------------------- */
+
+[data-md-color-scheme="default"] {
+  --md-primary-fg-color: var(--ax-marinho);
+  --md-primary-fg-color--light: #2a3a5e;
+  --md-primary-fg-color--dark: #0c1528;
+  --md-primary-bg-color: #fbfbf8;
+  --md-primary-bg-color--light: rgba(251, 251, 248, 0.7);
+
+  --md-accent-fg-color: var(--ax-laranja);
+  --md-accent-fg-color--transparent: rgba(224, 123, 26, 0.1);
+  --md-accent-bg-color: #ffffff;
+
+  --md-default-bg-color: var(--ax-fundo);
+  --md-default-fg-color: rgba(20, 33, 61, 0.87);
+  --md-default-fg-color--light: rgba(20, 33, 61, 0.6);
+  --md-default-fg-color--lighter: rgba(20, 33, 61, 0.3);
+  --md-default-fg-color--lightest: rgba(20, 33, 61, 0.08);
+
+  --md-typeset-color: var(--ax-corpo);
+  --md-typeset-a-color: var(--ax-azul);
+  --md-typeset-mark-color: rgba(224, 123, 26, 0.22);
+
+  --md-code-bg-color: #f1f3f6;
+  --md-code-fg-color: #24314d;
+  --md-code-hl-color: rgba(31, 95, 168, 0.12);
+  --md-code-hl-keyword-color: var(--ax-azul);
+  --md-code-hl-function-color: #6b3fa0;
+  --md-code-hl-string-color: var(--ax-verde);
+  --md-code-hl-number-color: var(--ax-laranjaesc);
+  --md-code-hl-constant-color: var(--ax-laranjaesc);
+  --md-code-hl-comment-color: #7a8596;
+  --md-code-hl-operator-color: var(--ax-corpo);
+  --md-code-hl-punctuation-color: #5a6578;
+  --md-code-hl-name-color: var(--md-code-fg-color);
+  --md-code-hl-variable-color: var(--md-code-fg-color);
+
+  --md-footer-bg-color: var(--ax-marinho);
+  --md-footer-bg-color--dark: #0c1528;
+
+  --ax-titulo: var(--ax-marinho);
+  --ax-th-bg: rgba(20, 33, 61, 0.06);
+  --ax-card-bg: #ffffff;
 }
 
-/* =============================================================================
-   MOVER ÍCONE DO GITHUB PARA A ESQUERDA DA BUSCA E REMOVER GAP
-   ============================================================================= */
+/* --- Modo escuro: fundo marinho, mesmos matizes clareados ----------------- */
 
-.md-header__source {
-    order: 1 !important;
-    width: 3rem !important; 
-    max-width: none !important; 
-    margin-right: 0.5rem !important; 
+[data-md-color-scheme="slate"] {
+  --md-hue: 222;
+  --md-primary-fg-color: #0e1830;
+  --md-primary-fg-color--light: #1b2a4a;
+  --md-primary-fg-color--dark: #0a1122;
+  --md-primary-bg-color: #eef1f6;
+  --md-primary-bg-color--light: rgba(238, 241, 246, 0.7);
+
+  --md-accent-fg-color: #f0a050;
+  --md-accent-fg-color--transparent: rgba(240, 160, 80, 0.12);
+
+  --md-default-bg-color: #111a2e;
+  --md-default-fg-color: rgba(226, 232, 242, 0.9);
+  --md-default-fg-color--light: rgba(226, 232, 242, 0.62);
+  --md-default-fg-color--lighter: rgba(226, 232, 242, 0.32);
+  --md-default-fg-color--lightest: rgba(226, 232, 242, 0.1);
+
+  --md-typeset-color: #cfd6e2;
+  --md-typeset-a-color: #7fb0e8;
+  --md-typeset-mark-color: rgba(240, 160, 80, 0.3);
+
+  --md-code-bg-color: #18233b;
+  --md-code-fg-color: #dbe2ee;
+  --md-code-hl-color: rgba(127, 176, 232, 0.15);
+  --md-code-hl-keyword-color: #7fb0e8;
+  --md-code-hl-function-color: #c2a3f0;
+  --md-code-hl-string-color: #6cc596;
+  --md-code-hl-number-color: #f0a050;
+  --md-code-hl-constant-color: #f0a050;
+  --md-code-hl-comment-color: #8090a8;
+  --md-code-hl-operator-color: #cfd6e2;
+  --md-code-hl-punctuation-color: #a3aec0;
+
+  --md-footer-bg-color: #0a1122;
+  --md-footer-bg-color--dark: #070c18;
+
+  --ax-titulo: #eef1f6;
+  --ax-th-bg: rgba(226, 232, 242, 0.06);
+  --ax-card-bg: #16213a;
 }
 
-/* ===== TABELAS MAIS PROFISSIONAIS ===== */
+/* --- Cabeçalho e abas: faixa laranja como na barra de progresso ----------- */
 
-.md-typeset table {
-    width: 100%;
-    border-radius: 8px;
-    overflow: hidden;
-    font-size: 0.9rem;
+.md-header {
+  border-bottom: 3px solid var(--ax-laranja);
+  box-shadow: none;
 }
 
-/* Cabeçalho */
-.md-typeset thead {
-    background-color: rgba(255,255,255,0.05);
+.md-tabs {
+  background-color: var(--md-primary-fg-color);
 }
 
-.md-typeset th {
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 0.05em;
+.md-tabs__link--active,
+.md-tabs__item--active .md-tabs__link {
+  color: #ffffff;
+  font-weight: 600;
 }
 
-/* Linhas */
-.md-typeset tbody tr:nth-child(even) {
-    background-color: rgba(255,255,255,0.02);
+/* --- Tipografia ----------------------------------------------------------- */
+
+.md-typeset {
+  font-size: 0.8rem;
+  line-height: 1.65;
 }
 
-/* Hover */
-.md-typeset tbody tr:hover {
-    background-color: rgba(100, 108, 255, 0.08);
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3,
+.md-typeset h4 {
+  color: var(--ax-titulo);
 }
 
-/* Bordas suaves */
-.md-typeset th,
-.md-typeset td {
-    border-bottom: 1px solid rgba(255,255,255,0.08);
+.md-typeset h1 {
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }
 
-.md-typeset table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
+.md-typeset h2 {
+  font-weight: 700;
+  letter-spacing: -0.005em;
+  padding-bottom: 0.3em;
+  border-bottom: 2px solid var(--md-default-fg-color--lightest);
 }
 
-.md-typeset table {
-    background-color: rgba(255,255,255,0.02);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    border-radius: 12px;
+.md-typeset h3 {
+  font-weight: 600;
 }
 
-/* ===== Destaque melhor para inline code ===== */
+.md-typeset strong {
+  color: var(--ax-titulo);
+}
 
 .md-typeset code {
-    background-color: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.12);
-    color: #ffffff;
-    padding: 0.15em 0.4em;
-    border-radius: 4px;
+  font-size: 0.85em;
+  border-radius: 0.25em;
 }
 
+/* Título principal: barra laranja à esquerda, sem gradiente */
+.md-content__inner h1 {
+  font-size: 2rem;
+  padding-left: 0.6rem;
+  border-left: 0.3rem solid var(--ax-laranja);
+}
+
+/* --- Links ---------------------------------------------------------------- */
+
+.md-typeset a {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+}
+
+.md-typeset a:hover {
+  color: var(--md-accent-fg-color);
+}
+
+/* --- Navegação lateral: item ativo em azul -------------------------------- */
+
+.md-nav__link--active,
+.md-nav__item .md-nav__link--active {
+  color: var(--md-typeset-a-color);
+  font-weight: 600;
+}
+
+/* --- Cards ---------------------------------------------------------------- */
+
+.md-typeset .grid.cards > ul > li {
+  background-color: var(--ax-card-bg);
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-top: 3px solid var(--md-typeset-a-color);
+  border-radius: 0.5rem;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.md-typeset .grid.cards > ul > li:nth-child(3n + 2) {
+  border-top-color: var(--ax-verde);
+}
+
+.md-typeset .grid.cards > ul > li:nth-child(3n) {
+  border-top-color: var(--ax-laranja);
+}
+
+.md-typeset .grid.cards > ul > li:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(20, 33, 61, 0.1);
+}
+
+.md-typeset .grid.cards > ul > li > :first-child {
+  color: var(--ax-titulo);
+}
+
+.md-typeset .grid.cards .twemoji,
+.md-typeset .grid.cards svg {
+  color: var(--md-typeset-a-color);
+}
+
+/* --- Blocos de código ----------------------------------------------------- */
+
+.md-typeset pre > code {
+  border-radius: 0.4rem;
+}
+
+.md-typeset .highlight {
+  border-radius: 0.4rem;
+  overflow: hidden;
+}
+
+/* --- Tabelas (estilo booktabs) -------------------------------------------- */
+
+.md-typeset table:not([class]) {
+  border-radius: 0.4rem;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  font-size: 0.7rem;
+}
+
+.md-typeset table:not([class]) th {
+  background-color: var(--ax-th-bg);
+  color: var(--ax-titulo);
+  font-weight: 600;
+  border-bottom: 2px solid var(--md-default-fg-color--lighter);
+}
+
+/* --- Admonitions na paleta ------------------------------------------------ */
+
+.md-typeset .admonition,
+.md-typeset details {
+  border-radius: 0.4rem;
+  border-width: 0 0 0 0.25rem;
+  box-shadow: none;
+  font-size: 0.75rem;
+}
+
+.md-typeset :is(.note, .info, .abstract, .question).admonition,
+.md-typeset details:is(.note, .info, .abstract, .question) {
+  border-color: var(--ax-azul);
+}
+.md-typeset :is(.note, .info, .abstract, .question) > :is(.admonition-title, summary) {
+  background-color: rgba(31, 95, 168, 0.1);
+}
+.md-typeset :is(.note, .info, .abstract, .question) > :is(.admonition-title, summary)::before {
+  background-color: var(--ax-azul);
+}
+
+.md-typeset :is(.tip, .success, .example).admonition,
+.md-typeset details:is(.tip, .success, .example) {
+  border-color: var(--ax-verde);
+}
+.md-typeset :is(.tip, .success, .example) > :is(.admonition-title, summary) {
+  background-color: rgba(46, 139, 87, 0.1);
+}
+.md-typeset :is(.tip, .success, .example) > :is(.admonition-title, summary)::before {
+  background-color: var(--ax-verde);
+}
+
+.md-typeset :is(.warning, .caution, .attention).admonition,
+.md-typeset details:is(.warning, .caution, .attention) {
+  border-color: var(--ax-laranja);
+}
+.md-typeset :is(.warning, .caution, .attention) > :is(.admonition-title, summary) {
+  background-color: rgba(224, 123, 26, 0.12);
+}
+.md-typeset :is(.warning, .caution, .attention) > :is(.admonition-title, summary)::before {
+  background-color: var(--ax-laranja);
+}
+
+.md-typeset :is(.danger, .error, .failure, .bug).admonition,
+.md-typeset details:is(.danger, .error, .failure, .bug) {
+  border-color: var(--ax-vermelho);
+}
+.md-typeset :is(.danger, .error, .failure, .bug) > :is(.admonition-title, summary) {
+  background-color: rgba(192, 57, 43, 0.1);
+}
+.md-typeset :is(.danger, .error, .failure, .bug) > :is(.admonition-title, summary)::before {
+  background-color: var(--ax-vermelho);
+}
+
+/* --- Mermaid na paleta ---------------------------------------------------- */
+
+:root {
+  --md-mermaid-font-family: "IBM Plex Sans", sans-serif;
+}
+
+[data-md-color-scheme="default"] {
+  --md-mermaid-node-bg-color: rgba(31, 95, 168, 0.08);
+  --md-mermaid-node-fg-color: var(--ax-azul);
+  --md-mermaid-edge-color: var(--ax-corpo);
+  --md-mermaid-label-fg-color: var(--ax-marinho);
+  --md-mermaid-label-bg-color: var(--ax-fundo);
+  --md-mermaid-sequence-actor-bg-color: rgba(31, 95, 168, 0.08);
+  --md-mermaid-sequence-actor-fg-color: var(--ax-marinho);
+  --md-mermaid-sequence-actor-border-color: var(--ax-azul);
+  --md-mermaid-sequence-actor-line-color: var(--md-default-fg-color--lighter);
+  --md-mermaid-sequence-actorman-bg-color: var(--ax-fundo);
+  --md-mermaid-sequence-actorman-line-color: var(--ax-azul);
+  --md-mermaid-sequence-box-bg-color: rgba(20, 33, 61, 0.04);
+  --md-mermaid-sequence-box-fg-color: var(--ax-marinho);
+  --md-mermaid-sequence-label-bg-color: var(--ax-fundo);
+  --md-mermaid-sequence-label-fg-color: var(--ax-marinho);
+  --md-mermaid-sequence-loop-bg-color: rgba(224, 123, 26, 0.06);
+  --md-mermaid-sequence-loop-fg-color: var(--ax-laranjaesc);
+  --md-mermaid-sequence-loop-border-color: var(--ax-laranja);
+  --md-mermaid-sequence-message-fg-color: var(--ax-marinho);
+  --md-mermaid-sequence-message-line-color: var(--ax-corpo);
+  --md-mermaid-sequence-note-bg-color: rgba(224, 123, 26, 0.1);
+  --md-mermaid-sequence-note-fg-color: var(--ax-marinho);
+  --md-mermaid-sequence-note-border-color: var(--ax-laranja);
+  --md-mermaid-sequence-number-bg-color: var(--ax-azul);
+  --md-mermaid-sequence-number-fg-color: #ffffff;
+}
+
+[data-md-color-scheme="slate"] {
+  --md-mermaid-node-bg-color: rgba(127, 176, 232, 0.1);
+  --md-mermaid-node-fg-color: #7fb0e8;
+  --md-mermaid-edge-color: #a3aec0;
+  --md-mermaid-label-fg-color: #eef1f6;
+  --md-mermaid-label-bg-color: #111a2e;
+}
+
+.md-typeset .mermaid {
+  display: flex;
+  justify-content: center;
+  padding: 0.5rem 0;
+}
+
+/* --- Rodapé --------------------------------------------------------------- */
+
+.md-footer-meta {
+  background-color: var(--md-footer-bg-color--dark);
+}
+
+/* --- Barra de rolagem (WebKit) -------------------------------------------- */
+
+.md-sidebar__scrollwrap::-webkit-scrollbar,
+.md-typeset pre::-webkit-scrollbar {
+  width: 0.4rem;
+  height: 0.4rem;
+}
+
+.md-sidebar__scrollwrap::-webkit-scrollbar-thumb,
+.md-typeset pre::-webkit-scrollbar-thumb {
+  background-color: var(--md-default-fg-color--lighter);
+  border-radius: 0.4rem;
+}
+
+.md-sidebar__scrollwrap::-webkit-scrollbar-thumb:hover,
+.md-typeset pre::-webkit-scrollbar-thumb:hover {
+  background-color: var(--md-accent-fg-color);
+}
+
+/* --- Logo no cabeçalho ---------------------------------------------------- */
+
+.md-header__button.md-logo img,
+.md-header__button.md-logo svg {
+  height: 1.4rem;
+  width: 1.4rem;
+}
+
+/* --- Figuras (diagramas exportados da apresentação) ------------------------
+   Os diagramas têm cores para fundo claro; no modo escuro ficam sobre um cartão claro. */
+
+.md-typeset figure.ax-figura img {
+  display: block;
+  margin: 0 auto;
+}
+
+[data-md-color-scheme="slate"] .md-typeset figure.ax-figura img {
+  background-color: var(--ax-fundo);
+  border-radius: 0.5rem;
+  padding: 0.6rem;
+}
+
+.md-typeset figure.ax-figura figcaption {
+  max-width: 36rem;
+  font-size: 0.7rem;
+  font-style: normal;
+  color: var(--md-default-fg-color--light);
+}
+
+/* --- Imagens legadas (fotos e diagramas em PNG/WebP) ---------------------- */
 
 .hero-img {
   display: block;
-  margin: 2rem auto;   
+  margin: 1.5rem auto;
   max-width: 100%;
-  width: 100%;
   height: auto;
-  border-radius: 16px;
+  border-radius: 0.5rem;
 }
 
-[data-md-color-scheme="slate"] .md-typeset h1 {
-  color: #ffffff;
-  font-weight: 200;
+/* Fórmulas longas rolam na horizontal em vez de serem cortadas */
+.md-typeset div.arithmatex,
+.md-typeset mjx-container[display="true"] {
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
+}
+
+/* Tabelas largas: rolagem horizontal dentro do wrapper do Material */
+.md-typeset__table {
+  max-width: 100%;
+}
+.md-typeset__scrollwrap {
+  overflow-x: auto;
+}
+
+/* Células mais compactas, para tabelas numéricas largas caberem na coluna */
+.md-typeset table:not([class]) th,
+.md-typeset table:not([class]) td {
+  padding: 0.55em 0.8em;
 }

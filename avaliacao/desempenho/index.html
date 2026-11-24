@@ -1,0 +1,2023 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Unidade de Processamento Neural (NPU) — arranjo sistólico 4×4 INT8 para inferência de redes neurais, em VHDL, integrada a um SoC RISC-V.">
+      
+      
+      
+        <link rel="canonical" href="https://RISC-V-Azedinha.github.io/NPU/avaliacao/desempenho/">
+      
+      
+        <link rel="prev" href="../../software/">
+      
+      
+        <link rel="next" href="../benchmark-mecanismos/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/favicon.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.3">
+    
+    
+      
+        <title>Desempenho da NPU - NPU</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:300,300i,400,400i,700,700i%7CIBM+Plex+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"IBM Plex Sans";--md-code-font:"IBM Plex Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#desempenho-da-npu" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href="../.." title="NPU" class="md-header__button md-logo" aria-label="NPU" data-md-component="logo">
+      
+  <img src="../../assets/logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            NPU
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Desempenho da NPU
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Mudar para modo escuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Mudar para modo escuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Mudar para modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Mudar para modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/RISC-V-Azedinha/NPU" title="Ir para repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    NPU
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Abas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../.." class="md-tabs__link">
+          
+  
+  
+  Início
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../fundamentos/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Fundamentos
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../arquitetura/visao-geral/" class="md-tabs__link">
+          
+  
+  
+  Arquitetura
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../mapeamento/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Mapeamento de camadas
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../software/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Software
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
+          
+  
+  
+  Avaliação
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../desenvolvimento/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Desenvolvimento
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../aplicacoes/iris/" class="md-tabs__link">
+          
+  
+  
+  Aplicações
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="NPU" class="md-nav__button md-logo" aria-label="NPU" data-md-component="logo">
+      
+  <img src="../../assets/logo.svg" alt="logo">
+
+    </a>
+    NPU
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/RISC-V-Azedinha/NPU" title="Ir para repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    NPU
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Início
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introdução
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../primeiros-passos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Primeiros passos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fundamentos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fundamentos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Arquitetura
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Arquitetura
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../arquitetura/visao-geral/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../arquitetura/nucleo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Núcleo de cálculo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../arquitetura/memorias-controle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Memórias e controle
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../arquitetura/movimentacao-dados/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Movimentação de dados
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mapeamento/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mapeamento de camadas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../software/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Software
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Avaliação
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Avaliação
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Desempenho da NPU
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Desempenho da NPU
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="Nesta página">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Nesta página
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#metodologia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Metodologia
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Metodologia">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-cpu-de-referencia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A CPU de referência
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="A CPU de referência">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#motivacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Motivação
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rv32i-multiciclo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RV32I Multiciclo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comparacao-com-mcu-comercial" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Comparação com MCU Comercial
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#classe-de-arquiteturas-consideradas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Classe de Arquiteturas Consideradas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#justificativa-do-uso-de-um-core-rv32i-multiciclo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Justificativa do Uso de um Core RV32I Multiciclo
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#limites-do-speedup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limites do speedup
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Limites do speedup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#definicao-formal-de-speedup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Definição Formal de Speedup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#overhead-de-offload" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overhead de Offload
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lei-de-amdahl-aplicada-a-npu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lei de Amdahl Aplicada à NPU
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#limite-pratico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limite Prático
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#eficiencia-e-o-muro-da-memoria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Eficiência e o muro da memória
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rede-completa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rede completa
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Referências
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../benchmark-mecanismos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Benchmark dos mecanismos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cnn-mnist/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estudo de caso: CNN para o MNIST
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../desenvolvimento/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Desenvolvimento
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Aplicações
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Aplicações
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../aplicacoes/iris/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conjunto Iris
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../aplicacoes/mnist/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conjunto MNIST (MLP)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="Nesta página">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Nesta página
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#metodologia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Metodologia
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Metodologia">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-cpu-de-referencia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A CPU de referência
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="A CPU de referência">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#motivacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Motivação
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rv32i-multiciclo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RV32I Multiciclo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comparacao-com-mcu-comercial" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Comparação com MCU Comercial
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#classe-de-arquiteturas-consideradas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Classe de Arquiteturas Consideradas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#justificativa-do-uso-de-um-core-rv32i-multiciclo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Justificativa do Uso de um Core RV32I Multiciclo
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#limites-do-speedup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limites do speedup
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Limites do speedup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#definicao-formal-de-speedup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Definição Formal de Speedup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#overhead-de-offload" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overhead de Offload
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lei-de-amdahl-aplicada-a-npu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lei de Amdahl Aplicada à NPU
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#limite-pratico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limite Prático
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#eficiencia-e-o-muro-da-memoria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Eficiência e o muro da memória
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rede-completa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rede completa
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Referências
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="desempenho-da-npu">Desempenho da NPU<a class="headerlink" href="#desempenho-da-npu" title="Permanent link">&para;</a></h1>
+<p>Os resultados desta página foram medidos na FPGA (Nexys A7-100T, 100 MHz), com a NPU integrada ao <a href="https://github.com/RISC-V-Azedinha/RISC-V">SoC RISC-V</a>. Para que as métricas não dependam da tecnologia nem da frequência, elas são expressas em <strong>ciclos de clock</strong>, tendo como referência o núcleo RV32I executando o mesmo algoritmo.</p>
+<p>O <em>benchmark</em> é um <em>firmware</em> <em>bare-metal</em> parametrizado: cada experimento define uma camada e os mecanismos da NPU habilitados, sobre dados pseudoaleatórios gerados na própria placa, com os ciclos medidos pelo contador do CLINT. <strong>Cada resultado da NPU é recalculado pela CPU e comparado byte a byte</strong>: não houve divergência, e o tempo da NPU foi idêntico em todas as repetições. A métrica principal é a vazão útil, em MACs úteis por ciclo. Comparam-se duas configurações:</p>
+<ul>
+<li><strong>base:</strong> sem os <a href="../../arquitetura/movimentacao-dados/">mecanismos de movimentação de dados</a>, com os pesos enviados por DMA a cada execução, um <code>START</code> por <em>tile</em> e a CPU lendo a saída;</li>
+<li><strong>otimizada:</strong> com todos eles (pesos residentes, sequenciador, saída por DMA, <em>tiles</em> encadeados e <em>streaming</em>), o que pressupõe o reaproveitamento dos pesos entre execuções, típico da inferência.</li>
+</ul>
+<h2 id="metodologia">Metodologia<a class="headerlink" href="#metodologia" title="Permanent link">&para;</a></h2>
+<h3 id="a-cpu-de-referencia">A CPU de referência<a class="headerlink" href="#a-cpu-de-referencia" title="Permanent link">&para;</a></h3>
+<h4 id="motivacao">Motivação<a class="headerlink" href="#motivacao" title="Permanent link">&para;</a></h4>
+<p>A avaliação de desempenho de aceleradores dedicados, como a NPU proposta neste trabalho depende da definição de uma <em>baseline</em> de CPU adequada. Comparações diretas de tempo de execução ou throughput absoluto tendem a ser fortemente influenciadas por fatores externos à arquitetura - como frequência de clock, tecnologia de fabricação, compiladores otimizados e microarquiteturas proprietárias - o que dificulta a análise do ganho arquitetura proporcionado pelo acelerador.</p>
+<p>Dessa forma, este trabalho adota como princípio metodológico a comparação em número de ciclos e em nível arquitetural, abstraindo deliberadamente a frequência de operação. O objetivo não é reproduzir fielmente o comportamento de um microcontrolador comercial específico, mas sim estabelecer limites plausíveis para uma CPU de classe de microprocessadores embarcados (<em>embedded</em>), contra a qual o ganho da NPU possa ser avaliado de forma justa e reprodutível.</p>
+<h4 id="rv32i-multiciclo">RV32I Multiciclo<a class="headerlink" href="#rv32i-multiciclo" title="Permanent link">&para;</a></h4>
+<p>A CPU utilizada como baseline neste SoC (System-on-a-Chip) é uma implementação RV32I-like estritamente multiciclo, sem pipeline, sem execução fora de ordem e sem extensões opcionais (M, F, V etc.). Cada instrução é decomposta em estágios funcionais sequenciais, com latências determinadas por restrições reais de FPGA, em especial:</p>
+<ul>
+<li>Latência de memória síncrona (IF e MEM com múltiplos ciclos);</li>
+<li>Caminhos críticos de lógica combinacional;</li>
+<li>Reuso de unidades funcionais para minimizar área.</li>
+</ul>
+<p>Uma configuração típica de latências por instrução é apresentada abaixo:</p>
+<table>
+<thead>
+<tr>
+<th>Estágio</th>
+<th>Latência (ciclos)</th>
+<th>Observações</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>IF</strong></td>
+<td>2</td>
+<td>Memória síncrona</td>
+</tr>
+<tr>
+<td><strong>ID</strong></td>
+<td>1</td>
+<td>Decodificação e leitura de registradores</td>
+</tr>
+<tr>
+<td><strong>EX</strong></td>
+<td>1-2</td>
+<td>Branches com latência adicional</td>
+</tr>
+<tr>
+<td><strong>MEM</strong></td>
+<td>1-2</td>
+<td>Dependente da operação</td>
+</tr>
+<tr>
+<td><strong>WB</strong></td>
+<td>1</td>
+<td>Escrita em registradores</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition quote">
+<p class="admonition-title">CPI Médio</p>
+<p>Assim, o custo médio por instrução (CPI - <em>Cycles per Instruction</em>) situa-se tipicamente entre 6 e 8 ciclos, dependendo do código sendo executado pelo processador.</p>
+</div>
+<p>Essa CPU representa um ponto de referência conservador, porém realista, para sistemas embedded minimalistas, educacionais ou orientados a baixo consumo.</p>
+<h4 id="comparacao-com-mcu-comercial">Comparação com MCU Comercial<a class="headerlink" href="#comparacao-com-mcu-comercial" title="Permanent link">&para;</a></h4>
+<p>Microcontroladores modernos baseados em RISC-V - como o ESP32-C3 - ou ARM (série M) incorporam uma série de otimizações microarquiteturais que dificultam uma comparação direta:</p>
+<ul>
+<li>Pipeline profundo (tipicamente 3 a 5 estágios);</li>
+<li>Execução especulativa e prefetch;</li>
+<li>Unidades aritméticas dedicadas e paralelas;</li>
+<li>Barramentos e hierarquias de memória otimizadas.</li>
+</ul>
+<p>Embora essas técnicas reduzam o número médio de ciclos por instrução, elas existem principalmente para viabilizar frequências mais altas, e não necessariamente para reduzir o trabalho arquitetural intrínseco da computação.</p>
+<p>Comparar diretamente tempos absolutos ou benchmarks compilados para tais CPUs introduziria variáveis difíceis de isolar, como qualidade do compilador, agressividade de otimizações e detalhes proprietários não documentados.</p>
+<h4 id="classe-de-arquiteturas-consideradas">Classe de Arquiteturas Consideradas<a class="headerlink" href="#classe-de-arquiteturas-consideradas" title="Permanent link">&para;</a></h4>
+<p>O <em>baseline</em> proposto representa a classe de processadores com as seguintes características:</p>
+<ul>
+<li>ISA: RV32I com extensão de multiplicação (RV32IM);</li>
+<li>Execução escalar (1 operação aritmética por instrução);</li>
+<li>Sem unidades vetoriais ou SIMD;</li>
+<li>Sem aceleração dedicada para MACs.</li>
+</ul>
+<p>Essa classe inclui tanto processadores multi-cycles simples quanto microcontroladores modernos com pipeline e multiplicador em hardware. Diferenças microarquiteturais afetam latência e frequência, mas não alteram os limites fundamentais impostos pela ISA.</p>
+<p>Considere a computação de um único MAC escalar:</p>
+<div class="arithmatex">\[ 
+\text{acc} \ \leftarrow \ \text{acc}+(a\times b)
+\]</div>
+<p>Em <strong>RV32IM</strong>, mesmo assumindo otimizações ideais, essa operação exige no mínimo:</p>
+<ol>
+<li>Um <code>load</code> para o operando <code>a</code>;</li>
+<li>Um <code>load</code>para o operando <code>b</code>;</li>
+<li>Uma instrução de multiplicação (<code>mul</code>);</li>
+<li>Uma instrução de soma (<code>add</code>).</li>
+</ol>
+<p>Portanto, cada MAC requer pelo menos <strong>4 instruções</strong>.</p>
+<p>Assumindo-se um cenário otimista:</p>
+<ul>
+<li>CPI = 1;</li>
+<li>Pipeline ideal;</li>
+<li>Cache perfeito;</li>
+<li>Sem stalls.</li>
+</ul>
+<p>Obtém-se o limite inferior teórico: <span class="arithmatex">\(\text{Ciclos}_{\text{CPU}}\ge 4\times N_{\text{MAC}}\)</span>. Esse resultado é independente de frequência, tecnologia ou microarquitetura específica.</p>
+<p>Com base nas observações anteriores, define-se o modelo matemático do baseline de CPU como:</p>
+<div class="arithmatex">\[
+T_{\text{CPU}}^{\text{min}}=4\cdot N_{\text{MAC}}
+\]</div>
+<p>Onde:</p>
+<ul>
+<li><span class="arithmatex">\(N_{\text{MAC}}\)</span> = número total de operações MAC do workload;</li>
+<li><span class="arithmatex">\(T_{\text{CPU}}^{\text{min}}\)</span> = tempo mínimo em ciclos.</li>
+</ul>
+<p>Esse modelo não representa um processador real, mas sim um limite inferior teórico para qualquer CPU RV32 escalar compatível com a ISA.</p>
+<h4 id="justificativa-do-uso-de-um-core-rv32i-multiciclo">Justificativa do Uso de um Core RV32I Multiciclo<a class="headerlink" href="#justificativa-do-uso-de-um-core-rv32i-multiciclo" title="Permanent link">&para;</a></h4>
+<p>A implementação de um core RV32I multi-cycle no SoC proposto não busca competir em desempenho absoluto, mas sim:</p>
+<ul>
+<li>Evidenciar de forma clara os gargalos arquiteturais da execução escalar;</li>
+<li>Facilitar análise ciclo-a-ciclo e verificação funcional;</li>
+<li>Servir como plataforma educacional e experimental.</li>
+</ul>
+<p>Importante ressaltar que, <strong>mesmo substituindo esse core por uma CPU pipelined ideal</strong>, o limite inferior definido permanece válido.</p>
+<h3 id="limites-do-speedup">Limites do <em>speedup</em><a class="headerlink" href="#limites-do-speedup" title="Permanent link">&para;</a></h3>
+<p>A aceleração obtida por meio de unidades especializadas, como NPUs (Neural Processing Units), é frequentemente reportada como um fator de <em>speedup</em> em relação à execução puramente em software. No entanto, tais valores isolados podem ser enganosos se não forem contextualizados por limites teóricos e arquiteturais bem definidos.</p>
+<p>Este capítulo busca estabelecer:</p>
+<ul>
+<li>A natureza do <em>workload</em> (operações matriciais e convolucionais);</li>
+<li>Restrições impostas por memória, DMA e interconexão;</li>
+<li>Grau de paralelismo efetivamente explorável.</li>
+</ul>
+<p>Dessa forma, busca-se responder à pergunta central:</p>
+<div class="admonition question">
+<p class="admonition-title">Speedup</p>
+<p>O speedup observado representa um limite estrutural da arquitetura ou um artefato da CPU baseline escolhida?</p>
+</div>
+<h4 id="definicao-formal-de-speedup">Definição Formal de Speedup<a class="headerlink" href="#definicao-formal-de-speedup" title="Permanent link">&para;</a></h4>
+<p>O speedup é definido de forma clássica como:</p>
+<div class="arithmatex">\[
+S=\cfrac{T_{\text{CPU}}}{T_{\text{CPU+NPU}}}
+\]</div>
+<p>onde:</p>
+<ul>
+<li><span class="arithmatex">\(T_{\text{CPU}}\)</span> = tempo de execução do workload completo utilizando apenas a CPU;</li>
+<li><span class="arithmatex">\(T_{\text{CPU+NPU}}\)</span> = tempo de execução considerando offload da computação para a NPU.</li>
+</ul>
+<p>Como a análise é feita em termos arquiteturais, o tempo é expresso em <strong>número de ciclos de clock</strong>, não em segundos, eliminando a dependência de frequência de clock.</p>
+<h4 id="overhead-de-offload">Overhead de Offload<a class="headerlink" href="#overhead-de-offload" title="Permanent link">&para;</a></h4>
+<p>O primeiro limite fundamental é que nenhuma NPU pode ser mais rápida do que o custo de invocá-la. O tempo total com aceleração pode ser decomposto como:</p>
+<div class="arithmatex">\[
+T_{\text{CPU+NPU}}=T_{\text{setup}}+T_{\text{DMA}}+T_{\text{NPU}}+T_{\text{sync}}
+\]</div>
+<p>Onde:</p>
+<ul>
+<li><span class="arithmatex">\(T_{\text{setup}}\)</span> = escrita de CSRs e comandos;</li>
+<li><span class="arithmatex">\(T_{\text{DMA}}\)</span> = transferência de dados;</li>
+<li><span class="arithmatex">\(T_{\text{NPU}}\)</span> = computação efetiva;</li>
+<li><span class="arithmatex">\(T_{\text{sync}}\)</span> = polling ou interrupção.</li>
+</ul>
+<p>Isso implica que workloads pequenos ou com baixa intensidade aritmética possuem <strong>speedup próximo de 1 ou até &lt; 1</strong>, independentemente da NPU.</p>
+<p>Esse limite explica porque: vetores curtos; poucas iterações; ou kernels pouco densos, não se beneficiam significativamente da aceleração. </p>
+<p>O limite superior teórico ocorre quando:</p>
+<ol>
+<li>Todo o tempo de computação da CPU é substituído por computação paralela na NPU;</li>
+<li>Overheads de comunicação são desprezíveis;</li>
+<li>A NPU opera com utilização plena.</li>
+</ol>
+<p>Nesse cenário hipotético:</p>
+<div class="arithmatex">\[
+S_{\text{max}}\approx\cfrac{C_{\text{CPU}}}{C_{\text{NPU}}}
+\]</div>
+<p>onde:</p>
+<ul>
+<li><span class="arithmatex">\(C_{\text{CPU}}\)</span> = ciclos necessários para executar o kernel em software;</li>
+<li><span class="arithmatex">\(C_{\text{NPU}}\)</span> = ciclos necessários para executar o mesmo kernel na NPU.</li>
+</ul>
+<p>Para workloads típicos de inferência (MACs, convoluções, GEMMs):</p>
+<div class="arithmatex">\[
+C_{\text{CPU}} \propto N_{\text{ops}}
+\]</div>
+<div class="arithmatex">\[
+C_{\text{NPU}} \propto \ \cfrac{N_{\text{ops}}}{P}
+\]</div>
+<p>onde <span class="arithmatex">\(P\)</span> é o grau de paralelismo da NPU.</p>
+<p>Assim, o <em>speedup</em> máximo teórico é aproximadamente: <span class="arithmatex">\(S_{\text{max}}\approx P\)</span>. Esse resultado é consistente com literatura clássica de arquiteturas SIMD, arranjos sistólicos e aceleradores.</p>
+<h4 id="lei-de-amdahl-aplicada-a-npu">Lei de Amdahl Aplicada à NPU<a class="headerlink" href="#lei-de-amdahl-aplicada-a-npu" title="Permanent link">&para;</a></h4>
+<p>Na prática, apenas uma fração do código é acelerável. Aplicando a Lei de Amdahl:</p>
+<div class="arithmatex">\[
+S=\cfrac{1}{(1-f)+\cfrac{f}{s_{\text{acc}}}}
+\]</div>
+<p>onde:</p>
+<ul>
+<li><span class="arithmatex">\(f\)</span> = fração do tempo total originalmente gasta em computação acelerável;</li>
+<li><span class="arithmatex">\(S_{\text{acc}}\)</span> = speedup do trecho acelerado.</li>
+</ul>
+<p>Mesmo com <span class="arithmatex">\(S_{\text{acc}} \rightarrow \infty\)</span>, o speedup total é limitado por <span class="arithmatex">\(1\ / \ (1-f)\)</span>. No contexto deste SoC:</p>
+<ul>
+<li>loops de MACs e ReLU <span class="arithmatex">\(\rightarrow\)</span>  alto <span class="arithmatex">\(f\)</span>;</li>
+<li>controle, configuração, I/O <span class="arithmatex">\(\rightarrow\)</span> baixo <span class="arithmatex">\(f\)</span>.</li>
+</ul>
+<p>Isso explica porque o speedup observado <strong>satura</strong> mesmo quando a NPU é escalada.</p>
+<h4 id="limite-pratico">Limite Prático<a class="headerlink" href="#limite-pratico" title="Permanent link">&para;</a></h4>
+<p>Na implementação real de um SoC, o teto de speedup é reduzido por:</p>
+<ol>
+<li><strong>Largura de banda da memória</strong>: a NPU só é tão rápida quanto o fornecimento de dados;</li>
+<li><strong>Arbitragem do barramento</strong>: mesmo com comportamento determinístico, há ciclos não produtivos;</li>
+<li><strong>Granularidade do DMA</strong>: transferências em blocos impõem latência mínima.</li>
+</ol>
+<p>Esses fatores impõem um teto prático:</p>
+<div class="arithmatex">\[
+S_{\text{prático}}&lt;S_{\text{max}}
+\]</div>
+<p>A observação de ciclos praticamente constantes entre execuções reforça que:</p>
+<ul>
+<li>O sistema opera em regime determinístico e previsível;</li>
+<li>O teto observado é estrutural, não estatístico.</li>
+</ul>
+<p>O speedup máximo medido experimentalmente deve ser interpretado como: o teto de aceleração da arquitetura atual para aquele padrão de workload e hierarquia de memória. Não se trata de um limite universal - mas, sim, um ponto de equilíbrio entre paralelismo computacional, capacidade de alimentação de dados e custo de orquestração pela CPU.</p>
+<h2 id="eficiencia-e-o-muro-da-memoria">Eficiência e o muro da memória<a class="headerlink" href="#eficiencia-e-o-muro-da-memoria" title="Permanent link">&para;</a></h2>
+<p>O experimento usa uma multiplicação de matrizes que ocupa o arranjo inteiro (quatro vetores de entrada por quatro saídas), variando a dimensão <span class="arithmatex">\(K\)</span> até 2.048, o limite da memória local da NPU.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;"><span class="arithmatex">\(K\)</span></th>
+<th style="text-align: right;">CPU (ciclos)</th>
+<th style="text-align: right;">NPU base</th>
+<th style="text-align: right;">NPU otim.</th>
+<th style="text-align: right;">MACs/ciclo base</th>
+<th style="text-align: right;">MACs/ciclo otim.</th>
+<th style="text-align: right;"><em>Speedup</em> otim.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">154.376</td>
+<td style="text-align: right;">1.093</td>
+<td style="text-align: right;">665</td>
+<td style="text-align: right;">0,23</td>
+<td style="text-align: right;">0,38</td>
+<td style="text-align: right;">232×</td>
+</tr>
+<tr>
+<td style="text-align: right;">64</td>
+<td style="text-align: right;">630.573</td>
+<td style="text-align: right;">1.208</td>
+<td style="text-align: right;">697</td>
+<td style="text-align: right;">0,85</td>
+<td style="text-align: right;">1,47</td>
+<td style="text-align: right;">905×</td>
+</tr>
+<tr>
+<td style="text-align: right;">256</td>
+<td style="text-align: right;">2.534.236</td>
+<td style="text-align: right;">1.779</td>
+<td style="text-align: right;">889</td>
+<td style="text-align: right;">2,30</td>
+<td style="text-align: right;">4,61</td>
+<td style="text-align: right;">2.851×</td>
+</tr>
+<tr>
+<td style="text-align: right;">1.024</td>
+<td style="text-align: right;">10.085.548</td>
+<td style="text-align: right;">4.080</td>
+<td style="text-align: right;">1.657</td>
+<td style="text-align: right;">4,02</td>
+<td style="text-align: right;">9,89</td>
+<td style="text-align: right;">6.087×</td>
+</tr>
+<tr>
+<td style="text-align: right;">2.048</td>
+<td style="text-align: right;">20.047.014</td>
+<td style="text-align: right;">7.148</td>
+<td style="text-align: right;">2.681</td>
+<td style="text-align: right;">4,58</td>
+<td style="text-align: right;">12,22</td>
+<td style="text-align: right;">7.477×</td>
+</tr>
+</tbody>
+</table>
+<p><figure class="ax-figura" markdown>
+  <img alt="Eficiência da NPU, aceleração e esparsidade" src="../../assets/figuras/eficiencia.png" width="100%" />
+<br />
+<figcaption>(a) Vazão da NPU nas duas configurações e o muro da memória. (b) Aceleração sobre a CPU em função de <span class="arithmatex">\(K\)</span>. (c) Impacto de 80% de ativações nulas em <span class="arithmatex">\(K=2048\)</span>.</figcaption></p>
+</figure>
+<p><strong>(a) O muro da memória.</strong> Na configuração base, a cada passo de <span class="arithmatex">\(K\)</span> a NPU aguarda uma palavra de pesos e uma de ativações antes de calcular (cerca de três ciclos por passo), o que limita a vazão a <span class="arithmatex">\(16/3\approx5{,}3\)</span> MACs por ciclo: ela estabiliza em 4,6, com o arranjo ocioso cerca de 71% do tempo. Na configuração otimizada, os pesos residentes eliminam o tráfego de parâmetros e o <em>streaming</em> sobrepõe a chegada das ativações ao cálculo, de modo que cada passo custa cerca de um ciclo: a vazão atinge <strong>12,22 MACs por ciclo</strong> em <span class="arithmatex">\(K=2048\)</span> (76% de utilização) e tende ao teto sistólico.</p>
+<p>Resta um custo fixo de cerca de 670 ciclos por execução, devido ao <em>overhead</em> de configuração da NPU, de movimentação de dados e de esvaziamento do arranjo. Em matrizes pequenas, esse custo domina: até <span class="arithmatex">\(K=32\)</span>, a configuração otimizada leva os mesmos 665 ciclos.</p>
+<p><strong>(b) Aceleração.</strong> O <em>speedup</em> cresce com <span class="arithmatex">\(K\)</span> à medida que o custo fixo se dilui, chega a <strong>7.477×</strong> em <span class="arithmatex">\(K=2048\)</span> e tende a um platô determinado pela razão entre os custos por operação da CPU e da NPU. As curvas ainda sobem no maior <span class="arithmatex">\(K\)</span> medido, porque <span class="arithmatex">\(K\)</span> está limitado pela capacidade da memória local, e não pela saturação.</p>
+<p><strong>(c) Esparsidade.</strong> Na CPU, sem multiplicador em hardware, cada produto é uma rotina de software que soma e desloca bit a bit e termina quando o fator se anula: com 80% de ativações nulas, a execução cai de 20,0 para 5,6 milhões de ciclos. Na NPU, as multiplicações por zero são calculadas integralmente pelos PEs, e a contagem de ciclos não muda: <strong>o tempo é determinístico</strong>, mas a esparsidade não é aproveitada.</p>
+<h2 id="rede-completa">Rede completa<a class="headerlink" href="#rede-completa" title="Permanent link">&para;</a></h2>
+<p>Na <a href="../cnn-mnist/">CNN do estudo de caso</a>, o custo fixo é pago uma única vez por imagem, e não a cada passagem. Executada na placa, a NPU calcula a rede inteira, da chegada do programa de descritores à gravação dos <em>logits</em>, em <strong>1.506 ciclos</strong> (15 µs a 100 MHz), ou 8,5 MACs úteis por ciclo. Sem os mecanismos, com a CPU montando as janelas e controlando cada passagem, a mesma rede levava 226.417 ciclos.</p>
+<table>
+<thead>
+<tr>
+<th>Configuração da CNN</th>
+<th style="text-align: right;">Ciclos por imagem</th>
+<th style="text-align: right;">MACs úteis/ciclo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CPU fazendo o <em>im2col</em> e o controle, sem os mecanismos</td>
+<td style="text-align: right;">226.417</td>
+<td style="text-align: right;">0,06</td>
+</tr>
+<tr>
+<td>Todos os mecanismos</td>
+<td style="text-align: right;"><strong>1.506</strong></td>
+<td style="text-align: right;"><strong>8,5</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Outros números da integração no SoC:</p>
+<ul>
+<li>Em convoluções com <em>kernels</em> maiores, a vazão chega a 14,4 MACs por ciclo.</li>
+<li>A transferência de dados por DMA é 14,7× mais rápida que por escritas da CPU (PIO).</li>
+<li>O SoC completo ocupa 107,5 dos 135 blocos BRAM36 da Artix-7 e cerca de 11 mil LUTs, com o <em>timing</em> fechado a 100 MHz.</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">O gargalo passa a ser o sistema</p>
+<p>Com o cálculo em 15 µs, a latência percebida de uma inferência pela UART (cerca de 9 ms) é dominada pela comunicação serial: o cálculo é menos de 0,2% do tempo total. Pela Lei de Amdahl, nem uma NPU infinitamente rápida reduziria essa latência em mais de 0,2%; o próximo ganho depende de um enlace mais rápido com o hospedeiro. Ver <a href="../cnn-mnist/#medicoes-na-placa">Estudo de caso</a>.</p>
+</div>
+<h2 id="referencias">Referências<a class="headerlink" href="#referencias" title="Permanent link">&para;</a></h2>
+<ul>
+<li>AMDAHL, Gene M. Validity of the single processor approach to achieving large scale computing capabilities. In: Proceedings of the April 18-20, 1967, spring joint computer conference. 1967. p. 483-485.</li>
+<li>Espressif Documentation. Disponível em: <a href="https://documentation.espressif.com/esp32-c3_datasheet_en.pdf">https://documentation.espressif.com/esp32-c3_datasheet_en.pdf</a>.</li>
+<li>HENNESSY, John L.; PATTERSON, David A. Computer architecture: a quantitative approach. Elsevier, 2011.</li>
+<li>PATTERSON, David A.; HENNESSY, John L. Computer organization and Design. The Hardware/Soft, 2022.</li>
+<li>HARRIS, Sarah; HARRIS, David. Digital Design and Computer Architecture, RISC-V Edition. Morgan Kaufmann, 2021.</li>
+</ul>
+
+
+
+
+
+
+
+  
+    
+  
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Última atualização">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-datetime" title="26 de março de 2026 21:08:12 UTC">26 de março de 2026 21:08:12</span>
+  </span>
+
+    
+    
+    
+    
+  </aside>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar para o topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Rodapé" >
+        
+          
+          <a href="../../software/" class="md-footer__link md-footer__link--prev" aria-label="Anterior: Software">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Anterior
+              </span>
+              <div class="md-ellipsis">
+                Software
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../benchmark-mecanismos/" class="md-footer__link md-footer__link--next" aria-label="Próximo: Benchmark dos mecanismos">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Próximo
+              </span>
+              <div class="md-ellipsis">
+                Benchmark dos mecanismos
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; RISC-V-Azedinha
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/RISC-V-Azedinha/NPU" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.tracking", "navigation.sections", "navigation.top", "navigation.footer", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "content.tabs.link", "content.tooltips"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

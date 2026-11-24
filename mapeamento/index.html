@@ -1,0 +1,1920 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Unidade de Processamento Neural (NPU) — arranjo sistólico 4×4 INT8 para inferência de redes neurais, em VHDL, integrada a um SoC RISC-V.">
+      
+      
+      
+        <link rel="canonical" href="https://RISC-V-Azedinha.github.io/NPU/mapeamento/">
+      
+      
+        <link rel="prev" href="../arquitetura/movimentacao-dados/">
+      
+      
+        <link rel="next" href="../software/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/favicon.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.3">
+    
+    
+      
+        <title>Mapeamento de camadas - NPU</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:300,300i,400,400i,700,700i%7CIBM+Plex+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"IBM Plex Sans";--md-code-font:"IBM Plex Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#mapeamento-de-camadas" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href=".." title="NPU" class="md-header__button md-logo" aria-label="NPU" data-md-component="logo">
+      
+  <img src="../assets/logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            NPU
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Mapeamento de camadas
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Mudar para modo escuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Mudar para modo escuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Mudar para modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Mudar para modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/RISC-V-Azedinha/NPU" title="Ir para repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    NPU
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Abas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href=".." class="md-tabs__link">
+          
+  
+  
+  Início
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../fundamentos/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Fundamentos
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../arquitetura/visao-geral/" class="md-tabs__link">
+          
+  
+  
+  Arquitetura
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Mapeamento de camadas
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../software/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Software
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../avaliacao/desempenho/" class="md-tabs__link">
+          
+  
+  
+  Avaliação
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../desenvolvimento/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Desenvolvimento
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../aplicacoes/iris/" class="md-tabs__link">
+          
+  
+  
+  Aplicações
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="NPU" class="md-nav__button md-logo" aria-label="NPU" data-md-component="logo">
+      
+  <img src="../assets/logo.svg" alt="logo">
+
+    </a>
+    NPU
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/RISC-V-Azedinha/NPU" title="Ir para repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    NPU
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Início
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introdução
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../primeiros-passos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Primeiros passos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fundamentos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fundamentos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Arquitetura
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Arquitetura
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../arquitetura/visao-geral/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../arquitetura/nucleo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Núcleo de cálculo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../arquitetura/memorias-controle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Memórias e controle
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../arquitetura/movimentacao-dados/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Movimentação de dados
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mapeamento de camadas
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mapeamento de camadas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="Nesta página">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Nesta página
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#como-o-arranjo-calcula" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Como o arranjo calcula
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Como o arranjo calcula">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-ideia-central" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A ideia central
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ciclo-a-ciclo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ciclo a ciclo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-frente-de-onda" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A frente de onda
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#convolucao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Convolução
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Convolução">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-conta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A conta
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-convolucao-como-produto-de-matrizes-im2col" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A convolução como produto de matrizes (im2col)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#entrada-dos-dados-no-arranjo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entrada dos dados no arranjo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#o-calculo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        O cálculo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-saida" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A saída
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#camada-densa-e-modo-gemv" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Camada densa e modo GEMV
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Camada densa e modo GEMV">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-conta_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A conta
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modo-gemv" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Modo GEMV
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#entrada-dos-dados-no-modo-gemv" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entrada dos dados no modo GEMV
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#o-fluxo-de-dados-no-modo-gemv" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        O fluxo de dados no modo GEMV
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#da-ilustracao-a-rede-real" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Da ilustração à rede real
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Software
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Avaliação
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Avaliação
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../avaliacao/desempenho/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Desempenho da NPU
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../avaliacao/benchmark-mecanismos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Benchmark dos mecanismos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../avaliacao/cnn-mnist/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estudo de caso: CNN para o MNIST
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../desenvolvimento/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Desenvolvimento
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Aplicações
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Aplicações
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../aplicacoes/iris/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conjunto Iris
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../aplicacoes/mnist/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conjunto MNIST (MLP)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="Nesta página">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Nesta página
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#como-o-arranjo-calcula" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Como o arranjo calcula
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Como o arranjo calcula">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-ideia-central" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A ideia central
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ciclo-a-ciclo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ciclo a ciclo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-frente-de-onda" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A frente de onda
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#convolucao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Convolução
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Convolução">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-conta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A conta
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-convolucao-como-produto-de-matrizes-im2col" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A convolução como produto de matrizes (im2col)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#entrada-dos-dados-no-arranjo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entrada dos dados no arranjo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#o-calculo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        O cálculo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-saida" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A saída
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#camada-densa-e-modo-gemv" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Camada densa e modo GEMV
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Camada densa e modo GEMV">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-conta_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A conta
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modo-gemv" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Modo GEMV
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#entrada-dos-dados-no-modo-gemv" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entrada dos dados no modo GEMV
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#o-fluxo-de-dados-no-modo-gemv" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        O fluxo de dados no modo GEMV
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#da-ilustracao-a-rede-real" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Da ilustração à rede real
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="mapeamento-de-camadas">Mapeamento de camadas<a class="headerlink" href="#mapeamento-de-camadas" title="Permanent link">&para;</a></h1>
+<p>Mapear uma camada no arranjo envolve duas perguntas diferentes. A primeira é <strong>como</strong> o arranjo calcula: o mecanismo é sempre o mesmo e é apresentado primeiro, em um arranjo <span class="arithmatex">\(2\times2\)</span> com números pequenos. A segunda é <strong>o que</strong> colocar em cada linha e em cada coluna, e é aí que a <a href="#convolucao">convolução</a> e a <a href="#camada-densa-e-modo-gemv">camada densa</a> diferem. Para simplificar as contas, os exemplos omitem o viés e a divisão da PPU, que só reescalam o resultado.</p>
+<h2 id="como-o-arranjo-calcula">Como o arranjo calcula<a class="headerlink" href="#como-o-arranjo-calcula" title="Permanent link">&para;</a></h2>
+<h3 id="a-ideia-central">A ideia central<a class="headerlink" href="#a-ideia-central" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p><strong>Cada linha do arranjo recebe um vetor de entrada, cada coluna recebe um vetor de pesos, e cada PE calcula o produto escalar entre o vetor da sua linha e o vetor da sua coluna.</strong></p>
+</blockquote>
+<p>No arranjo <span class="arithmatex">\(2\times2\)</span> da figura, as linhas recebem <span class="arithmatex">\(\mathbf a_0=(1,2,3)\)</span> e <span class="arithmatex">\(\mathbf a_1=(2,1,1)\)</span>, e as colunas recebem <span class="arithmatex">\(\mathbf w_0=(1,2,1)\)</span> e <span class="arithmatex">\(\mathbf w_1=(2,1,3)\)</span>. Ao final, o PE<span class="arithmatex">\(_{00}\)</span> deve conter <span class="arithmatex">\(\mathbf a_0\cdot\mathbf w_0=1\cdot1+2\cdot2+3\cdot1=8\)</span>; o PE<span class="arithmatex">\(_{01}\)</span>, <span class="arithmatex">\(\mathbf a_0\cdot\mathbf w_1=13\)</span>; o PE<span class="arithmatex">\(_{10}\)</span>, <span class="arithmatex">\(\mathbf a_1\cdot\mathbf w_0=5\)</span>; e o PE<span class="arithmatex">\(_{11}\)</span>, <span class="arithmatex">\(\mathbf a_1\cdot\mathbf w_1=8\)</span>.</p>
+<figure class="ax-figura">
+<p><img alt="Funcionamento do arranjo, ciclo a ciclo" src="../assets/figuras/ex_mecanismo.svg" width="720" />
+  </p>
+<figcaption>Funcionamento do arranjo sistólico, ciclo a ciclo, em um arranjo <span class="arithmatex">\(2\times2\)</span>. As entradas (laranja) andam para a direita e os pesos (lilás), para baixo, uma casa por ciclo. Em cada ciclo, os PEs em azul multiplicam o par de valores que acabaram de receber e somam o produto ao seu acumulador <span class="arithmatex">\(\Sigma\)</span>.</figcaption>
+</figure>
+<h3 id="ciclo-a-ciclo">Ciclo a ciclo<a class="headerlink" href="#ciclo-a-ciclo" title="Permanent link">&para;</a></h3>
+<p>Os valores esperam em filas, com o primeiro elemento de cada vetor na ponta, junto ao arranjo. A cada ciclo, cada PE faz duas coisas: multiplica o par que está recebendo e soma o produto ao acumulador <span class="arithmatex">\(\Sigma\)</span>; e repassa a entrada ao vizinho da direita e o peso ao vizinho de baixo. Seguindo a figura:</p>
+<ul>
+<li><strong>Início:</strong> a linha 1 e a coluna 1 começam com uma casa vazia, o atraso (<em>skew</em>), cuja razão aparece no ciclo 1.</li>
+<li><strong>Ciclo 0:</strong> só o PE<span class="arithmatex">\(_{00}\)</span> tem os dois operandos; ele calcula <span class="arithmatex">\(1\cdot1\)</span>, e <span class="arithmatex">\(\Sigma=1\)</span>.</li>
+<li><strong>Ciclo 1:</strong> tudo anda uma casa. O PE<span class="arithmatex">\(_{00}\)</span> recebe o segundo par (<span class="arithmatex">\(2\cdot2\)</span>, <span class="arithmatex">\(\Sigma=5\)</span>). O PE<span class="arithmatex">\(_{01}\)</span> recebe a entrada 1 que o PE<span class="arithmatex">\(_{00}\)</span> acabou de repassar e o primeiro peso de <span class="arithmatex">\(\mathbf w_1\)</span> (<span class="arithmatex">\(1\cdot2\)</span>). O PE<span class="arithmatex">\(_{10}\)</span> recebe o peso 1 que desceu do PE<span class="arithmatex">\(_{00}\)</span> e, no mesmo ciclo, o primeiro elemento de <span class="arithmatex">\(\mathbf a_1\)</span>, que esperou um ciclo na casa de atraso (<span class="arithmatex">\(2\cdot1\)</span>). Sem o atraso, esse 2 teria chegado no ciclo 0, antes do peso com que deve ser multiplicado.</li>
+<li><strong>Ciclo 2:</strong> os quatro PEs trabalham, e o PE<span class="arithmatex">\(_{00}\)</span> faz sua última multiplicação: <span class="arithmatex">\(\Sigma=8\)</span>.</li>
+<li><strong>Ciclos 3 e 4:</strong> os PEs mais afastados terminam; o último é o PE<span class="arithmatex">\(_{11}\)</span>, no ciclo 4.</li>
+</ul>
+<p>Ao final, os acumuladores contêm exatamente os quatro produtos escalares esperados. As entradas e os pesos atravessam o arranjo, mas cada resultado fica parado no seu PE do começo ao fim: é o fluxo <strong>estacionário na saída</strong>.</p>
+<h3 id="a-frente-de-onda">A frente de onda<a class="headerlink" href="#a-frente-de-onda" title="Permanent link">&para;</a></h3>
+<p>Em geral, o elemento <span class="arithmatex">\(k\)</span> do vetor da linha <span class="arithmatex">\(i\)</span> encontra o elemento <span class="arithmatex">\(k\)</span> do vetor da coluna <span class="arithmatex">\(j\)</span> no PE<span class="arithmatex">\(_{ij}\)</span> no ciclo</p>
+<div class="arithmatex">\[
+t=k+i+j.
+\]</div>
+<p>No arranjo real, <span class="arithmatex">\(4\times4\)</span>, nada muda além do tamanho: são quatro vetores de entrada e quatro de pesos, com <span class="arithmatex">\(K\)</span> elementos cada, e a última multiplicação ocorre no ciclo <span class="arithmatex">\((K-1)+3+3\)</span>. No hardware, as filas são as duas memórias locais da NPU: a cada ciclo, uma palavra de 32 bits da memória de entradas fornece um elemento para cada linha (o byte <span class="arithmatex">\(i\)</span> vai para a linha <span class="arithmatex">\(i\)</span>), e uma palavra da memória de pesos, um elemento para cada coluna (o byte <span class="arithmatex">\(j\)</span> vai para a coluna <span class="arithmatex">\(j\)</span>).</p>
+<h2 id="convolucao">Convolução<a class="headerlink" href="#convolucao" title="Permanent link">&para;</a></h2>
+<p>O exemplo usa uma imagem <span class="arithmatex">\(5\times5\)</span> com um traço diagonal e quatro filtros <span class="arithmatex">\(3\times3\)</span> com papéis fáceis de reconhecer: borda vertical (F0), borda horizontal (F1) e as duas diagonais (F2 e F3). Antes de ir ao arranjo, vejamos qual conta precisa ser feita.</p>
+<h3 id="a-conta">A conta<a class="headerlink" href="#a-conta" title="Permanent link">&para;</a></h3>
+<p>Com passo <span class="arithmatex">\(s=2\)</span> e sem o viés, a saída do filtro <span class="arithmatex">\(c\)</span> na posição <span class="arithmatex">\((u,v)\)</span> é</p>
+<div class="arithmatex">\[
+Y^{(c)}_{u,v}=\sum_{m=0}^{2}\sum_{n=0}^{2}K^{(c)}_{m,n}\,X_{2u+m,\;2v+n}:
+\]</div>
+<p>coloca-se o filtro sobre a janela de <span class="arithmatex">\(3\times3\)</span> pixels que começa em <span class="arithmatex">\((2u,2v)\)</span>, multiplicam-se os valores sobrepostos e somam-se os 9 produtos. Com <span class="arithmatex">\(5\times5\)</span> pixels e passo 2, há <span class="arithmatex">\(2\times2\)</span> posições, ou seja, quatro janelas, J0 a J3. Elas se sobrepõem na linha e na coluna centrais da imagem, porque o passo (2) é menor que o lado do filtro (3).</p>
+<figure class="ax-figura">
+<p><img alt="Imagem, janelas e filtros do exemplo" src="../assets/figuras/ex_conv_janelas.svg" width="700" />
+  </p>
+<figcaption>Exemplo reduzido da convolução. (a) Imagem <span class="arithmatex">\(5\times5\)</span> e as quatro janelas <span class="arithmatex">\(3\times3\)</span> de passo 2, cada uma destacada em uma miniatura. (b) Os quatro filtros.</figcaption>
+</figure>
+<p>Vale fazer uma dessas contas à mão. Para a janela J1, na posição <span class="arithmatex">\((u,v)=(0,1)\)</span>, com o filtro F3, da diagonal "/":</p>
+<div class="arithmatex">\[
+Y^{(3)}_{0,1}=\underbrace{0\cdot0+0\cdot1+1\cdot2}_{\text{linha 0}}
+             +\underbrace{0\cdot1+1\cdot2+0\cdot1}_{\text{linha 1}}
+             +\underbrace{1\cdot2+0\cdot1+0\cdot0}_{\text{linha 2}}=6.
+\]</div>
+<p>O filtro só "enxerga" os três pixels da diagonal "/" da janela, e o resultado é alto porque o traço passa justamente por eles. Repetindo a conta para as quatro janelas e os quatro filtros, obtêm-se 16 saídas. <strong>São esses 16 números que o arranjo precisa produzir.</strong></p>
+<figure class="ax-figura">
+<p><img alt="Cálculo manual de uma saída" src="../assets/figuras/ex_conv_manual.svg" width="780" />
+  </p>
+<figcaption>Cálculo manual de uma saída: os pixels da janela J1 são multiplicados, um a um, pelos pesos do filtro F3, e os produtos são somados. À direita, as 16 saídas do exemplo, organizadas em quatro mapas <span class="arithmatex">\(2\times2\)</span>; o contorno grosso marca a saída calculada.</figcaption>
+</figure>
+<h3 id="a-convolucao-como-produto-de-matrizes-im2col">A convolução como produto de matrizes (<em>im2col</em>)<a class="headerlink" href="#a-convolucao-como-produto-de-matrizes-im2col" title="Permanent link">&para;</a></h3>
+<p>Para chegar ao arranjo, falta escrever a mesma conta como um produto de matrizes. A soma dupla é, na verdade, um produto escalar entre 9 pixels e 9 pesos: basta achatar a janela e o filtro, linha a linha, em vetores de 9 elementos. É o que faz a técnica <strong><em>im2col</em></strong>: cada janela vira uma linha da matriz <span class="arithmatex">\(\mathbf P\)</span> (<span class="arithmatex">\(4\times9\)</span>), e cada filtro, uma coluna da matriz <span class="arithmatex">\(\tilde{\mathbf K}^{\top}\)</span> (<span class="arithmatex">\(9\times4\)</span>). As 16 saídas formam o produto</p>
+<div class="arithmatex">\[
+\mathbf C=\mathbf P\,\tilde{\mathbf K}^{\top},\qquad
+c_{ij}=\sum_{k=0}^{8}P_{i,k}\,\tilde K^{(j)}_{k}=(\text{janela J}i)\cdot(\text{filtro F}j).
+\]</div>
+<p>A saída calculada à mão é o elemento <span class="arithmatex">\(c_{13}\)</span>: a linha de J1 vezes a coluna de F3. Comparando com o <a href="#como-o-arranjo-calcula">mecanismo do arranjo</a>, cada <span class="arithmatex">\(c_{ij}\)</span> é exatamente o produto escalar que o PE<span class="arithmatex">\(_{ij}\)</span> calcula. A alocação sai daí: <strong>a janela <span class="arithmatex">\(i\)</span> vai para a linha <span class="arithmatex">\(i\)</span> do arranjo, e o filtro <span class="arithmatex">\(j\)</span>, para a coluna <span class="arithmatex">\(j\)</span></strong>. Como há quatro janelas e quatro filtros, a convolução inteira cabe em uma única passagem.</p>
+<figure class="ax-figura">
+<p><img alt="A convolução como produto de matrizes" src="../assets/figuras/ex_conv_im2col.svg" width="620" />
+  </p>
+<figcaption>A convolução do exemplo como produto de matrizes. Cada linha de <span class="arithmatex">\(\mathbf P\)</span> é uma janela achatada, e cada coluna de <span class="arithmatex">\(\tilde{\mathbf K}^{\top}\)</span>, um filtro achatado; os contornos grossos mostram que <span class="arithmatex">\(c_{13}=6\)</span> é a linha de J1 vezes a coluna de F3.</figcaption>
+</figure>
+<h3 id="entrada-dos-dados-no-arranjo">Entrada dos dados no arranjo<a class="headerlink" href="#entrada-dos-dados-no-arranjo" title="Permanent link">&para;</a></h3>
+<p>Resta levar esse produto ao arranjo, aplicando o mecanismo com quatro linhas, quatro colunas e <span class="arithmatex">\(K=9\)</span>: a linha <span class="arithmatex">\(i\)</span> recebe a linha <span class="arithmatex">\(i\)</span> de <span class="arithmatex">\(\mathbf P\)</span> (os 9 pixels da janela J<span class="arithmatex">\(i\)</span>), e a coluna <span class="arithmatex">\(j\)</span>, a coluna <span class="arithmatex">\(j\)</span> de <span class="arithmatex">\(\tilde{\mathbf K}^{\top}\)</span> (os 9 pesos do filtro F<span class="arithmatex">\(j\)</span>), com os mesmos atrasos de <span class="arithmatex">\(i\)</span> e <span class="arithmatex">\(j\)</span> casas. Na memória, cada palavra de 32 bits é uma "fatia" das quatro filas: a palavra <span class="arithmatex">\(k\)</span> das entradas junta o pixel <span class="arithmatex">\(k\)</span> das quatro janelas, e a palavra <span class="arithmatex">\(k\)</span> dos pesos, o peso <span class="arithmatex">\(k\)</span> dos quatro filtros. A primeira palavra de entradas é <span class="arithmatex">\((0,0,0,2)\)</span>, e a primeira de pesos, <span class="arithmatex">\((-1,-1,1,0)\)</span>.</p>
+<figure class="ax-figura">
+<p><img alt="Entrada dos dados no arranjo" src="../assets/figuras/ex_conv_fluxo.svg" width="520" />
+  </p>
+<figcaption>Entrada dos dados no arranjo. Cada linha recebe os 9 pixels de uma janela e cada coluna, os 9 pesos de um filtro, com o pixel e o peso <span class="arithmatex">\(k=0\)</span> mais próximos do arranjo. Os registradores de atraso (cinza) fazem a linha <span class="arithmatex">\(i\)</span> e a coluna <span class="arithmatex">\(j\)</span> começarem <span class="arithmatex">\(i\)</span> e <span class="arithmatex">\(j\)</span> ciclos depois.</figcaption>
+</figure>
+<h3 id="o-calculo">O cálculo<a class="headerlink" href="#o-calculo" title="Permanent link">&para;</a></h3>
+<p>Com os dados nas filas, o cálculo avança em diagonal, seguindo a frente de onda <span class="arithmatex">\(t=k+i+j\)</span>. No ciclo 0, só o PE<span class="arithmatex">\(_{00}\)</span> trabalha; entre os ciclos 6 e 8, os 16 PEs trabalham ao mesmo tempo, cada um em um passo <span class="arithmatex">\(k\)</span> diferente; e no ciclo <span class="arithmatex">\(8+3+3=14\)</span> o PE<span class="arithmatex">\(_{33}\)</span> faz o último produto. Cada PE executa as 9 multiplicações do seu par janela-filtro; o PE<span class="arithmatex">\(_{13}\)</span>, por exemplo, refaz a conta manual, um produto por ciclo, entre os ciclos 4 e 12, e termina com <span class="arithmatex">\(\Sigma=6\)</span>.</p>
+<figure class="ax-figura">
+<p><img alt="O cálculo da convolução em cinco instantes" src="../assets/figuras/ex_conv_ciclos.svg" width="780" />
+  </p>
+<figcaption>O cálculo da convolução do exemplo (<span class="arithmatex">\(K=9\)</span>) em cinco instantes. O número em cada PE em destaque é o passo <span class="arithmatex">\(k=t-i-j\)</span> que ele executa naquele ciclo.</figcaption>
+</figure>
+<h3 id="a-saida">A saída<a class="headerlink" href="#a-saida" title="Permanent link">&para;</a></h3>
+<p>Ao fim da passagem, o arranjo contém a matriz <span class="arithmatex">\(\mathbf C\)</span>. A PPU zera os valores negativos (ReLU), e os acumuladores descem para a saída uma linha por vez; por padrão, a partir da linha 3, mas o formatador de saída da NPU pode entregá-las na ordem 0 a 3. Cada palavra traz, portanto, os quatro filtros de uma mesma janela, e as palavras gravadas em sequência formam o vetor de ativações já na ordem <strong>NHWC</strong> (os quatro canais de cada posição juntos), que é a ordem em que a camada densa seguinte espera os dados.</p>
+<figure class="ax-figura">
+<p><img alt="Saída da passagem" src="../assets/figuras/ex_conv_saida.svg" width="740" />
+  </p>
+<figcaption>Saída da passagem do exemplo: acumuladores, ReLU na PPU, ordem de drenagem (linha 3 primeiro) e o vetor resultante na ordem NHWC, que alimenta a camada densa.</figcaption>
+</figure>
+<h2 id="camada-densa-e-modo-gemv">Camada densa e modo GEMV<a class="headerlink" href="#camada-densa-e-modo-gemv" title="Permanent link">&para;</a></h2>
+<h3 id="a-conta_1">A conta<a class="headerlink" href="#a-conta_1" title="Permanent link">&para;</a></h3>
+<p>Na camada densa, cada neurônio está ligado a todas as entradas. O exemplo tem 5 entradas e 6 neurônios: cada uma das 5 ativações <span class="arithmatex">\(\tilde a_k\)</span> chega a cada um dos 6 neurônios por uma ligação com peso próprio, num total de 30 pesos. Cada neurônio multiplica cada entrada pelo peso da ligação por onde ela chega e soma os produtos. Para o neurônio N0, cujos pesos são <span class="arithmatex">\(1\)</span>, <span class="arithmatex">\(-1\)</span>, <span class="arithmatex">\(0\)</span>, <span class="arithmatex">\(2\)</span> e <span class="arithmatex">\(1\)</span>:</p>
+<div class="arithmatex">\[
+z_0=1\cdot2+(-1)\cdot0+0\cdot1+2\cdot3+1\cdot1=9.
+\]</div>
+<figure class="ax-figura">
+<p><img alt="A camada densa vista como rede" src="../assets/figuras/ex_fc_rede.svg" width="700" />
+  </p>
+<figcaption>A camada densa do exemplo vista como rede. As ligações que chegam ao neurônio N0 aparecem em destaque, com seus pesos. Guardando, para cada neurônio, os pesos das ligações que chegam a ele, obtém-se uma linha da matriz <span class="arithmatex">\(\tilde{\mathbf W}\)</span>.</figcaption>
+</figure>
+<p>Para fazer a conta de todos os neurônios de uma vez, os pesos que chegam ao neurônio <span class="arithmatex">\(n\)</span> formam a linha <span class="arithmatex">\(n\)</span> de uma matriz <span class="arithmatex">\(\tilde{\mathbf W}\)</span>, e a camada inteira é um produto de matriz por vetor:</p>
+<div class="arithmatex">\[
+\mathbf z=\tilde{\mathbf W}\,\tilde{\mathbf a},\qquad z_n=\sum_{k=0}^{K-1}\tilde W_{n,k}\,\tilde a_k .
+\]</div>
+<p>No exemplo, com <span class="arithmatex">\(K=5\)</span> entradas e 6 neurônios, sem o viés:</p>
+<div class="arithmatex">\[
+\underbrace{\begin{bmatrix}
+   1&amp;-1&amp; 0&amp; 2&amp; 1\\
+   0&amp; 2&amp;-1&amp; 1&amp; 0\\
+  -1&amp; 0&amp; 2&amp; 0&amp; 1\\
+   2&amp; 1&amp; 0&amp;-1&amp;-1\\
+   1&amp; 0&amp; 1&amp; 1&amp;-2\\
+   0&amp;-1&amp; 1&amp; 0&amp; 2
+\end{bmatrix}}_{\tilde{\mathbf W}\ (6\times5)}
+\underbrace{\begin{bmatrix}2\\0\\1\\3\\1\end{bmatrix}}_{\tilde{\mathbf a}}
+=\underbrace{\begin{bmatrix}9\\2\\1\\0\\4\\3\end{bmatrix}}_{\mathbf z}.
+\]</div>
+<p>Cada <span class="arithmatex">\(z_n\)</span> é, de novo, um produto escalar, agora entre o vetor de entradas e o vetor de pesos do neurônio <span class="arithmatex">\(n\)</span>. Pelo <a href="#como-o-arranjo-calcula">mecanismo do arranjo</a>, isso indica a alocação das colunas: <strong>os pesos do neurônio <span class="arithmatex">\(n\)</span> ocupam uma coluna do arranjo</strong>. Como há quatro colunas, os neurônios são processados de quatro em quatro, um bloco por passagem: <span class="arithmatex">\(\mathbf z_{0..3}\)</span> na primeira e <span class="arithmatex">\(\mathbf z_{4..5}\)</span> na segunda, completada com dois neurônios nulos.</p>
+<figure class="ax-figura">
+<p><img alt="Divisão em passagens" src="../assets/figuras/ex_fc_blocos.svg" width="440" />
+  </p>
+<figcaption>Divisão do produto em passagens. Como o arranjo tem quatro colunas, os neurônios são agrupados de quatro em quatro; o último bloco é completado com neurônios nulos. As entradas são as mesmas nas duas passagens.</figcaption>
+</figure>
+<h3 id="modo-gemv">Modo GEMV<a class="headerlink" href="#modo-gemv" title="Permanent link">&para;</a></h3>
+<p>A diferença em relação à convolução está nas linhas, e vale construí-la por etapas.</p>
+<p><strong>Primeira tentativa: uma linha só.</strong> Na convolução, cada linha do arranjo recebe uma janela diferente. Na camada densa, com uma imagem por vez, só existe <strong>um</strong> vetor de entradas. A alocação direta seria colocá-lo na linha 0, com um neurônio em cada coluna. Funciona, mas as linhas 1 a 3 não teriam o que fazer: 12 dos 16 PEs multiplicariam zeros, e a passagem levaria um passo por entrada.</p>
+<p><strong>A ideia: dividir a soma entre as linhas.</strong> A conta de cada neurônio é uma soma de produtos, e uma soma pode ser quebrada em pedaços e juntada no fim. Para <span class="arithmatex">\(z_0\)</span>:</p>
+<div class="arithmatex">\[
+z_0=\underbrace{1\cdot2+1\cdot1}_{\text{linha 0: entradas 0 e 4}}
+   +\underbrace{(-1)\cdot0}_{\text{linha 1: entrada 1}}
+   +\underbrace{0\cdot1}_{\text{linha 2: entrada 2}}
+   +\underbrace{2\cdot3}_{\text{linha 3: entrada 3}}
+   =3+0+0+6=9.
+\]</div>
+<p>É o que faz o modo de produto matriz-vetor (<strong>GEMV</strong>) da NPU: <strong>o vetor de entradas é repartido entre as quatro linhas, e cada PE acumula um pedaço do produto escalar do neurônio da sua coluna</strong>. A linha <span class="arithmatex">\(i\)</span> recebe as entradas <span class="arithmatex">\(k\equiv i\pmod 4\)</span>, isto é, <span class="arithmatex">\(\tilde a_i,\tilde a_{i+4},\tilde a_{i+8},\dots\)</span> As colunas não mudam: cada coluna continua sendo um neurônio. Como as quatro linhas trabalham ao mesmo tempo, a passagem do exemplo leva 2 passos em vez de 5. Ao fim dela, o PE<span class="arithmatex">\(_{ij}\)</span> guarda uma <strong>soma parcial</strong> <span class="arithmatex">\(s_{ij}\)</span>, e o neurônio completo é a soma da sua coluna, feita pela NPU antes da PPU:</p>
+<div class="arithmatex">\[
+s_{ij}=\sum_{t}\tilde W_{j,\,4t+i}\;\tilde a_{4t+i},\qquad z_j=\sum_{i=0}^{3}s_{ij}.
+\]</div>
+<p><strong>Por que os pesos não descem mais pela coluna.</strong> Na convolução, todos os PEs de uma coluna usam o <strong>mesmo</strong> peso no mesmo passo, pois é o mesmo filtro aplicado a janelas diferentes; por isso o peso entra pelo topo e desce de PE em PE. No GEMV, isso deixa de valer: no primeiro passo da coluna N0, o PE<span class="arithmatex">\(_{00}\)</span> multiplica a entrada 0 e precisa do peso <span class="arithmatex">\(\tilde W_{0,0}=1\)</span>; o PE<span class="arithmatex">\(_{10}\)</span> multiplica a entrada 1 e precisa de <span class="arithmatex">\(\tilde W_{0,1}=-1\)</span>; e assim por diante. Cada PE da coluna precisa de um peso <strong>diferente</strong>. Por isso, a memória de pesos é dividida em quatro bancos, que entregam 16 pesos de uma vez a cada passo, um para cada PE, e um multiplexador em cada PE escolhe esse peso próprio no lugar do que vem de cima. A ligação vertical continua existindo no hardware, pois a convolução a usa, mas é ignorada neste modo.</p>
+<h3 id="entrada-dos-dados-no-modo-gemv">Entrada dos dados no modo GEMV<a class="headerlink" href="#entrada-dos-dados-no-modo-gemv" title="Permanent link">&para;</a></h3>
+<p>As 5 entradas, completadas com zeros até 8, cabem em dois passos (<span class="arithmatex">\(t=0\)</span> e <span class="arithmatex">\(t=1\)</span>). Na memória de entradas, a palavra <span class="arithmatex">\(t\)</span> traz as entradas <span class="arithmatex">\(4t\)</span> a <span class="arithmatex">\(4t+3\)</span>, e o byte <span class="arithmatex">\(i\)</span> vai para a linha <span class="arithmatex">\(i\)</span>. Nos pesos, o banco <span class="arithmatex">\(i\)</span> guarda, no passo <span class="arithmatex">\(t\)</span>, a palavra da entrada <span class="arithmatex">\(k=4t+i\)</span>, com o peso do neurônio N<span class="arithmatex">\(j\)</span> no byte <span class="arithmatex">\(j\)</span>: o PE<span class="arithmatex">\(_{ij}\)</span> recebe o byte <span class="arithmatex">\(j\)</span> do banco <span class="arithmatex">\(i\)</span>. Resta acertar o tempo: a entrada <span class="arithmatex">\(\tilde a_{4t+i}\)</span> começa <span class="arithmatex">\(i\)</span> ciclos atrasada e leva mais <span class="arithmatex">\(j\)</span> ciclos para andar até a coluna <span class="arithmatex">\(j\)</span>; por isso, o peso do PE<span class="arithmatex">\(_{ij}\)</span> também é atrasado em <span class="arithmatex">\(i+j\)</span> ciclos, e os dois se encontram no ciclo <span class="arithmatex">\(t+i+j\)</span>, a mesma frente de onda da convolução.</p>
+<figure class="ax-figura">
+<p><img alt="Entrada dos dados no modo GEMV" src="../assets/figuras/ex_fc_gemv_fluxo.svg" width="560" />
+  </p>
+<figcaption>Entrada dos dados na primeira passagem do exemplo, no modo GEMV. A linha <span class="arithmatex">\(i\)</span> recebe as entradas <span class="arithmatex">\(k=i\)</span> e <span class="arithmatex">\(k=i+4\)</span>. A memória de pesos entrega um bloco <span class="arithmatex">\(4\times4\)</span> por passo: o PE<span class="arithmatex">\(_{ij}\)</span> recebe o byte <span class="arithmatex">\(j\)</span> do banco <span class="arithmatex">\(i\)</span>, com atraso de <span class="arithmatex">\(i+j\)</span> ciclos; a ligação vertical (tracejada) é ignorada neste modo.</figcaption>
+</figure>
+<p>Ao fim da passagem, cada PE contém uma soma parcial. Na coluna do neurônio N0, o PE<span class="arithmatex">\(_{00}\)</span> acumula <span class="arithmatex">\(1\cdot2+1\cdot1=3\)</span>; o PE<span class="arithmatex">\(_{10}\)</span>, <span class="arithmatex">\((-1)\cdot0=0\)</span>; o PE<span class="arithmatex">\(_{20}\)</span>, <span class="arithmatex">\(0\cdot1=0\)</span>; e o PE<span class="arithmatex">\(_{30}\)</span>, <span class="arithmatex">\(2\cdot3=6\)</span>. A soma da coluna, <span class="arithmatex">\(3+0+0+6=9\)</span>, é exatamente <span class="arithmatex">\(z_0\)</span>. As outras colunas dão <span class="arithmatex">\(z_1=2\)</span>, <span class="arithmatex">\(z_2=1\)</span> e <span class="arithmatex">\(z_3=0\)</span>, e a PPU entrega os quatro numa única palavra. Na segunda passagem, a NPU relê as mesmas entradas, e as colunas recebem os pesos de N4, N5 e dos dois neurônios nulos, produzindo <span class="arithmatex">\(z_4=4\)</span> e <span class="arithmatex">\(z_5=3\)</span>.</p>
+<figure class="ax-figura">
+<p><img alt="Primeira passagem no modo GEMV" src="../assets/figuras/ex_fc_gemv.svg" width="680" />
+  </p>
+<figcaption>Primeira passagem da camada densa do exemplo no modo GEMV. Cada PE acumula uma soma parcial <span class="arithmatex">\(s_{ij}\)</span>; as quatro linhas de cada coluna são somadas, e a PPU entrega os quatro neurônios do bloco numa única palavra. O contorno grosso acompanha o neurônio N0.</figcaption>
+</figure>
+<p>Com essa alocação, os 16 PEs trabalham também na camada densa, e cada passagem leva <span class="arithmatex">\(\lceil K/4\rceil\)</span> passos em vez de <span class="arithmatex">\(K\)</span>. Na memória, a palavra <span class="arithmatex">\(t\)</span> de entradas traz as entradas <span class="arithmatex">\(4t\)</span> a <span class="arithmatex">\(4t+3\)</span>, uma por byte, o mesmo formato em que a convolução entrega as suas saídas: <strong>a saída de uma camada já é a entrada da outra</strong>.</p>
+<h3 id="o-fluxo-de-dados-no-modo-gemv">O fluxo de dados no modo GEMV<a class="headerlink" href="#o-fluxo-de-dados-no-modo-gemv" title="Permanent link">&para;</a></h3>
+<p>Essa divisão muda a classificação do fluxo de dados. Na taxonomia usual, um fluxo é caracterizado pelo dado que permanece no PE e pelo modo como os demais são reaproveitados. No modo GEMV:</p>
+<ul>
+<li>as <strong>somas parciais</strong> continuam estacionárias, como na convolução: cada PE acumula localmente do primeiro ao último passo;</li>
+<li>o <strong>resultado final</strong> <span class="arithmatex">\(z_j\)</span>, porém, não fica em um único PE: ele é repartido entre os quatro PEs da coluna e só se forma na soma feita fora do arranjo;</li>
+<li>as <strong>entradas</strong> continuam sistólicas, andando para a direita e servindo aos quatro neurônios da linha;</li>
+<li>os <strong>pesos</strong> não são reaproveitados: com uma única imagem, cada peso de uma camada densa é usado exatamente uma vez, e o que limita o arranjo é a banda da memória de pesos, que precisa entregar 16 pesos por ciclo.</li>
+</ul>
+<p>O modo GEMV é, portanto, uma variação híbrida do fluxo estacionário na saída: estacionário nas somas parciais, sistólico nas entradas, sem reuso dos pesos e com uma redução espacial ao final. A convolução, em que todos esses reusos existem, continua usando o fluxo estacionário na saída puro.</p>
+<h2 id="da-ilustracao-a-rede-real">Da ilustração à rede real<a class="headerlink" href="#da-ilustracao-a-rede-real" title="Permanent link">&para;</a></h2>
+<p>Na rede real, cada camada repete os exemplos com dimensões maiores. A imagem <span class="arithmatex">\(28\times28\)</span> tem 169 janelas, que, completadas com três janelas nulas, formam 43 grupos de quatro; cada grupo é uma passagem idêntica à do exemplo da convolução, com os mesmos 9 pesos e quatro janelas novas. A camada densa tem 676 entradas e 10 neurônios e roda no modo GEMV: três passagens de <span class="arithmatex">\(676/4=169\)</span> passos, a última com dois neurônios nulos. Na NPU, as janelas da convolução nunca são gravadas: o <a href="../arquitetura/movimentacao-dados/#im2col-em-hardware-npu_im2col"><em>im2col</em> em hardware</a> monta cada palavra de entrada a partir da imagem crua, no momento da leitura.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align: center;">Convolução</th>
+<th style="text-align: center;">Camada densa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Linha <span class="arithmatex">\(i\)</span> recebe</td>
+<td style="text-align: center;">janela <span class="arithmatex">\(4g+i\)</span></td>
+<td style="text-align: center;">entradas <span class="arithmatex">\(k\equiv i \pmod 4\)</span></td>
+</tr>
+<tr>
+<td>Coluna <span class="arithmatex">\(j\)</span> recebe</td>
+<td style="text-align: center;">filtro <span class="arithmatex">\(j\)</span></td>
+<td style="text-align: center;">neurônio <span class="arithmatex">\(4c+j\)</span></td>
+</tr>
+<tr>
+<td>Passos por passagem</td>
+<td style="text-align: center;">9</td>
+<td style="text-align: center;">169</td>
+</tr>
+<tr>
+<td>Passagens</td>
+<td style="text-align: center;">43</td>
+<td style="text-align: center;">3</td>
+</tr>
+<tr>
+<td>Relido a cada passagem</td>
+<td style="text-align: center;">pesos</td>
+<td style="text-align: center;">entradas</td>
+</tr>
+<tr>
+<td>MACs úteis</td>
+<td style="text-align: center;">98%</td>
+<td style="text-align: center;">83%</td>
+</tr>
+</tbody>
+</table>
+<p>Das <span class="arithmatex">\(3\cdot169\cdot16=8.112\)</span> MACs que o arranjo executa na camada densa, 6.760 são úteis, cerca de 83%; com a entrada ocupando uma única linha, seriam 32.448 MACs, das quais 21% úteis.</p>
+<p>Como o <em>firmware</em> alimenta a NPU com essas camadas, com pesos residentes, <em>im2col</em> em hardware e o programa de descritores, está no <a href="../avaliacao/cnn-mnist/#execucao-no-soc">estudo de caso</a>.</p>
+
+
+
+
+
+
+
+  
+    
+  
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Última atualização">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-datetime" title="24 de novembro de 2026 22:05:03 UTC">24 de novembro de 2026 22:05:03</span>
+  </span>
+
+    
+    
+    
+    
+  </aside>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar para o topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Rodapé" >
+        
+          
+          <a href="../arquitetura/movimentacao-dados/" class="md-footer__link md-footer__link--prev" aria-label="Anterior: Movimentação de dados">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Anterior
+              </span>
+              <div class="md-ellipsis">
+                Movimentação de dados
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../software/" class="md-footer__link md-footer__link--next" aria-label="Próximo: Software">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Próximo
+              </span>
+              <div class="md-ellipsis">
+                Software
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; RISC-V-Azedinha
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/RISC-V-Azedinha/NPU" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.instant.progress", "navigation.tabs", "navigation.tabs.sticky", "navigation.tracking", "navigation.sections", "navigation.top", "navigation.footer", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "content.tabs.link", "content.tooltips"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

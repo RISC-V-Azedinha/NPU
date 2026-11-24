@@ -1,0 +1,93 @@
+% Fluxo estacionário na saída, ciclo a ciclo, num arranjo 2x2: C = X W.
+\colorlet{corSai}{green!14}
+\begin{tikzpicture}[font=\footnotesize,>={Stealth[length=1.4mm]},
+  c/.style={draw,minimum size=5.6mm,inner sep=0pt,font=\footnotesize},
+  pe/.style={draw,thick,minimum size=11.2mm,inner sep=0pt,align=center,font=\scriptsize}]
+  \begin{scope}[shift={(-2.6,-0.65)}]
+    \node[font=\footnotesize\bfseries] at (2.1,1.2) {produto a calcular};
+    \foreach \v [count=\n from 0] in {A,B,C,D} \node[c,fill=corEnt] at ({mod(\n,2)*0.56},{-floor(\n/2)*0.56}) {$\v$};
+    \node at (1.25,-0.28) {$\times$};
+    \foreach \v [count=\n from 0] in {1,2,3,4} \node[c,fill=corPeso] at ({1.8+mod(\n,2)*0.56},{-floor(\n/2)*0.56}) {$\v$};
+    \node at (3.05,-0.28) {$=$};
+    \foreach \v [count=\n from 0] in {a,b,c,d} \node[c,fill=corSai] at ({3.6+mod(\n,2)*0.56},{-floor(\n/2)*0.56}) {$\v$};
+    \node[font=\scriptsize,align=center] at (2.1,-1.35) {$a=A{\cdot}1+B{\cdot}3,\quad b=A{\cdot}2+B{\cdot}4$\\[1pt]$c=C{\cdot}1+D{\cdot}3,\quad d=C{\cdot}2+D{\cdot}4$};
+  \end{scope}
+  \begin{scope}[shift={(6.2,0)}]
+    \node[pe,fill=corPE] (p00) at (0.0,0.0) {};
+    \node[pe,fill=corPE] (p01) at (1.3,0.0) {};
+    \node[pe,fill=corPE] (p10) at (0.0,-1.3) {};
+    \node[pe,fill=corPE] (p11) at (1.3,-1.3) {};
+    \node[c,fill=corEnt] at (-1.180,0.0) {$A$};
+    \node[c,fill=corEnt] at (-1.800,0.0) {$B$};
+    \draw[->] (-0.900,0.0) -- (p00.west);
+    \node[c,fill=corAtraso] at (-1.180,-1.3) {};
+    \node[c,fill=corEnt] at (-1.800,-1.3) {$C$};
+    \node[c,fill=corEnt] at (-2.420,-1.3) {$D$};
+    \draw[->] (-0.900,-1.3) -- (p10.west);
+    \node[c,fill=corPeso] at (0.0,1.180) {$1$};
+    \node[c,fill=corPeso] at (0.0,1.800) {$3$};
+    \draw[->] (0.0,0.900) -- (p00.north);
+    \node[c,fill=corAtraso] at (1.3,1.180) {};
+    \node[c,fill=corPeso] at (1.3,1.800) {$2$};
+    \node[c,fill=corPeso] at (1.3,2.420) {$4$};
+    \draw[->] (1.3,0.900) -- (p01.north);
+    \node[font=\footnotesize\bfseries] at (0.65,-2.21) {início};
+  \end{scope}
+  \begin{scope}[shift={(12.4,0)}]
+    \node[pe,fill=corAtivo] (p00) at (0.0,0.0) {$A{\cdot}1$};
+    \node[pe,fill=corPE] (p01) at (1.3,0.0) {};
+    \node[pe,fill=corPE] (p10) at (0.0,-1.3) {};
+    \node[pe,fill=corPE] (p11) at (1.3,-1.3) {};
+    \node[c,fill=corEnt] at (-1.180,0.0) {$B$};
+    \draw[->] (-0.900,0.0) -- (p00.west);
+    \node[c,fill=corEnt] at (-1.180,-1.3) {$C$};
+    \node[c,fill=corEnt] at (-1.800,-1.3) {$D$};
+    \draw[->] (-0.900,-1.3) -- (p10.west);
+    \node[c,fill=corPeso] at (0.0,1.180) {$3$};
+    \draw[->] (0.0,0.900) -- (p00.north);
+    \node[c,fill=corPeso] at (1.3,1.180) {$2$};
+    \node[c,fill=corPeso] at (1.3,1.800) {$4$};
+    \draw[->] (1.3,0.900) -- (p01.north);
+    \node[font=\footnotesize\bfseries] at (0.65,-2.21) {ciclo 0};
+  \end{scope}
+  \begin{scope}[shift={(0.6,-5.2)}]
+    \node[pe,fill=corAtivo] (p00) at (0.0,0.0) {$A{\cdot}1+{}$\\$B{\cdot}3$};
+    \node[pe,fill=corAtivo] (p01) at (1.3,0.0) {$A{\cdot}2$};
+    \node[pe,fill=corAtivo] (p10) at (0.0,-1.3) {$C{\cdot}1$};
+    \node[pe,fill=corPE] (p11) at (1.3,-1.3) {};
+    \draw[->] (-0.900,0.0) -- (p00.west);
+    \node[c,fill=corEnt] at (-1.180,-1.3) {$D$};
+    \draw[->] (-0.900,-1.3) -- (p10.west);
+    \draw[->] (0.0,0.900) -- (p00.north);
+    \node[c,fill=corPeso] at (1.3,1.180) {$4$};
+    \draw[->] (1.3,0.900) -- (p01.north);
+    \node[font=\footnotesize\bfseries] at (0.65,-2.21) {ciclo 1};
+  \end{scope}
+  \begin{scope}[shift={(6.199999999999999,-5.2)}]
+    \node[pe,fill=corFim] (p00) at (0.0,0.0) {$A{\cdot}1+{}$\\$B{\cdot}3$};
+    \node[pe,fill=corAtivo] (p01) at (1.3,0.0) {$A{\cdot}2+{}$\\$B{\cdot}4$};
+    \node[pe,fill=corAtivo] (p10) at (0.0,-1.3) {$C{\cdot}1+{}$\\$D{\cdot}3$};
+    \node[pe,fill=corAtivo] (p11) at (1.3,-1.3) {$C{\cdot}2$};
+    \draw[->] (-0.900,0.0) -- (p00.west);
+    \draw[->] (-0.900,-1.3) -- (p10.west);
+    \draw[->] (0.0,0.900) -- (p00.north);
+    \draw[->] (1.3,0.900) -- (p01.north);
+    \node[font=\footnotesize\bfseries] at (0.65,-2.21) {ciclo 2};
+  \end{scope}
+  \begin{scope}[shift={(11.799999999999999,-5.2)}]
+    \node[pe,fill=corFim] (p00) at (0.0,0.0) {$A{\cdot}1+{}$\\$B{\cdot}3$};
+    \node[pe,fill=corFim] (p01) at (1.3,0.0) {$A{\cdot}2+{}$\\$B{\cdot}4$};
+    \node[pe,fill=corFim] (p10) at (0.0,-1.3) {$C{\cdot}1+{}$\\$D{\cdot}3$};
+    \node[pe,fill=corAtivo] (p11) at (1.3,-1.3) {$C{\cdot}2+{}$\\$D{\cdot}4$};
+    \draw[->] (-0.900,0.0) -- (p00.west);
+    \draw[->] (-0.900,-1.3) -- (p10.west);
+    \draw[->] (0.0,0.900) -- (p00.north);
+    \draw[->] (1.3,0.900) -- (p01.north);
+    \node[font=\footnotesize\bfseries] at (0.65,-2.21) {ciclo 3};
+  \end{scope}
+  \begin{scope}[shift={(17.4,-5.2)}]
+    \foreach \v [count=\n from 0] in {a,b,c,d}
+      \node[pe,fill=corSai] at ({mod(\n,2)*1.3},{-floor(\n/2)*1.3}) {$\v$};
+    \node[font=\footnotesize\bfseries] at (0.65,-2.21) {fim: resultados drenados};
+  \end{scope}
+\end{tikzpicture}
