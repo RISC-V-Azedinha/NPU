@@ -1,0 +1,32 @@
+% Muro da memória: (a) processador x DRAM (taxas de HENNESSY; PATTERSON, 2012, fig. 2.2);
+% (b) tamanho dos modelos x memória dos aceleradores de IA (GHOLAMI et al., 2024).
+\begin{tikzpicture}
+\begin{groupplot}[group style={group size=2 by 1,horizontal sep=19mm},
+  grafico, width=78mm, height=62mm, ymode=log,
+  /pgf/number format/1000 sep={}, log basis y=10]
+\nextgroupplot[title={(a) Processador $\times$ memória},
+  xmin=1980, xmax=2010, ymin=0.7, ymax=20000,
+  xtick={1980,1985,1990,1995,2000,2005,2010}, xticklabel style={/pgf/number format/1000 sep={}},
+  xlabel={ano}, ylabel={desempenho relativo a 1980}]
+  \addplot[name path=p,very thick,azul,domain=1980:1986,samples=7] {1.25^(x-1980)};
+  \addplot[very thick,azul,domain=1986:2000,samples=15] {3.815*1.52^(x-1986)};
+  \addplot[very thick,azul,domain=2000:2005,samples=6] {1341*1.2^(x-2000)};
+  \addplot[very thick,azul,domain=2005:2010,samples=2] {3337};
+  \addplot[very thick,laranja,domain=1980:2010,samples=31] {1.07^(x-1980)};
+  \node[azul,font=\scriptsize\bfseries,anchor=south east] at (axis cs:2003,1900) {processador};
+  \node[laranja!80!black,font=\scriptsize\bfseries,anchor=north west] at (axis cs:1996,2.6) {memória (DRAM)};
+  \draw[<->,thick,vermelho] (axis cs:2008,8.5) -- (axis cs:2008,3000)
+    node[midway,left,font=\scriptsize,align=right,text=vermelho]{muro da\\memória\\($\approx$440$\times$)};
+  \node[font=\tiny,align=left,anchor=north west,text=corpo] at (axis cs:1981,15000)
+    {processador: +25\,\%/ano até 1986,\\+52\,\%/ano até 2000, +20\,\%/ano até 2005\\DRAM: +7\,\%/ano};
+\nextgroupplot[title={(b) Modelos de IA $\times$ memória dos aceleradores},
+  xmin=2016, xmax=2022, ymin=0.5, ymax=1e8,
+  xtick={2016,2017,2018,2019,2020,2021,2022}, xticklabel style={/pgf/number format/1000 sep={}},
+  xlabel={ano}, ylabel={crescimento relativo a 2016}]
+  \addplot[name path=m,very thick,azul,domain=2016:2022,samples=25] {240^((x-2016)/2)};
+  \addplot[name path=h,very thick,laranja,domain=2016:2022,samples=2] {2^((x-2016)/2)};
+  \addplot[laranja!12] fill between[of=m and h];
+  \node[azul,font=\scriptsize\bfseries,anchor=south east,align=right] at (axis cs:2020.6,4e5) {tamanho dos\\\emph{transformers}\\240$\times$ a cada 2 anos};
+  \node[laranja!80!black,font=\scriptsize\bfseries,anchor=south east,align=right] at (axis cs:2021.9,12) {memória dos aceleradores\\2$\times$ a cada 2 anos};
+\end{groupplot}
+\end{tikzpicture}

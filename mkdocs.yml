@@ -1,52 +1,72 @@
-site_name: Neural Processing Unit - NPU
-site_description: Arquitetura, Drivers e Aplicações do Acelerador de IA
+site_name: NPU
+site_description: Unidade de Processamento Neural (NPU) — arranjo sistólico 4×4 INT8 para inferência de redes neurais, em VHDL, integrada a um SoC RISC-V.
 site_url: https://RISC-V-Azedinha.github.io/NPU/
+repo_name: NPU
 repo_url: https://github.com/RISC-V-Azedinha/NPU
+edit_uri: edit/main/docs/
+copyright: Copyright &copy; RISC-V-Azedinha
 
 theme:
   name: material
-  
-  # Logo no canto superior esquerdo (usando vetor embutido)
+  language: pt-BR
+  logo: assets/logo.svg
+  favicon: assets/favicon.svg
+  font:
+    text: IBM Plex Sans
+    code: IBM Plex Mono
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-night
+        name: Mudar para modo escuro
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-sunny
+        name: Mudar para modo claro
   icon:
-    logo: material/memory
-    
-  # Favicon da aba do navegador. 
-  # IMPORTANTE: Crie a pasta docs/assets, coloque um arquivo favicon.png lá e descomente a linha abaixo!
-  # favicon: assets/favicon.png 
-
+    repo: fontawesome/brands/github
   features:
     - navigation.instant
+    - navigation.instant.progress
     - navigation.tabs
-    - navigation.footer
+    - navigation.tabs.sticky
     - navigation.tracking
+    - navigation.sections
     - navigation.top
+    - navigation.footer
     - toc.follow
-    - content.code.copy
-    - content.tabs.link
-    - search.highlight
     - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
     - content.tooltips
 
-  palette:
-    # Apenas Modo Escuro para forçar o estilo da imagem que você mandou
-    - scheme: slate
-      primary: black 
-      accent: indigo
-
-  font:
-    text: Inter
-    code: JetBrains Mono
-
 markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - def_list
+  - footnotes
+  - tables
+  - toc:
+      permalink: true
+      title: Nesta página
+  - pymdownx.details
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
+      pygments_lang_class: true
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.arithmatex:
       generic: true
-  - admonition
-  - pymdownx.details
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
@@ -57,42 +77,44 @@ markdown_extensions:
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
-  - tables
-  - attr_list
 
-# Estrutura do Menu Lateral (Ajuste conforme seus arquivos)
-nav:
-  - Introdução:
-      - Visão Geral: index.md
-      - Requisitos e Setup: intro/setup.md
-      - Primeiros Passos: intro/quickstart.md
-  - Arquitetura de Hardware:
-      - Visão Geral do Top-Level: hardware/overview.md
-      - Fluxo de Dados (Dataflow): hardware/systolic_array.md  
-      - Unidade de Pós-Processamento (PPU): hardware/ppu.md 
-      - Unidade de Controle (FSM): hardware/controller.md   
-      - Gestão de Dados: hardware/datapath.md
-      - Movimentação de Dados e Autonomia: hardware/data_movement.md     
-  - Software e Integração:
-      - API de Programação: software/api_programming.md
-      - Hardware-in-the-Loop (HIL): software/hil.md
-  - Desenvolvimento e Avaliação:
-      - Ambiente de Testes (Cocotb): dev/simulation.md     
-      - Fluxo de Síntese (FPGA): dev/fpga_build.md  
-      - Benchmark e Baselines: hardware/benchmark.md       
-  - Aplicações:
-      - Classificação IRIS: apps/IRIS.md
-      - Classificação MNIST: apps/MNIST.md
-      - Dados Sintéticos (FCN): apps/fc_synthetic.md
+plugins:
+  - search:
+      lang: pt
+  - git-revision-date-localized:
+      type: datetime
+      locale: pt
+      fallback_to_build_date: true
 
 extra_css:
   - stylesheets/extra.css
 
-plugins:
-  - search
-  - git-revision-date-localized:
-      type: datetime
-
 extra_javascript:
   - javascripts/mathjax.js
-  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
+  - https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/RISC-V-Azedinha/NPU
+
+nav:
+  - Início:
+      - Introdução: index.md
+      - Primeiros passos: primeiros-passos.md
+  - Fundamentos: fundamentos.md
+  - Arquitetura:
+      - Visão geral: arquitetura/visao-geral.md
+      - Núcleo de cálculo: arquitetura/nucleo.md
+      - Memórias e controle: arquitetura/memorias-controle.md
+      - Movimentação de dados: arquitetura/movimentacao-dados.md
+  - Mapeamento de camadas: mapeamento.md
+  - Software: software.md
+  - Avaliação:
+      - Desempenho da NPU: avaliacao/desempenho.md
+      - Benchmark dos mecanismos: avaliacao/benchmark-mecanismos.md
+      - "Estudo de caso: CNN para o MNIST": avaliacao/cnn-mnist.md
+  - Desenvolvimento: desenvolvimento.md
+  - Aplicações:
+      - Conjunto Iris: aplicacoes/iris.md
+      - Conjunto MNIST (MLP): aplicacoes/mnist.md
