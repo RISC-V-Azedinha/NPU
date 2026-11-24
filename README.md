@@ -1,7 +1,6 @@
 # NPU
 
 ![VHDL](https://img.shields.io/badge/VHDL-2008-1F5FA8?style=for-the-badge)
-![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![GHDL](https://img.shields.io/badge/Simulator-GHDL-2E8B57?style=for-the-badge)
 ![Cocotb](https://img.shields.io/badge/Testbench-Cocotb-E07B1A?style=for-the-badge)
 ![Vivado](https://img.shields.io/badge/Synthesis-Vivado-C0392B?style=for-the-badge)
